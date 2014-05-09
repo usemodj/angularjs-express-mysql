@@ -96,3 +96,52 @@ npm uninstall grunt-contrib-connect --save-dev
 4. Now comes the modification of Gruntfile.js file. You'll need to remove configuration related to the plugins mentioned in the previous step and add configuration for plugins added in step 1. You can find the exact changes in the embedded gist by doing a diff between revisions.
 
 5. Add an Express server at the root of the directory. You can take server.js from the gist and build upon it. 	
+
+
+---------------
+## Yeoman AngularJS Generator
+Available generators:
+
+angular (aka angular:app)
+angular:controller
+angular:directive
+angular:filter
+angular:route
+angular:service
+angular:provider
+angular:factory
+angular:value
+angular:constant
+angular:decorator
+angular:view
+
+
+### yo angular:factory [options] <name>
+
+```
+Usage:
+  yo angular:factory [options] <name>
+
+Options:
+  -h,   --help    # Print generator's options and usage  Default: false
+        --coffee  # Description for coffee               Default: false
+
+Arguments:
+  name  # Type: String  Required: true
+```
+
+> $ yo angular:factory  UserFactory
+
+### yo angular:controller [options] <name>
+
+```
+Usage:
+  yo angular:controller [options] <name>
+
+Options:
+  -h,   --help    # Print generator's options and usage  Default: false
+        --coffee  # Description for coffee               Default: false
+
+Arguments:
+  name  # Type: String  Required: true
+```

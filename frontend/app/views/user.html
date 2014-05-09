@@ -1,0 +1,12 @@
+<p>This is the user view.</p>
+<button ng-click="list()">User List</button>
+<ul ng-repeat="user in users">
+  <li >{{user.email}} </li>
+</ul>
+
+<button ng-click="show(1)">User(1)</button>
+<div>
+<ul><li>Email: {{user.email}}</li></ul>
+</div>
+
+<div ng-include="'/views/partials/login.html'"></div>

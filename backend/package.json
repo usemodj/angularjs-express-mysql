@@ -13,6 +13,10 @@
     "body-parser": "~1.0.0",
     "debug": "~0.7.4",
     "errorhandler": "*",
-    "mysql": "~2.2.0"
+    "mysql": "~2.2.0",
+    "orm": "~2.1.8",
+    "express-session": "~1.0.4",
+    "passport": "~0.2.0",
+    "method-override": "~1.0.0"
   }
 }

@@ -1,6 +1,7 @@
 <div class="header">
   <ul class="nav nav-pills pull-right">
     <li class="active"><a ng-href="#">Home</a></li>
+    <li><a ng-href="#/users/1">User</a></li>
     <li><a ng-href="#">About</a></li>
     <li><a ng-href="#">Contact</a></li>
   </ul>
@@ -15,6 +16,11 @@
   </p>
   <p><a class="btn btn-lg btn-success" ng-href="#">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
 </div>
+
+<button ng-click="list()">User List</button>
+<ul ng-repeat="user in users">
+  <li >{{user.email}} </li>
+</ul>
 
   <ul ng-repeat='thing in awesomeThings'>
     <li><span ng-bind='thing'></span></li>
