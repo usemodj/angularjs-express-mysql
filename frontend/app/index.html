@@ -4,7 +4,8 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+    <base href="/"></base>
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
@@ -19,13 +20,13 @@
     <!-- endbuild -->
   </head>
   <body ng-app="frontendApp">
-    <h2>Hello, AngularJS</h2>
-    
+   
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
+    <div ng-include="" src="'views/partials/navbar.html'"></div>
     <div class="container" ng-view=""></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -53,6 +54,7 @@
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-http-auth/src/http-auth-interceptor.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -60,7 +62,20 @@
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/user.js"></script>
+        <script src="scripts/controllers/signup.js"></script>
+        <script src="scripts/controllers/login.js"></script>
+        <script src="scripts/controllers/mail.js"></script>
+        <script src="scripts/controllers/navbar.js"></script>
+        <script src="scripts/controllers/password.js"></script>
+        
         <script src="scripts/services/userfactory.js"></script>
+        <script src="scripts/services/sessionfactory.js"></script>
+        <script src="scripts/services/authfactory.js"></script>
+        <script src="scripts/services/mailfactory.js"></script>
+        
+        <script src="scripts/directives/servererror.js"></script>
+        <script src="scripts/directives/onfocus.js"></script>
+        <script src="scripts/directives/passwordmatch.js"></script>
         <!-- endbuild -->
 </body>
 </html>

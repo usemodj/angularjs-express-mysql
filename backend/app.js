@@ -8,71 +8,95 @@ var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var errorHandler = require('errorhandler');
+var fs = require('fs');
+var SessionStore = require('express-mysql-session');
+var modRewrite = require('connect-modrewrite');
 
+var settings = require('./config/settings');
 var models = require('./models/');
-
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var mailer = require('./config/mailer');
 
 var app = express();
 
-// Configuration
-
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
-
-app.use(favicon());
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
-app.use(methodOverride());
-app.use(cookieParser());
-app.use(session({
-	secret : 'your secret here',
-	key : 'sid',
-	cookie : {
-		secure : true
-	}
-}));
-// app.use(express.static(path.join(__dirname, '../frontend/app')));
-if (app.get('env') === 'development') {
-	app.use(express.static(path.join(__dirname, '../frontend/app')));
-	app.use(errorHandler({
-		dumpExceptions : true,
-		showStack : true
-	}));
-} else {
-	// production
-	app.use(express.static(path.join(__dirname, '../frontend/dist')));
-	app.use(errorHandler());
-};
-app.use(passport.initialize());
-app.use(passport.session());
-
-// DB Models
+//Passport-local Strategy and  DB Models
 app.use(function(req, res, next) {
-	models(function(err, db) {
-		if (err)
-			return next(err);
+    models(function(err, db) {
+        if (err)
+            return next(err);
+        //database
+        req.models = db.models;
+        req.db = db;
+        //passport-local strategy
+        require('./config/pass')(db);
 
-		req.models = db.models;
-		req.db = db;
-
+        return next();
+    });
+});
+// Mailer 
+app.use(function(req, res, next){
+	mailer(function(transport){
+		req.transport = transport;
 		return next();
 	});
 });
 
-//Routes
-routes(app);
-users(app);
+// Configuration
+app.use(function(req, res, next) {
+    if ('HEAD' === req.method || 'OPTIONS' === req.method) return next();
+    var writeHead = res.writeHead;
+    res.writeHead = function() {
+        res.cookie('XSRF-TOKEN', req.session && req.session._csrfSecret);
+        writeHead.apply(res, arguments);
+    };
+    next();
+});
+// app.use(express.static(path.join(__dirname, '../frontend/app')));
+if (app.get('env') === 'development') {
+    app.use(express.static(path.join(__dirname, '../frontend/app')));
+    app.use(errorHandler({
+        dumpExceptions: true,
+        showStack: true
+    }));
+} else {
+    // production
+    app.use(express.static(path.join(__dirname, '../frontend/dist')));
+    app.use(errorHandler());
+};
+// app.set('views', __dirname + '../frontend/app');
+// app.engine('html', require('ejs').renderFile);
+// app.set('view engine', 'html');
+app.use(favicon());
+app.use(logger('dev'));
+app.use(bodyParser());
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded());
+app.use(methodOverride());
+app.use(cookieParser());
+app.use(session({
+    secret: 'your secret here',
+    key: 'sid',
+    cookie: {
+        maxAge: new Date(Date.now() + 3600000 * 24 * 7)
+    },
+    store: new SessionStore(settings.database)
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+// app.use(modRewrite([
+//                 '!\\.html|\\.js|\\.css|\\woff|\\ttf|\\swf$ /index.html [L]'
+//               ]));
 
+//Bootstrap routes
+var routesPath = path.join(__dirname, './routes');
+fs.readdirSync(routesPath).forEach(function(file) {
+    require(routesPath + '/' + file)(app);
+});
 
 // Catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
-	var err = new Error('Not Found');
-	err.status = 404;
-	next(err);
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handlers
@@ -80,17 +104,17 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-	app.use(function(err, req, res, next) {
-		res.status(err.status || 500);
-		res.send('Error ' + err.stacktrace);
-	});
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.send('Error ' + err.stacktrace);
+    });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-	res.status(err.status || 500);
-	res.send('Error ' + err.stacktrace);
+    res.status(err.status || 500);
+    res.send('Error ' + err.stacktrace);
 });
 
 module.exports = app;
