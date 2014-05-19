@@ -20,7 +20,7 @@ module.exports = function(cb) {
 }
 
 /**
- * 
+ 
  var transport = nodemailer.createTransport("SMTP", {
     service: "Gmail",
     auth: {
