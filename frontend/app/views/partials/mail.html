@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h1 class="text-center login-title">
+                Mail for password
+            </h1>
+            <div class="account-wall">
+                <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120" alt="">
+
+                <form class="form-signin" name="form" ng-submit="mailPassword(form)" novalidate>
+
+                    <div ng-class="{'has-error': form.email.$error.server}">
+                        <input type="text" class="form-control" placeholder="Email" name="email" ng-model="user.email" required autofocus server-error>
+                        <p class="help-block" ng-show="form.email.$error.server">
+                            {{ errors.email }}
+                        </p>
+                    </div>
+                    <br/>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Send mail</button>
+
+                    <span class="clearfix"></span>
+                </form>
+            </div>
+                <div class="form-group" ng-class="{'has-success': true}">
+                    <p class="help-block ng-show=" form. mail$success.server ">
+                       	{{success.mail}}
+                    	</p>
+                  </div>
+                <br />
+
+            <a ng-href="#/signup" class="text-center new-account">Create an account </a>
+        </div>
+    </div>
+</div>

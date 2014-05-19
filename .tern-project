@@ -1,1 +1,1 @@
-{"ide":{},"plugins":{"angular":"..\/"},"libs":["browser","ecma5"]}
+{"ide":{},"plugins":{"angular":"../","node":"../"},"libs":["browser","ecma5"]}

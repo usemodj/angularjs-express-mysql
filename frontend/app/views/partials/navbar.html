@@ -1,0 +1,35 @@
+<div class="navbar navbar-default" ng-controller="NavbarCtrl">
+
+    <div class="navbar-header">
+        <a class="navbar-brand" ng-href="/" name="top">NodeStoreJS.com</a>
+    </div>
+    <div class="nav navbar-nav">
+        <ul class="nav navbar-nav">
+            <li ng-repeat="item in menu" ui-route="/{{item.link}}" ng-class="{acrtive: $uiRoute}">
+                <a href="/{{item.link}}">{{item.title}}</a>
+            </li>
+            <li ng-repeat="item in authMenu" ng-show="currentUser" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}">
+                <a href="/{{item.link}}">{{item.title}}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="nav navbar-nav pull-right">
+        <ul class="nav navbar-nav" ng-hide="currentUser">
+            <li><a ng-href="#/login">Login</a>
+            </li>
+            <li><a ng-href="#/signup">Signup</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav" ng-show="currentUser">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown">Welcome, {{ currentUser.email }} <b class="caret"></b></a>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation"><a role="menuitem" ng-click="logout()"><span class="glyphicon-log-out"></span> Logout</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <!--/.navbar-collapse -->
+</div>
+<!--/.navbar -->

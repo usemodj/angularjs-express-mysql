@@ -17,6 +17,12 @@
     "orm": "~2.1.8",
     "express-session": "~1.0.4",
     "passport": "~0.2.0",
-    "method-override": "~1.0.0"
+    "method-override": "~1.0.0",
+    "crypto": "0.0.3",
+    "passport-local": "~1.0.0",
+    "express-mysql-session": "0.0.12",
+    "ejs": "~1.0.0",
+    "connect-modrewrite": "~0.7.5",
+    "nodemailer": "~0.6.5"
   }
 }

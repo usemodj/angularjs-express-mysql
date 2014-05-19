@@ -7,6 +7,11 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 //var path = require('path');
+var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
+var mountFolder = function (connect, dir) {
+  return connect.static(require('path').resolve(dir));
+};
+var modRewrite = require('connect-modrewrite');
 
 module.exports = function (grunt) {
 
@@ -103,8 +108,8 @@ module.exports = function (grunt) {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
-        livereload: 35729
-      },
+        livereload: 35729,
+     },
       livereload: {
         options: {
           open: true,
@@ -114,6 +119,38 @@ module.exports = function (grunt) {
           //bases: [path.resolve('./.tmp'), path.resolve(__dirname, '<%= yeoman.app %>')]
           server: '../backend/bin/www',
           bases: ['.tmp', '<%= yeoman.app %>']
+
+          //, middleware: livereloadMiddleware
+
+          //, middleware: function (connect, options,middlewares) {
+          //   //var middlewares = [];
+          //   middlewares.push(modRewrite([
+          //     '!/api|/assets|\\.html|\\.js|\\.css|\\woff|\\ttf|\\swf$ /index.html'
+          //   ]));
+          //   options.base.forEach(function (base) {
+          //     // Serve static files.
+          //     middlewares.push(connect.static(base));
+          //   });
+          //   middlewares.push(lrSnippet);
+          //   return middlewares;
+          // }
+
+          //  , middleware : function (connect, options) {
+          //   if (!Array.isArray(options.base)) {
+          //     options.base = [options.base];
+          //   }
+          //   // Setup the proxy
+          //   var middlewares = [require('grunt-connect-proxy/lib/utils').proxyRequest];
+          //   // Serve static files.
+          //   options.base.forEach(function(base) {
+          //     middlewares.push(connect.static(base));
+          //   });
+          //  // Make directory browse-able.
+          //   var directory = options.directory || options.base[options.base.length - 1];
+          //   middlewares.push(connect.directory(directory));
+
+          //   return middlewares;
+          // }
         }
       },
       test: {
@@ -151,6 +188,16 @@ module.exports = function (grunt) {
           jshintrc: 'test/.jshintrc'
         },
         src: ['test/spec/{,*/}*.js']
+      }
+    },
+    // jsbeautifier beautify js code
+    jsbeautifier: {
+      files: ['<%= yeoman.app %>/scripts/{,*/}*.js',
+                '<%= yeoman.app %>/views/{,*/}*.html',
+                '<%= yeoman.app %>/styles/{,*/}*.css',
+                '../backend/{,*/}*.js'],
+      options: {
+
       }
     },
 
@@ -427,6 +474,10 @@ module.exports = function (grunt) {
     'rev',
     'usemin',
     'htmlmin'
+  ]);
+
+  grunt.registerTask('format', [
+    'jsbeautifier'
   ]);
 
   grunt.registerTask('default', [
