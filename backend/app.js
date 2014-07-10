@@ -41,15 +41,40 @@ app.use(function(req, res, next){
 });
 
 // Configuration
-app.use(function(req, res, next) {
-    if ('HEAD' === req.method || 'OPTIONS' === req.method) return next();
-    var writeHead = res.writeHead;
-    res.writeHead = function() {
-        res.cookie('XSRF-TOKEN', req.session && req.session._csrfSecret);
-        writeHead.apply(res, arguments);
-    };
-    next();
-});
+// app.use(function(req, res, next) {
+//     if ('HEAD' === req.method || 'OPTIONS' === req.method) return next();
+//     var writeHead = res.writeHead;
+//     res.writeHead = function() {
+//         res.cookie('XSRF-TOKEN', req.session && req.session._csrfSecret);
+//         writeHead.apply(res, arguments);
+//     };
+//     next();
+// });
+
+// app.set('views', __dirname + '../frontend/app');
+// app.engine('html', require('ejs').renderFile);
+// app.set('view engine', 'html');
+app.use(favicon());
+app.use(logger('dev'));
+app.use(bodyParser());
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded());
+app.use(methodOverride());
+app.use(cookieParser());
+
+app.use(session({
+    secret: 'your secret here',
+    key: 'sid',
+    cookie: {
+        maxAge: 3600000 * 24 * 7
+    },
+    store: new SessionStore(settings.database)
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+// app.use(modRewrite([
+//                 '!\\.html|\\.js|\\.css|\\woff|\\ttf|\\swf$ /index.html [L]'
+//               ]));
 // app.use(express.static(path.join(__dirname, '../frontend/app')));
 if (app.get('env') === 'development') {
     app.use(express.static(path.join(__dirname, '../frontend/app')));
@@ -62,34 +87,11 @@ if (app.get('env') === 'development') {
     app.use(express.static(path.join(__dirname, '../frontend/dist')));
     app.use(errorHandler());
 };
-// app.set('views', __dirname + '../frontend/app');
-// app.engine('html', require('ejs').renderFile);
-// app.set('view engine', 'html');
-app.use(favicon());
-app.use(logger('dev'));
-app.use(bodyParser());
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded());
-app.use(methodOverride());
-app.use(cookieParser());
-app.use(session({
-    secret: 'your secret here',
-    key: 'sid',
-    cookie: {
-        maxAge: new Date(Date.now() + 3600000 * 24 * 7)
-    },
-    store: new SessionStore(settings.database)
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-// app.use(modRewrite([
-//                 '!\\.html|\\.js|\\.css|\\woff|\\ttf|\\swf$ /index.html [L]'
-//               ]));
 
 //Bootstrap routes
-var routesPath = path.join(__dirname, './routes');
+var routesPath = path.join(__dirname, './routes/');
 fs.readdirSync(routesPath).forEach(function(file) {
-    require(routesPath + '/' + file)(app);
+    require(routesPath + file)(app);
 });
 
 // Catch 404 and forwarding to error handler

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('frontendApp')
-    .controller('NavbarCtrl', ['$scope', 'AuthFactory', '$location',
+    .controller('NavbarCtrl', ['$scope', 'AuthFactory', '$location', 
         function($scope, AuthFactory, $location) {
 
             $scope.logout = function() {
@@ -11,7 +11,7 @@ angular.module('frontendApp')
                         console.log(err);
                     } else {
                         $location.path('/login');
-                    }
+                    	}
                 });
             };
         }

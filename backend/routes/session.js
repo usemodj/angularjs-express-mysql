@@ -15,8 +15,8 @@ module.exports = function(app) {
                 var error = err || info;
                 if (error) return res.json(400, error);
                 // Update login info
-                console.log(JSON.stringify(user));
-                console.log('>> req.ip: ' + req.ip);
+                //console.log(JSON.stringify(user));
+                //console.log('>> req.ip: ' + req.ip);
                 user.save({
                     current_sign_in_ip: req.ip,
                     current_sign_in_at: new Date(),

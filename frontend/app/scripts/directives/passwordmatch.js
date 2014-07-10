@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('frontendApp')
+angular.module('frontendApp.directives',[])
 .directive('passwordMatch', function() {
     return {
         restrict: 'A',

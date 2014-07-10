@@ -3,6 +3,8 @@
 var services = angular.module('frontendApp');
 services.factory('MailFactory', ['$resource',
         function($resource) {
-            return $resource('/auth/mail/', {});
+            return $resource('/auth/mail/', { },{
+            	update: { method: 'PUT'}
+            });
         }
     ]);

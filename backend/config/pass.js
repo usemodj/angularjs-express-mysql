@@ -14,9 +14,7 @@ module.exports = function(db) {
     });
 
     passport.deserializeUser(function(id, done) {
-        User.one({
-            id: id
-        }, function(err, user) {
+        User.get(id, function(err, user) {
             done(err, user);
         });
     });

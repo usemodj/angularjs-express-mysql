@@ -6,11 +6,30 @@ angular.module('frontendApp')
         '$scope',
         'AuthFactory',
         '$location',
-        function($scope, AuthFactory, $location) {
+        '$remember',
+        function($scope, AuthFactory, $location, $remember) {
             $scope.error = {};
             $scope.user = {};
+            $scope.user.rememberMe = false;
+            
+            if($remember('email')){
+            	$scope.user.rememberMe = true;
+            	$scope.user.email = $remember('email');
+            	//$scope.user.password = $remember('password');
+            }
+
+            function rememberMe(){
+            	if($scope.user.rememberMe){
+            		$remember('email', $scope.user.email);
+            		//$remember('password', {value:$scope.user.password, secure: true});
+            	} else {
+            		$remember('email', '');
+            		//$remember('password', '');
+            	}
+           }
 
             $scope.login = function(form) {
+            	rememberMe();
                 AuthFactory.login('password', {
                     'email': $scope.user.email,
                     'password': $scope.user.password,

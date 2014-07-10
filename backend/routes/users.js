@@ -4,7 +4,7 @@ module.exports = function(app) {
         req.models.users.find().all(function(err, users) {
             if (err)
                 return next(err);
-            console.log('>>routes/users:');
+            console.log('>>get users:');
             console.log(JSON.stringify(users));
             res.json(users);
         });
@@ -16,17 +16,18 @@ module.exports = function(app) {
     // res.json(users);
     // });
     // });
-    // '/users/:id?color=red' -> req.params.id, req.query.color
+
+    // get '/users/:id?color=red' --> req.params.id, req.query.color
     app.get('/users/:id', function(req, res, next) {
         req.models.users.get(req.params.id, function(err, user) {
             if (err)
                 return next(err);
-            console.log('>>routes/users/' + req.params.id);
+            console.log('>>get /users/' + req.params.id);
             console.log(JSON.stringify(user));
             res.json(user);
         });
     });
-
+    // post signup
     app.post('/users', function(req, res, next) {
         var User = req.models.users;
         var email = req.body.email;
@@ -73,6 +74,7 @@ module.exports = function(app) {
         });
     });
 
+	//Update Password 
     app.put('/users', ensureAuthenticated,
         function(req, res, next) {
             if (!req.user) return res.json(400, 'Login is required.');
@@ -87,12 +89,12 @@ module.exports = function(app) {
                 password: password
             }, function(err, user) {
                 if (err) {
-                    console.log('>> users findOne err:');
+                    //console.log('>> users findOne err:');
                     console.log(err);
                     return res.json(400, err);
                 }
-                console.log('>>/users put');
-                console.log(JSON.stringify(user));
+                //console.log('>>/users put');
+                //console.log(JSON.stringify(user));
                 user.save({
                     //email: email,
                     encrypted_password: user.encryptPassword(new_password)

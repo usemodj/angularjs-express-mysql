@@ -23,8 +23,7 @@ services.factory('UserFactory', ['$resource',
             //get: { method: 'GET', params: {id: '@id'} },
             update: {
                 method: 'PUT'
-            },
-            //delete: { method: 'DELETE', params: {id: '@id'} }
+            }
         });
     }
 ]);

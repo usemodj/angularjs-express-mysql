@@ -10,8 +10,8 @@ module.exports = function(cb) {
         // If you are using @gmail.com address, then you don't
         // even have to define the service name
         auth: {
-            user: "gmail.user@gmail.com",
-            pass: "userpass"
+            user: "nodesoft.blog@gmail.com",
+            pass: "nodesoft3208"
         }
     });
 

@@ -24,6 +24,7 @@
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown">Welcome, {{ currentUser.email }} <b class="caret"></b></a>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
+                    <li><a role="menuitem" ng-href="#/password"><span class="glyphicon glyphicon-ok form-control-feedback"></span> Change Password</a>
                     <li role="presentation"><a role="menuitem" ng-click="logout()"><span class="glyphicon-log-out"></span> Logout</a>
                     </li>
                 </ul>

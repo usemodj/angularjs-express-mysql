@@ -95,6 +95,9 @@ module.exports = function(orm, db) {
                 var salt = new Buffer(password_salt, 'base64');
                 return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
             },
+            randomToken: function() {
+                return Math.round((new Date().valueOf() * Math.random())) + '';
+            }
 
         },
         validations: {
@@ -116,10 +119,8 @@ module.exports = function(orm, db) {
 
             },
             beforeSave: function() {
-                console.log('>>User this.encrypted_password: ' + this.encrypted_password);
-                console.log('>>User this.retype_password: ' + this.retype_password);
-                console.log('>>User this.password: ' + this.password);
-            },
+
+           },
             beforeCreate: function() {
                 this.created_at = new Date();
             }
@@ -139,7 +140,8 @@ module.exports = function(orm, db) {
             if (err) {
                 callback(err);
             } else {
-                if (person.encrypted_password == person.encryptPassword2(user.password, person.password_salt)) {
+                if (person.encrypted_password == person.encryptPassword(user.password)) {
+                //if (person.encrypted_password == person.encryptPassword2(user.password, person.password_salt)) {
                     callback(null, person);
                 } else {
                     var errors = [{
@@ -152,6 +154,29 @@ module.exports = function(orm, db) {
             }
         });
     }
+
+    User.findByPasswordToken = function(user, callback) {
+        this.one({
+            email: user.email,
+            reset_password_token: user.reset_password_token
+        }, function(err, person) {
+            if (err) {
+                callback(err);
+            } else {
+            	if(!person){
+	                    var errors = [{
+	                        property: 'retype_password',
+	                        msg: 'Password token is invalid.',
+	                        value: user.password
+	                    }];
+	                    callback(errors);
+	             } else {
+            		callback(null, person);
+            	}
+            }
+        });
+    }
+
     //	Person.find({ surname: "Doe" }).limit(3).offset(2).only("name", "surname").run(function (err, people) {
     // finds people with surname='Doe', skips first 2 and limits to 3 elements,
     // returning only 'name' and 'surname' properties
