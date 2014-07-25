@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('frontendApp.directives',[])
+angular.module('frontendApp')
     .constant('focusConfig', {
         focusClass: 'focused'
     })

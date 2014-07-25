@@ -39,8 +39,13 @@ var connection = null;
 
 function setup(db, cb) {
     require('./user')(orm, db);
+    require('./role')(orm, db);
     require('./customer')(orm, db);
     require('./address')(orm, db);
+    require('./product')(orm, db);
+    require('./variant')(orm, db);
+    require('./option_type')(orm, db);
+    require('./option_value')(orm, db);
 
     return cb(null, db);
 }
@@ -54,5 +59,6 @@ module.exports = function(cb) {
         connection = db;
         db.settings.set('instance.returnAllErrors', true);
         setup(db, cb);
+        //db.sync();
     });
 };

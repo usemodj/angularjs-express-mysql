@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('frontendApp.directives',[])
+angular.module('frontendApp')
 /**
  * Removes server error when user updates input
  */

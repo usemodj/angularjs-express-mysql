@@ -1,0 +1,24 @@
+﻿<div class="panel-body">
+    <form class="form" name="form" ng-submit="updateRole(currentUser)"  novalidate>
+    <div class="form-group">
+        <label>Email:</label>
+        {{currentUser.email}}
+    </div>
+    <div class="form-group">
+        <label>Role:</label>
+        {{currentUser.role.title}}
+    </div>
+    <div class="form-group">
+        <label>Change Role:</label>
+        <select class="form-control"  name="role" ng-model="currentUser.role_id"
+                ng-options="role.id as role.title for role in roles" >
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Active:</label>{{currentUser.active}}
+        <input type="checkbox" ng-model="currentUser.active">
+    </div>
+    <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid || !currentUser.email">Save</button>
+    <button class="btn btn-primary" ng-click="cancelEdit()">Cancel</button>
+    </form>
+</div>

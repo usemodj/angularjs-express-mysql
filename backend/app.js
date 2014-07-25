@@ -13,7 +13,7 @@ var SessionStore = require('express-mysql-session');
 var modRewrite = require('connect-modrewrite');
 
 var settings = require('./config/settings');
-var models = require('./models/');
+var models = require('./models/');//index.js
 var mailer = require('./config/mailer');
 
 var app = express();
@@ -51,14 +51,13 @@ app.use(function(req, res, next){
 //     next();
 // });
 
-// app.set('views', __dirname + '../frontend/app');
+//app.set('views', __dirname + '../frontend/app/');
 // app.engine('html', require('ejs').renderFile);
 // app.set('view engine', 'html');
 app.use(favicon());
 app.use(logger('dev'));
-app.use(bodyParser());
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride());
 app.use(cookieParser());
 
@@ -77,22 +76,23 @@ app.use(passport.session());
 //               ]));
 // app.use(express.static(path.join(__dirname, '../frontend/app')));
 if (app.get('env') === 'development') {
-    app.use(express.static(path.join(__dirname, '../frontend/app')));
+    app.use(express.static(path.join(__dirname, '../frontend/app/')));
     app.use(errorHandler({
         dumpExceptions: true,
         showStack: true
     }));
 } else {
     // production
-    app.use(express.static(path.join(__dirname, '../frontend/dist')));
+    app.use(express.static(path.join(__dirname, '../frontend/dist/')));
     app.use(errorHandler());
 };
 
-//Bootstrap routes
-var routesPath = path.join(__dirname, './routes/');
-fs.readdirSync(routesPath).forEach(function(file) {
-    require(routesPath + file)(app);
-});
+//Bootstrap controllers
+//var routesPath = path.join(__dirname, './routes/');
+//fs.readdirSync(routesPath).forEach(function(file) {
+//    require(routesPath + file)(app);
+//});
+require('./routes')(app);
 
 // Catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

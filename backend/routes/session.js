@@ -11,11 +11,12 @@ module.exports = function(app) {
     //login post
     app.post('/auth/session',
         function(req, res, next) {
+            console.log('>> login post...');
             passport.authenticate('local', function(err, user, info) {
                 var error = err || info;
                 if (error) return res.json(400, error);
                 // Update login info
-                //console.log(JSON.stringify(user));
+                console.log(JSON.stringify(user));
                 //console.log('>> req.ip: ' + req.ip);
                 user.save({
                     current_sign_in_ip: req.ip,

@@ -1,0 +1,53 @@
+<h2>Option Types</h2>
+
+<div class="panel-body" >
+    <form name="myform" class="form-inline" role="form" ng-submit="createOptionType(myform)">
+        <div class="row">
+            <div class="form-group col-xs-5 col-md-5">
+                <label>Name*:</label><br/>
+                <input class="form-control" ng-model="newOptionType.name" placeholder="Enter name" required>
+            </div>
+            <div class="form-group col-xs-5 col-md-5">
+                <label>Presentation*:</label><br/>
+                <input class="form-control" ng-model="newOptionType.presentation" placeholder="Enter presentation" required>
+            </div>
+            <div class="col-xs-2 col-md-2">
+                <br>
+                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Create</button>
+            </div>
+        </div>
+        <div class="form-group has-error">
+            <p class="help-block">{{ error }}</p>
+        </div>
+
+    </form>
+    <br/>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Presentation</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody ui-sortable="sortableOptions" ng-model="data.optionTypes">
+        <tr ng-repeat="item in data.optionTypes">
+            <td style="width:300px" class="col-md-5"><span class="glyphicon glyphicon-list"></span> {{item.name}}</td>
+            <td style="width:300px" class="col-md-5">{{item.presentation}} {{item.position}}</td>
+            <td class="col-md-2 text-center">
+                <a ui-sref="admin.products.option_types.edit({id: item.id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
+                <a  ng-click="deleteOptionType(item)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-xs-2 col-md-2"></div>
+        <div class="col-xs-8  col-md-8">
+        </div>
+        <div class="col-xs-2 col-md-2">
+            <a ui-sref="admin.products.option_types.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+        </div>
+    </div>
+</div>

@@ -4,24 +4,51 @@ var services = angular.module('frontendApp');
 services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','SessionFactory', 'UserFactory',
                              'MailFactory',
         function($location, $rootScope, $cookieStore, SessionFactory, UserFactory, MailFactory) {
-            $rootScope.currentUser = $cookieStore.get('user') || null;
+            var accessLevels = routingConfig.accessLevels,
+                userRoles = routingConfig.userRoles,
+                currentUser = $cookieStore.get('user') || {email:'', role: userRoles.public};
+
             //$cookieStore.remove('user');
 
-            return {
+            function changeUser(user){
+                angular.extend(currentUser, user);
+            }
 
-                login: function(provider, user, callback) {
+            return {
+                accessLevels: accessLevels,
+                userRoles: userRoles,
+                user: currentUser,
+
+                authorize: function(accessLevel, role){
+                    if(role === undefined){
+                        role = currentUser.role;
+                    }
+                    return accessLevel.bit_mask & role.bit_mask;
+                },
+
+                isLoggedIn: function(user){
+                    if(user === undefined){
+                        user = currentUser;
+                    }
+                    return user.role.title === userRoles.user.title || user.role.title === userRoles.admin.title;
+                },
+
+                login: function(provider, userinfo, callback) {
+                    console.log('>> auth login');
                     var cb = callback || angular.noop;
                     SessionFactory.save({
                         provider: provider,
-                        email: user.email,
-                        password: user.password,
-                        rememberMe: user.rememberMe
+                        email: userinfo.email,
+                        password: userinfo.password,
+                        rememberMe: userinfo.rememberMe
                     }, function(user) {
-                        //console.log( user);
-                        $rootScope.currentUser= user;
+                        //console.log('>> authfactory login user:'+JSON.stringify(user));
+                        //$rootScope.currentUser= user;
                         $cookieStore.put('user', user);
+                        changeUser(user)
                         return cb();
                     }, function(err) {
+                        console.log('>>authfactory login error:'+ JSON.stringify(err));
                         return cb(err.data);
                     });
                 },
@@ -29,8 +56,12 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                 logout: function(callback) {
                     var cb = callback || angular.noop;
                     SessionFactory.delete(function(res) {
-                            $rootScope.currentUser = null;
+                            //$rootScope.currentUser = null;
                             $cookieStore.remove('user');
+                            changeUser({
+                                email:'',
+                                role: userRoles.public
+                            });
                             return cb();
                         },
                         function(err) {
@@ -43,25 +74,38 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                     var cb = callback || angular.noop;
                     UserFactory.save(userinfo,
                         function(user) {
-                            $rootScope.currentUser = user;
-                            $cookieStore.put('user', user);
-                            return cb();
+                            //$rootScope.currentUser = user;
+                            //$cookieStore.put('user', user);
+                            //changeUser(user);
+                            return cb(null);
                         },
                         function(err) {
-                            console.log('>> authfactory createUser err: ');
-                            console.log(err);
+                            //console.log('>> authfactory createUser err: ');
+                            //console.log(err);
                             return cb(err.data);
                         });
                 },
 
-                currentUser: function() {
-                    console.log('>>authfactory currentUser:');
+                changeRole: function(user, callback) {
+                    var cb = callback || angular.noop;
+                    UserFactory.update({
+                        id: user.id,
+                        email: user.email,
+                        role_id: user.role_id,
+                        active: user.active
+                    }, function(user) {
+                        console.log('updateUserRole changed');
+                        console.log('>> user: ' + user);
+                        changeUser(user);
+                        return cb(null);
 
-                    SessionFactory.get(function(user) {
-                        console.log(user);
-                        $rootScope.currentUser = user;
-                        $cookieStore.put('user', user);
+                    }, function(err) {
+                        console.log('>> updateUserRole error: ');
+                        console.log(err);
+                        return cb(err.data);
                     });
+
+
                 },
 
                 changePassword: function(email, oldPassword, newPassword, retypePassword, callback) {
@@ -76,8 +120,8 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                         console.log('>> user: ' + user);
                         return cb();
                     }, function(err) {
-                        //console.log('>> authfactory changePassword: ');
-                        //console.log(err);
+                        console.log('>> authfactory changePassword: ');
+                        console.log(err);
                         return cb(err.data);
                     });
                 },

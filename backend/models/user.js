@@ -8,6 +8,13 @@ module.exports = function(orm, db) {
             required: true,
             unique: true
         },
+        role_id: {
+            type: 'serial',
+            required: true
+        },
+        active: {
+          type: 'boolean'
+        },
         encrypted_password: {
             type: 'text'
         },
@@ -53,17 +60,29 @@ module.exports = function(orm, db) {
         }
 
     }, {
+        //cache: false,
+        autoFetch: true,
+        autoFetchLimit: 2,
         methods: {
-            // password : {
-            //         set: function(val) {
-            //         	this.setAttribute('password_salt', this.makeSalt());
-            //             this.setAttribute('encrypted_password', this.encryptPassword( val));
-            //         }
-            //     },
+
             serialize: function() {
+//                var role;
+//                User.get(function(err, user){
+//                    if(err) {
+//                        console.log(err);
+//                    }
+//                    else {
+//                        console.log('>>serialize user:'+ JSON.stringify(user));
+//                        user.getRole(function(err, r){
+//                            if(err) throw err;
+//                            role = r;
+//                        });
+//
+//                    }
+//                });
                 return {
-                    id: this.id,
                     email: this.email
+                    ,role: this.role
                 };
             },
             /**
@@ -115,20 +134,21 @@ module.exports = function(orm, db) {
             beforeValidation: function() {
                 this.updated_at = new Date();
             },
-            afterLoad: {
+            afterLoad: function () {
 
             },
             beforeSave: function() {
 
-           },
+            },
             beforeCreate: function() {
                 this.created_at = new Date();
             }
         }
+
     });
     // creates column 'customer_id' in 'users' table
-    // User.hasOne('customer', db.models.customers, { required: true, reverse:
-    // 'users', autoFetch: true });
+    // User.hasOne('customer', db.models.customers, { required: true, reverse:'users', autoFetch: true });
+    User.hasOne('role', db.models.roles, { });
 
     User.findOne = function(user, callback) {
         //console.log('>> findOne user:' + JSON.stringify(user));
@@ -153,7 +173,7 @@ module.exports = function(orm, db) {
                 }
             }
         });
-    }
+    };
 
     User.findByPasswordToken = function(user, callback) {
         this.one({
@@ -175,7 +195,8 @@ module.exports = function(orm, db) {
             	}
             }
         });
-    }
+    };
+
 
     //	Person.find({ surname: "Doe" }).limit(3).offset(2).only("name", "surname").run(function (err, people) {
     // finds people with surname='Doe', skips first 2 and limits to 3 elements,

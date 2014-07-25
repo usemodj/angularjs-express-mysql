@@ -1,0 +1,45 @@
+<nav class="navbar navbar-default  navbar-static-top" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div ng-class="{active:$state.includes('admin.products.list')}" class="navbar-header">
+            <a class="navbar-brand" ui-sref="admin.products.list"> Products </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li ng-class="{active:$state.includes('admin.products.option_types.list')}"><a ui-sref="admin.products.option_types.list">Option Types</a></li>
+                <li ng-class="{active:$state.includes('admin.products.taxonomies.list')}"><a ui-sref="admin.products.taxonomies.list">Taxonomies</a></li>
+                <li ng-class="{active:$state.includes('admin.products.taxons.list')}"><a ui-sref="admin.products.taxons.list">Taxons</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Link</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+       </div><!-- /.navbar-collapse -->
+
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-md-push-9">
+            <div class="list-group" >
+                <div class="list-group-item">
+                    <strong>Nested Menu</strong>
+                </div>
+                <a ui-sref="admin.users.list" active-nav class="list-group-item">List of Users</a>
+                <a ui-sref="admin.users.edit" active-nav class="list-group-item">List of Users</a>
+            </div>
+        </div>
+        <div class="col-md-9 col-md-pull-3" ui-view></div>
+    </div>
+</div>

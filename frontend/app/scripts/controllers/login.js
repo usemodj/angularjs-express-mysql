@@ -40,6 +40,7 @@ angular.module('frontendApp')
                     if (!err) {
                         $location.path('/');
                     } else {
+                        console.log('>>login controller error:'+ JSON.stringify(err));
                         console.log(err);
                         angular.forEach(err.errors, function(error,
                             field) {

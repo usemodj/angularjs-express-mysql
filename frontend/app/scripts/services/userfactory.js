@@ -12,12 +12,12 @@
 var services = angular.module('frontendApp');
 services.factory('UserFactory', ['$resource',
     function($resource) {
-        return $resource('/users/:id', {}, {
-            list: {
+        return $resource('/users/:id', {id:"@id"}, {
+            list: {//query
                 method: 'GET',
                 isArray: true
             },
-            show: {
+            show: {//get
                 method: 'GET'
             },
             //get: { method: 'GET', params: {id: '@id'} },

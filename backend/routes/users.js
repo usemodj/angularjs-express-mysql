@@ -1,11 +1,16 @@
 module.exports = function(app) {
 
     app.get('/users', function(req, res, next) {
+        console.log('>>req.originalUrl:'+ req.originalUrl);
+        console.log('>>req.url:'+ req.url);
+        //console.log('>>req:' );
+        //console.log( req);
+
         req.models.users.find().all(function(err, users) {
             if (err)
                 return next(err);
-            console.log('>>get users:');
-            console.log(JSON.stringify(users));
+            //console.log('>>get users:');
+            //console.log(JSON.stringify(users));
             res.json(users);
         });
     });

@@ -27,7 +27,11 @@ module.exports = function(orm, db) {
         hooks: {
             beforeValidation: function() {
                 this.updated_at = new Date();
+            },
+            beforeCreate: function () {
+                this.created_at = new Date();
             }
+
         }
     });
     // creates column 'user_id' in 'customers' table

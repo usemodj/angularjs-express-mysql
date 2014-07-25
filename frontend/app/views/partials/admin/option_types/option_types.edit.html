@@ -1,0 +1,63 @@
+<h2>Editing Option Type: {{optionType.name}}</h2>
+
+<div class="panel-body" >
+    <form name="myform" class="form-inline" role="form" ng-submit="updateOptionType(myform)">
+        <div class="row">
+            <div class="form-group col-xs-5 col-md-5">
+                <label>Name*:</label><br/>
+                <input class="form-control" ng-model="optionType.name" placeholder="Enter name" required>
+            </div>
+            <div class="form-group col-xs-5 col-md-5">
+                <label>Presentation*:</label><br/>
+                <input class="form-control" ng-model="optionType.presentation" placeholder="Enter presentation" required>
+            </div>
+            <div class="col-xs-2 col-md-2">
+                <br>
+            </div>
+        </div>
+        <div class="form-group has-error">
+            <p class="help-block">{{ error }}</p>
+        </div>
+        <div class="form-group has-success">
+            <p class="help-block">{{ message }}</p>
+        </div>
+
+        <br/>
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-5">Name</th>
+                <th class="col-md-5">Display</th>
+                <th><a class="btn btn-primary" data-target="tbody#option_values" ng-click="addOptionValue()"><span class="glyphicon glyphicon-plus"></span> Add Option Value</a></th>
+            </tr>
+            </thead>
+            <tbody id="option_values" ui-sortable="sortableOptions" ng-model="optionType.optionValues">
+            <tr ng-repeat="item in optionType.optionValues">
+                <td style="width:400px" class="col-md-5">
+                    <div class="row">
+                        <div class="col-xs-1 col-md-1"><span class="text-center glyphicon glyphicon-list"></span></div>
+                        <div class="col-xs-10 col-md-10"><input class="form-control" ng-model="item.name" required/></div>
+                    </div>
+                </td>
+
+                <td style="width:400px" class="col-md-5"><input class="form-control" ng-model="item.presentation" required/></td>
+                <td class="col-md-2 text-center">
+                    <a ng-click="deleteOptionValue(item)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-trash"></span></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-xs-2 col-md-2"></div>
+            <div class="text-center col-xs-6 col-md-6">
+                <button type="submit" ng-disabled="myform.$invalid || optionType.optionValues.length === 0" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Update</button>
+            </div>
+            <div class="text-right col-xs-4 col-md-4">
+                <a ui-sref="admin.products.option_types.list" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-chevron-left"></span> Back</a>
+                <a ui-sref="admin.products.option_types.edit({id: optionType.id})" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+            </div>
+        </div>
+    </form>
+</div>

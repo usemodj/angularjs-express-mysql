@@ -8,25 +8,26 @@
             <li ng-repeat="item in menu" ui-route="/{{item.link}}" ng-class="{acrtive: $uiRoute}">
                 <a href="/{{item.link}}">{{item.title}}</a>
             </li>
-            <li ng-repeat="item in authMenu" ng-show="currentUser" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}">
+            <li ng-repeat="item in authMenu" ng-show="user" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}">
                 <a href="/{{item.link}}">{{item.title}}</a>
             </li>
         </ul>
     </div>
+
     <div class="nav navbar-nav pull-right">
-        <ul class="nav navbar-nav" ng-hide="currentUser">
-            <li><a ng-href="#/login">Login</a>
+        <ul class="nav navbar-nav">
+            <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.login">Login</a>
             </li>
-            <li><a ng-href="#/signup">Signup</a>
+            <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.signup">Signup</a>
             </li>
         </ul>
-        <ul class="nav navbar-nav" ng-show="currentUser">
+        <ul class="nav navbar-nav" access-level="accessLevels.user">
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">Welcome, {{ currentUser.email }} <b class="caret"></b></a>
+                <a class="dropdown-toggle" data-toggle="dropdown">Welcome, {{ user.email }} <b class="caret"></b></a>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
-                    <li><a role="menuitem" ng-href="#/password"><span class="glyphicon glyphicon-ok form-control-feedback"></span> Change Password</a>
-                    <li role="presentation"><a role="menuitem" ng-click="logout()"><span class="glyphicon-log-out"></span> Logout</a>
-                    </li>
+                    <li active-nav><a role="menuitem" ui-sref="user.password"><span class="glyphicon glyphicon-ok form-control-feedback"></span> Change Password</a></li>
+                    <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.users.list"><span class="glyphicon glyphicon-user form-control-feedback"></span> Users</a> </li>
+                    <li role="presentation"><a role="menuitem" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                 </ul>
             </li>
         </ul>

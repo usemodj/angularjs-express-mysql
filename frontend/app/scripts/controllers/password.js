@@ -3,11 +3,8 @@
 angular.module('frontendApp')
     .controller('PasswordCtrl', ['$rootScope', '$scope', 'AuthFactory', '$location',
         function($rootScope, $scope, AuthFactory, $location) {
-            console.log('>>passwordCtrl:');
-            console.log($rootScope.currentUser);
-            if (!$rootScope.currentUser) return $location.path('/login');
 
-            $scope.user = $rootScope.currentUser;
+            $scope.user = AuthFactory.user;
 
             $scope.changePassword = function(form) {
 
@@ -19,11 +16,7 @@ angular.module('frontendApp')
                         $scope.errors = {};
                         $scope.success = {};
 
-                        if (!errors) {
-                            form['password'].$setValidity('server', true);
-                            $scope.success['password'] = 'Password changed.';
-                            //$location.path('/');
-                        } else {
+                        if (errors) {
                             // console.log( err);
                             angular.forEach(errors, function(error) {
                                 var msg = error.msg;
@@ -35,6 +28,10 @@ angular.module('frontendApp')
                                 form[field].$setValidity('server', false);
                                 $scope.errors[field] = msg;
                             });
+                        } else {
+                            form['password'].$setValidity('server', true);
+                            $scope.success['password'] = 'Password changed.';
+                            //$location.path('/');
                         }
                     });
             };
