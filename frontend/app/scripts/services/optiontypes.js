@@ -60,7 +60,7 @@ angular.module('frontendApp')
         searchOptionTypes: function(conditions, callback){
             var cb = callback || angular.noop;
             console.log(conditions);
-            $http.post('/admin/option_types/', conditions)
+            $http.post('/admin/option_types/search', conditions)
                 .success(function(data, status, headers, config){
                     console.log('>> status:'+ status);
                     return cb(null, data);

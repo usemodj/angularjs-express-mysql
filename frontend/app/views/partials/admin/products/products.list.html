@@ -1,59 +1,69 @@
-<h2>Products List</h2>
-
-<div class="panel-body" >
-    <form name="form" class="form-inline" role="form" ng-submit="searchProducts(form)">
+<div class="container">
+    <div class="row">
+        <div class="col-xs-8 col-md-8">
+            <h2>Products List</h2>
+        </div>
+        <div class="col-xs-4 col-md-4 text-center">
+            <br/>
+            <button class="btn btn-primary" ui-sref="admin.products.new"><span class="glyphicon glyphicon-plus"></span> New Product &nbsp;&nbsp; </button>
+        </div>
+    </div>
+    <div class="panel-body" >
+        <form name="form" class="form-inline" role="form" ng-submit="searchProducts(form)">
+            <div class="row">
+                <div class="form-group col-xs-7 col-md-4">
+                    <label>Name:</label><br/>
+                    <input class="form-control" ng-model="conditions.name" placeholder="Enter name">
+                </div>
+                <div class="form-group col-xs-6 col-md-3">
+                    <label>SKU:</label><br/>
+                    <input class="form-control" ng-model="conditions.sku" placeholder="Enter sku">
+                </div>
+                <div class="form-group col-xs-3 col-md-3">
+                    <label><br/>
+                        <input type="checkbox" ng-model="conditions.deleted"> Show Deleted
+                    </label>
+                </div>
+                <div class="col-xs-2 col-md-2">
+                    <br>
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search form-control-feedback"></span> Search</button>
+                </div>
+            </div>
+        </form>
+        <br/>
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Master Price</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in data.products">
+                <td>{{item.sku}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.price}}
+                </td>
+                <td class="text-center">
+                    <a ng-hide="item.deleted_at != null" ui-sref="admin.products.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                    <a ui-sref="admin.products.clone({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Clone"><span class="glyphicon glyphicon-file"></span></a>
+                    <a ng-hide="item.deleted_at != null" ng-confirm-click="Are you sure?" ng-click="deleteProduct(item)" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Delete"><span class="glyphicon glyphicon-trash"></span></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
         <div class="row">
-            <div class="form-group col-xs-4 col-md-4">
-                <label>Name:</label><br/>
-                <input class="form-control" ng-model="conditions.name" placeholder="Enter name">
-            </div>
-            <div class="form-group col-xs-3 col-md-3">
-                <label>SKU:</label><br/>
-                <input class="form-control" ng-model="conditions.sku" placeholder="Enter sku">
-            </div>
-            <div class="form-group col-xs-3 col-md-3">
-                <label><br/>
-                    <input type="checkbox" ng-model="conditions.deleted"> Show Deleted
-                </label>
+            <div class="col-xs-2 col-md-2">Page:{{page}}/{{numPages}} ({{totalItems}})</div>
+            <div class="col-xs-8  col-md-8">
+                <pagination total-items="totalItems" ng-model="page" max-size="3" items-per-page="10"
+                            num-pages="numPages" ng-change="pageChanged()"></pagination>
             </div>
             <div class="col-xs-2 col-md-2">
-                <br>
-                <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search form-control-feedback"></span> Search</button>
+                <a ui-sref="admin.products.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
             </div>
-        </div>
-    </form>
-    <br/>
-    <table class="table table-striped table-bordered table-hover">
-        <thead>
-        <tr>
-            <th>SKU</th>
-            <th>Name</th>
-            <th>Master Price</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="item in data.products">
-            <td>{{item.sku}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.price}}
-            </td>
-            <td class="text-center">
-                <a ui-sref="admin.products.edit({id: item.id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
-
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="row">
-        <div class="col-xs-2 col-md-2">Page:{{page}}/{{numPages}} ({{totalItems}})</div>
-        <div class="col-xs-8  col-md-8">
-            <pagination total-items="totalItems" ng-model="page" max-size="3" items-per-page="10"
-                        num-pages="numPages" ng-change="pageChanged()"></pagination>
-        </div>
-        <div class="col-xs-2 col-md-2">
-            <a ui-sref="admin.products.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
-                <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
         </div>
     </div>
 </div>

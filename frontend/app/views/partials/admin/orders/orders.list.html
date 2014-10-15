@@ -1,1 +1,114 @@
-<h2>Orders List</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-8 col-md-8">
+            <h2>Orders List</h2>
+        </div>
+        <div class="col-xs-4 col-md-4 text-center">
+        </div>
+    </div>
+    <div class="panel-body" >
+        <form name="form" class="" role="form" ng-submit="searchOrders(form)">
+            <div class="row">
+                <div class="form-group col-xs-2 col-md-2">
+                    <label>Date Range:</label><br/>
+                    <input class="form-control" ng-model="conditions.from" placeholder="Start" jqdatepicker>
+
+                </div>
+                <div class="col-xs-1 col-md-1" style="width:10px;">
+                    <br/>
+                    <div class="glyphicon glyphicon-arrow-right"></div>
+                </div>
+                <div class="form-group col-xs-2 col-md-2">
+                    <br/>
+                    <input class="form-control" ng-model="conditions.to" placeholder="Stop" jqdatepicker>
+                </div>
+                <div class="form-group col-xs-2 col-md-2">
+                    <label>Order#:</label><br/>
+                    <input class="form-control" ng-model="conditions.number" placeholder="Number">
+                </div>
+                <div class="form-group col-xs-2 col-md-2">
+                    <label>Name:</label><br/>
+                    <input class="form-control" ng-model="conditions.name" placeholder="Name">
+                </div>
+                <div class="form-group col-xs-2 col-md-2">
+                    <label><br/>
+                        <input type="checkbox" ng-model="conditions.completed"> Only Show Complete Orders
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-2 col-md-2">
+                    <label>Status:</label><br/>
+                    <select class="form-control" ng-model="conditions.state" >
+                        <option value="">-- state --</option>
+                        <option>cart</option>
+                        <option>address</option>
+                        <option>delivery</option>
+                        <option>payment</option>
+                        <option>confirm</option>
+                        <option>complete</option>
+                        <option>canceled</option>
+                        <option>awaiting return</option>
+                        <option>returned</option>
+                    </select>
+                </div>
+                <div class="form-group col-xs-3 col-md-3">
+                    <label>Email:</label><br/>
+                    <input class="form-control" ng-model="conditions.email" placeholder="Email">
+                </div>
+                <div class="col-xs-2 col-md-2">
+                    <br>
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search form-control-feedback"></span> Search</button>
+                </div>
+            </div>
+        </form>
+        <br/>
+        <div class="row">
+            <div class="col-md-10">
+
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>Completed At</th>
+                        <th>Number</th>
+                        <th>State</th>
+                        <th>Payment State</th>
+                        <th>Shipment State</th>
+                        <th>Customer Email</th>
+                        <th>Name</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in data.orders">
+                        <td>{{item.completed_at}}</td>
+                        <td>{{item.number}}</td>
+                        <td>{{item.state}}</td>
+                        <td>{{item.payment_state}}</td>
+                        <td>{{item.shipment_state}}</td>
+                        <td>{{item.email}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.total | currency}}</td>
+                        <td class="text-center">
+                            <a ng-hide="item.deleted_at != null" ui-sref="admin.orders.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-xs-2 col-md-2">Page:{{page}}/{{numPages}} ({{totalItems}})</div>
+                    <div class="col-xs-8  col-md-8">
+                        <pagination total-items="totalItems" ng-model="page" max-size="3" items-per-page="10"
+                                    num-pages="numPages" ng-change="pageChanged()"></pagination>
+                    </div>
+                    <div class="col-xs-2 col-md-2">
+                        <a ui-sref="admin.orders.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                            <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

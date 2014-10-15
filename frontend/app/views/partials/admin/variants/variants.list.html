@@ -1,0 +1,109 @@
+<h2><label>Editing Product:</label> {{data.product.name}}</h2>
+<div class="text-center"><strong>(Master SKU:{{data.product.variant.sku}})</strong>
+    <div class="pull-right">
+        <a ng-hide="deleted" ng-click="showVariants(true)" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span> Show Deleted </a>
+        <a ng-show="deleted" ng-click="showVariants(false)" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span> Show Active </a>
+    </div>
+</div>
+
+<div class="panel-body" >
+    <h3>New Variant</h3>
+    <form name="myform" class="form-inline" role="form" ng-submit="createVariant(myform)">
+        <div class="row">
+            <div class="form-group col-xs-6 col-md-6">
+
+                <div ng-repeat="(key, optionType) in data.product.option_types">
+                    <label>{{optionType.presentation}}:</label>
+                    <select style="width:100%" ui-select2 ng-model="newVariant.option_values[optionType.id]" placeholder="Pick a option value" >
+                        <option ng-repeat="option_value in optionType.option_values" value="{{option_value.id}}" ng-selected="{{newVariant.option_values[optionType.id] == option_value.id.toString()}}">{{option_value.presentation}}</option>
+                    </select>
+
+                </div>
+                <div>
+                    <label>SKU*:</label>
+                    <input class="form-control" ng-model="newVariant.sku" placeholder="Enter sku" required>
+                </div>
+                <div>
+                    <label>Price*:</label>
+                    <input class="form-control" type="number" min="0" name="price" ng-model="newVariant.price" required/>
+                    <p class="error" ng-show="myform.price.$error.number">Not valid number!</p>
+                </div>
+                <div>
+                    <label>Cost price:</label>
+                    <input class="form-control" type="number" min="0" name="cost_price" ng-model="newVariant.cost_price" required/>
+                    <p class="error" ng-show="myform.cost_price.$error.number">Not valid number!</p>
+                </div>
+            </div>
+            <div class="form-group col-xs-6 col-md-6">
+                <div>
+                    <label>Weight:</label>
+                    <input class="form-control" type="number" min="0" name="weight" ng-model="newVariant.weight" />
+                    <p class="error" ng-show="myform.weight.$error.number">Not valid number!</p>
+                </div>
+                <div>
+                    <label>Height:</label>
+                    <input class="form-control" type="number" min="0" name="height" ng-model="newVariant.height" />
+                    <p class="error" ng-show="myform.height.$error.number">Not valid number!</p>
+                </div>
+                <div>
+                    <label>Width:</label>
+                    <input class="form-control" type="number" min="0" name="width" ng-model="newVariant.width" />
+                    <p class="error" ng-show="myform.width.$error.number">Not valid number!</p>
+                </div>
+                <div>
+                    <label>Depth:</label>
+                    <input class="form-control" type="number" min="0" name="depth" ng-model="newVariant.depth" required/>
+                    <p class="error" ng-show="myform.depth.$error.number">Not valid number!</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="text-center col-xs-12 col-md-12">
+                <br>
+                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Create</button>
+            </div>
+        </div>
+        <div class="form-group has-error" ng-show="error">
+            <p class="help-block">{{ error }}</p>
+        </div>
+        <div class="form-group has-success" ng-show="success">
+            <p class="help-block">{{ message }}</p>
+        </div>
+
+    </form>
+
+    <br/>
+    <h3>Variants List</h3>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Options</th>
+            <th>Price</th>
+            <th>SKU</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody ui-sortable="sortableOptions" ng-model="data.variants">
+        <tr ng-repeat="item in data.variants">
+            <td style="width:300px" class="col-md-6"><span class="glyphicon glyphicon-list"></span> {{item.options}}</td>
+            <td style="width:200px" class="col-md-2 text-right">{{item.price}}</td>
+            <td style="width:200px" class="col-md-2">{{item.sku}}</td>
+            <td class="col-md-2 text-center">
+                <div ng-hide="deleted">
+                <a ui-sref="admin.products.variants.edit({id: item.id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
+                <a ng-confirm-click="Are you sure?" ng-click="deleteVariant(item)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-trash"></span></a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-xs-2 col-md-2"></div>
+        <div class="col-xs-8  col-md-8">
+        </div>
+        <div class="col-xs-2 col-md-2">
+            <a ui-sref="admin.products.variants.list({product_id: $stateParams.product_id})" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+        </div>
+    </div>
+</div>

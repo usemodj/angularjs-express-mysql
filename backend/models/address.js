@@ -3,14 +3,19 @@ module.exports = function(orm, db) {
         name: {
             type: 'text'
         },
-        address: {
-            type: 'text',
-            required: true
+        address1: {
+            type: 'text'
         },
         address2: {
             type: 'text'
         },
         zipcode: {
+            type: 'text'
+        },
+        phone: {
+            type: 'text'
+        },
+        mobile: {
             type: 'text'
         },
         created_at: {
@@ -24,6 +29,7 @@ module.exports = function(orm, db) {
         }
 
     }, {
+        autoFetch: true,
         methods: {},
         validations: {},
         hooks: {
@@ -37,8 +43,5 @@ module.exports = function(orm, db) {
         }
     });
     // creates column 'customer_id' in 'addresses' table
-    Address.hasOne('customer', db.models.customers, {
-        reverse: 'addresses',
-        autoFetch: true
-    });
+    //Address.hasOne('customer', db.models.customers, {reverse: 'addresses',autoFetch: true});
 };

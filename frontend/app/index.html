@@ -14,9 +14,15 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/select2/select2.css" />
+    <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.min.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css" />
+    <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css" />
     <!-- endbower -->
     <!-- endbuild -->
+    <link rel="stylesheet" href="bower_components/angular-pagedown/angular-pagedown.css" />
+
     <!-- build:css({.tmp,app}) styles/main.css -->
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/all.css" />
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
@@ -38,6 +44,7 @@
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/ng-file-upload-shim/angular-file-upload-shim.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
@@ -49,41 +56,84 @@
     <script src="bower_components/angular-ui-select2/src/select2.js"></script>
     <script src="bower_components/jquery-ui/jquery-ui.js"></script>
     <script src="bower_components/angular-ui-sortable/sortable.js"></script>
+    <script src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
+    <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/common/routingConfig.js"></script>
-        <script src="scripts/app.js"></script>
-        <script src="scripts/state.js"></script>
-        <script src="scripts/services/userfactory.js"></script>
-        <script src="scripts/services/sessionfactory.js"></script>
-        <script src="scripts/services/authfactory.js"></script>
-        <script src="scripts/services/mailfactory.js"></script>
-        
-        <script src="scripts/directives/servererror.js"></script>
-        <script src="scripts/directives/onfocus.js"></script>
-        <script src="scripts/directives/passwordmatch.js"></script>
-        <script src="scripts/services/rememberfactory.js"></script>
+    <script src="bower_components/pagedown/Markdown.Converter.js"></script>
+    <script src="bower_components/pagedown/Markdown.Sanitizer.js"></script>
+    <script src="bower_components/pagedown/Markdown.Editor.js"></script>
+    <script src="bower_components/angular-pagedown/angular-pagedown.js"></script>
 
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/user.js"></script>
-        <script src="scripts/controllers/signup.js"></script>
-        <script src="scripts/controllers/login.js"></script>
-        <script src="scripts/controllers/mail.js"></script>
-        <script src="scripts/controllers/navbar.js"></script>
-        <script src="scripts/controllers/password.js"></script>
-        <script src="scripts/directives/accesslevel.js"></script>
-        <script src="scripts/directives/activenav.js"></script>
-        <script src="scripts/controllers/admin/user.js"></script>
-        <script src="scripts/services/rolefactory.js"></script>
-        <script src="scripts/controllers/admin/product.js"></script>
-        <script src="scripts/services/products.js"></script>
-        <script src="scripts/directives/jqdatepicker.js"></script>
-        <script src="scripts/controllers/admin/optiontype.js"></script>
-        <script src="scripts/services/optiontypes.js"></script>
-        <script src="scripts/services/optionvalues.js"></script>
-        <script src="scripts/directives/ngconfirmclick.js"></script>
-        <!-- endbuild -->
+    <script src="bower_components/markdown/lib/markdown.js"></script>
+    <script src="bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="bower_components/jquery-ui/ui/i18n/datepicker-ko.js"></script>
+    <script src="bower_components/angular-i18n/angular-locale_ko.js"></script>
+    <script src="scripts/common/routingConfig.js"></script>
+    <script src="scripts/common/tree.js"></script>
+    <script src="scripts/common/utils.js"></script>
+
+    <script src="scripts/app.js"></script>
+    <script src="scripts/state.js"></script>
+    <script src="scripts/services/userfactory.js"></script>
+    <script src="scripts/services/sessionfactory.js"></script>
+    <script src="scripts/services/authfactory.js"></script>
+    <script src="scripts/services/mailfactory.js"></script>
+
+    <script src="scripts/directives/servererror.js"></script>
+    <script src="scripts/directives/onfocus.js"></script>
+    <script src="scripts/directives/passwordmatch.js"></script>
+    <script src="scripts/services/rememberfactory.js"></script>
+
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/user.js"></script>
+    <script src="scripts/controllers/signup.js"></script>
+    <script src="scripts/controllers/login.js"></script>
+    <script src="scripts/controllers/mail.js"></script>
+    <script src="scripts/controllers/navbar.js"></script>
+    <script src="scripts/controllers/password.js"></script>
+    <script src="scripts/directives/accesslevel.js"></script>
+    <script src="scripts/directives/activenav.js"></script>
+    <script src="scripts/controllers/admin/user.js"></script>
+    <script src="scripts/services/rolefactory.js"></script>
+    <script src="scripts/controllers/admin/product.js"></script>
+    <script src="scripts/services/products.js"></script>
+    <script src="scripts/directives/jqdatepicker.js"></script>
+    <script src="scripts/controllers/admin/optiontype.js"></script>
+    <script src="scripts/services/optiontypes.js"></script>
+    <script src="scripts/services/optionvalues.js"></script>
+    <script src="scripts/directives/ngconfirmclick.js"></script>
+    <script src="scripts/controllers/admin/taxonomy.js"></script>
+    <script src="scripts/services/taxonomies.js"></script>
+    <script src="scripts/services/taxons.js"></script>
+    <script src="scripts/controllers/admin/variant.js"></script>
+    <script src="scripts/services/variants.js"></script>
+    <script src="scripts/controllers/admin/asset.js"></script>
+    <script src="scripts/services/assets.js"></script>
+    <script src="scripts/controllers/product.js"></script>
+    <script src="scripts/controllers/cart.js"></script>
+    <script src="scripts/services/orders.js"></script>
+    <!--script src="scripts/directives/input.js"></script-->
+    <script src="scripts/controllers/address.js"></script>
+    <script src="scripts/controllers/payment.js"></script>
+    <script src="scripts/services/payments.js"></script>
+    <script src="scripts/controllers/order.js"></script>
+    <script src="scripts/controllers/admin/shipping_method.js"></script>
+    <script src="scripts/services/shipping_methods.js"></script>
+    <script src="scripts/controllers/admin/payment_method.js"></script>
+    <script src="scripts/services/payment_methods.js"></script>
+    <script src="scripts/controllers/delivery.js"></script>
+    <script src="scripts/services/shipments.js"></script>
+    <script src="scripts/controllers/complete.js"></script>
+    <script src="scripts/controllers/admin/order.js"></script>
+    <script src="scripts/directives/markdowneditor.js"></script>
+    <script src="scripts/controllers/admin/forum.js"></script>
+    <script src="scripts/services/forums.js"></script>
+    <script src="scripts/controllers/forum.js"></script>
+    <script src="scripts/controllers/topic.js"></script>
+    <script src="scripts/services/topics.js"></script>
+    <!-- endbuild -->
 </body>
 </html>

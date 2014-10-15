@@ -48,6 +48,7 @@ module.exports = {
 
         OptionType.get(id, function(err, optionType){
             console.log('>> optionType:'+ JSON.stringify(optionType));
+            //if(!optionType.optionValues) optionType.optionValues = [];
 
             async.eachSeries(optionType.optionValues, function(value, callback){
                 OptionValue.get(value.id, function(err, optionValue){

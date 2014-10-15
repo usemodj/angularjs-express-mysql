@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('frontendApp', 
-	['ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.bootstrap','ui.select2','ui.sortable', 'frontendApp.state'])
+	['ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.bootstrap','ui.select2','ui.sortable','ui.tree',
+     'frontendApp.state', 'angularFileUpload', 'ui.pagedown'])
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', '$logProvider',
         function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $logProvider) {
-
+            $logProvider.debugEnabled = true;
 //            var access = routingConfig.accessLevels;
 //
 //            // Public controllers

@@ -4,8 +4,11 @@ module.exports = function(orm, db) {
         name: {
             type: 'text'
         },
+        properties: {
+            type: 'text', big: true
+        },
         description: {
-            type: 'text'
+            type: 'text', big: true
         },
         available_on: {
             type: 'date',
@@ -24,12 +27,9 @@ module.exports = function(orm, db) {
         meta_keywords: {
             type: 'text'
         },
-        tax_category_id: {
-            type: 'serial'
-        },
-        shipping_category_id: {
-            type: 'serial'
-        },
+//        taxon_ids: {
+//            type: 'text'
+//        },
         created_at: {
             type: 'date',
             time: true
@@ -67,6 +67,7 @@ module.exports = function(orm, db) {
     });
     // creates column 'customer_id' in 'users' table
     // User.hasOne('customer', db.models.customers, { required: true, reverse:'users', autoFetch: true });
-    //Product.hasMany('option_types', db.models.option_types, {reverse:'products', autoFetch:false, autoFetchLimit:1 });
+    Product.hasMany('option_types', db.models.option_types, {}, { key:true});
+    Product.hasMany('taxons', db.models.taxons,{}, { key:true});
     Product.sync(); //create a join table 'product_option_types'
 };

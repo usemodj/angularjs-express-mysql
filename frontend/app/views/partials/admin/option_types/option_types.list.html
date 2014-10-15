@@ -33,10 +33,10 @@
         <tbody ui-sortable="sortableOptions" ng-model="data.optionTypes">
         <tr ng-repeat="item in data.optionTypes">
             <td style="width:300px" class="col-md-5"><span class="glyphicon glyphicon-list"></span> {{item.name}}</td>
-            <td style="width:300px" class="col-md-5">{{item.presentation}} {{item.position}}</td>
+            <td style="width:300px" class="col-md-5">{{item.presentation}} </td>
             <td class="col-md-2 text-center">
                 <a ui-sref="admin.products.option_types.edit({id: item.id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
-                <a  ng-click="deleteOptionType(item)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-trash"></span></a>
+                <a ng-confirm-click="Are you sure?" ng-click="deleteOptionType(item)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-trash"></span></a>
             </td>
         </tr>
         </tbody>

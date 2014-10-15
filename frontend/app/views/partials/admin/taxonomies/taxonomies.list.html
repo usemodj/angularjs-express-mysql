@@ -1,1 +1,49 @@
 <h2>Taxonomies List</h2>
+
+<div class="panel-body" >
+    <form name="myform" class="form-inline" role="form" ng-submit="createTaxonomy(myform)">
+        <div class="row">
+            <div class="text-right form-group col=xs-2 col-md-2">
+                <label>Name* :</label>
+            </div>
+            <div class="form-group col-xs-6 col-md-6">
+                <input class="form-control" ng-model="newTaxonomy.name" placeholder="Enter taxonomy" required>
+            </div>
+            <div class="form-group col-xs-4 col-md-4">
+                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Create</button>
+            </div>
+        </div>
+        <div class="form-group has-error">
+            <p class="help-block">{{ error }}</p>
+        </div>
+    </form>
+
+    <br/>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th colspan="2" class="text-center">Name</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody ui-sortable="sortableOptions" ng-model="data.taxonomies">
+        <tr ng-repeat="item in data.taxonomies">
+            <td style="width:300px" class="col-md-5 text-right"><span class="glyphicon glyphicon-list"></span></td>
+            <td style="width:300px" class="col-md-5 text-center"> {{item.name}} </td>
+            <td class="col-md-2 text-center">
+                <a ui-sref="admin.products.taxonomies.edit({id: item.id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
+                <a ng-confirm-click="Are you sure?"  ng-click="deleteTaxonomy(item)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-xs-2 col-md-2"></div>
+        <div class="col-xs-8  col-md-8">
+        </div>
+        <div class="col-xs-2 col-md-2">
+            <a ui-sref="admin.products.taxonomies.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+        </div>
+    </div>
+</div>

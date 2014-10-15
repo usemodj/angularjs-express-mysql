@@ -1,6 +1,60 @@
 #!/usr/bin/env node
 var debug = require('debug')('my-application');
+var cluster = require('express-cluster');
 var app = require('../app');
+
+/**
+ * make a log directory, just in case it isn't there.
+ */
+try {
+    require('fs').mkdirSync('./log');
+} catch (e) {
+    if (e.code != 'EEXIST') {
+        console.error("Could not set up log directory, error was: ", e);
+        process.exit(1);
+    }
+}
+/**
+ * Initialise log4js first, so we don't miss any log messages
+ */
+var log4js = require('log4js');
+//log4js.configure('./config/log4js.json');
+log4js.configure(
+    {
+        "appenders": [
+            {
+                "type": "clustered",
+                "appenders": [
+                    {
+                        "type": "dateFile",
+                        "filename": "log/access.log",
+                        "pattern": "-yyyy-MM-dd",
+                        "category": "http"
+                    },
+                    {
+                        "type": "file",
+                        "filename": "log/app.log",
+                        "maxLogSize": 10485760,
+                        "numBackups": 3
+                    },
+                    {
+                        "type": "logLevelFilter",
+                        "level": "ERROR",
+                        "appender": {
+                            "type": "file",
+                            "filename": "log/errors.log"
+                        }
+                    },
+                    {
+                        "type": "console"
+                    }
+                ],
+                //replaceConsole: true
+            }
+        ]
+    }
+
+);
 
 app.set('port', process.env.PORT || 3000);
 
@@ -8,5 +62,14 @@ var server = app.listen(app.get('port'), function() {
   //debug('Express server listening on port ' + server.address().port);
   console.log('Express server listening on port %d in %s mode', server.address().port, app.get('env'));
 });
+//var log = log4js.getLogger("startup");
+////let's start up a cluster
+//cluster(function() {
+//    app.set('port', process.env.PORT || 3000);
+//
+//    var server = app.listen(app.get('port'), function() {
+//        log.info('Express server listening on port ', server.address().port, " with pid ", process.pid );
+//    });
+//});
 
 module.exports = app;

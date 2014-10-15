@@ -11,7 +11,7 @@ module.exports = function(cb) {
         // even have to define the service name
         auth: {
             user: "nodesoft.blog@gmail.com",
-            pass: "nodesoft3208"
+            pass: "node3208"
         }
     });
 

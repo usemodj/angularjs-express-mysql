@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default  navbar-static-top" role="navigation">
-    <div class="container-fluid">
+    <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div ng-class="{active:$state.includes('admin.products.list')}" class="navbar-header">
             <a class="navbar-brand" ui-sref="admin.products.list"> Products </a>
@@ -11,6 +11,8 @@
                 <li ng-class="{active:$state.includes('admin.products.option_types.list')}"><a ui-sref="admin.products.option_types.list">Option Types</a></li>
                 <li ng-class="{active:$state.includes('admin.products.taxonomies.list')}"><a ui-sref="admin.products.taxonomies.list">Taxonomies</a></li>
                 <li ng-class="{active:$state.includes('admin.products.taxons.list')}"><a ui-sref="admin.products.taxons.list">Taxons</a></li>
+                <li ng-class="{active:$state.includes('admin.products.shipping_methods.list')}"><a ui-sref="admin.products.shipping_methods.list">Shipping Methods</a></li>
+                <li ng-class="{active:$state.includes('admin.products.payment_methods.list')}"><a ui-sref="admin.products.payment_methods.list">Payment Methods</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#">Link</a></li>
@@ -30,16 +32,5 @@
     </div><!-- /.container-fluid -->
 </nav>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-3 col-md-push-9">
-            <div class="list-group" >
-                <div class="list-group-item">
-                    <strong>Nested Menu</strong>
-                </div>
-                <a ui-sref="admin.users.list" active-nav class="list-group-item">List of Users</a>
-                <a ui-sref="admin.users.edit" active-nav class="list-group-item">List of Users</a>
-            </div>
-        </div>
-        <div class="col-md-9 col-md-pull-3" ui-view></div>
-    </div>
+    <div ui-view></div>
 </div>

@@ -1,81 +1,128 @@
-/* Space out content a bit */
-
-body {
-    padding-top: 20px;
-    padding-bottom: 20px;
+.tree-node {
+    border: 1px solid #dae2ea;
+    background: #f8faff;
+    color: #7c9eb2;
 }
-/* Everything but the jumbotron gets side spacing for mobile first views */
-
-.header,
-.marketing,
-.footer {
-    padding-left: 15px;
-    padding-right: 15px;
+.tree-node-content {
+    margin: 10px;
 }
-/* Custom page header */
-
-.header {
-    border-bottom: 1px solid #e5e5e5;
+.tree-handle {
+    padding: 10px;
+    background: #428bca;
+    color: #FFF;
+    margin-right: 10px;
 }
-/* Make the masthead heading the same height as the navigation */
 
-.header h3 {
-    margin-top: 0;
-    margin-bottom: 0;
-    line-height: 40px;
-    padding-bottom: 19px;
+.angular-ui-tree-handle:hover {
 }
-/* Custom page footer */
 
-.footer {
-    padding-top: 19px;
-    color: #777;
-    border-top: 1px solid #e5e5e5;
+.angular-ui-tree-placeholder {
+    background: #f0f9ff;
+    border: 2px dashed #bed2db;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
-/* Customize container */
 
-@media (min-width: 768px) {
-    .container {
-        max-width: 730px;
-    }
+ul#products:after {
+    content: " ";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0px;
 }
-.container-narrow > hr {
-    margin: 30px 0;
+ul, ol {
+    margin-left: 0px;
+    margin-top: 0px;
+    padding-left: 0px;
+    list-style-position: inside;
 }
-/* Main marketing message and sign up button */
-
-.jumbotron {
+ul, ol {
+    list-style-position: inside;
+}
+ul#products li {
     text-align: center;
-    border-bottom: 1px solid #e5e5e5;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
-.jumbotron .btn {
-    font-size: 21px;
-    padding: 14px 24px;
+ul.inline li, ol.inline li {
+    display: inline-block;
 }
-/* Supporting marketing content */
+ul#products li .product-image {
+    border: 1px solid #D9D9DB;
+    padding: 5px;
+    min-height: 110px;
+    background-color: #FFF;
+}
+ul#products li {
+    text-align: center;
+    font-weight: bold;
+}
+ul#products li a.info {
+    height: 35px;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #BBB;
+    border-bottom: 1px solid #D9D9DB;
+    overflow: hidden;
+}
+ul#products li a {
+    display: block;
+}
+a {
+    text-decoration: none;
+    color: #00ADEE;
+}
 
-.marketing {
-    margin: 40px 0;
+ul#products li .price {
+    color: #00ADEE;
+    font-size: 16px;
+    padding-top: 5px;
+    display: block;
 }
-.marketing p + h4 {
-    margin-top: 28px;
-}
-/* Responsive: Portrait tablets and up */
 
-@media screen and (min-width: 768px) {
-    /* Remove the padding we set earlier */
-    .header,
-    .marketing,
-    .footer {
-        padding-left: 0;
-        padding-right: 0;
-    }
-    /* Space out the masthead */
-    .header {
-        margin-bottom: 30px;
-    }
-    /* Remove the bottom border on the jumbotron for visual effect */
-    .jumbotron {
-        border-bottom: 0;
-    }
+#product-price .price {
+    color: #00ADEE;
+    font-size: 26px;
+    padding-top: 5px;
+    display: block;
+}
+span.price.selling, #checkout-summary table tr[data-hook="item_total"] td:last-child strong.selling, #checkout-summary table #summary-order-total.selling, #order_details td.price span.selling, #order_details td.total span.selling, #order_summary td.price span.selling, #order_summary td.total span.selling, table#cart-detail tbody#line_items tr td[data-hook="cart_item_price"], table#cart-detail tbody#line_items tr td[data-hook="cart_item_total"], div[data-hook="inside_cart_form"] #subtotal span.selling.order-total {
+    font-size: 20px;
+}
+span.price, #checkout-summary table tr[data-hook="item_total"] td:last-child strong, #checkout-summary table #summary-order-total, #order_details td.price span, #order_details td.total span, #order_summary td.price span, #order_summary td.total span, table#cart-detail tbody#line_items tr td[data-hook="cart_item_price"], table#cart-detail tbody#line_items tr td[data-hook="cart_item_total"], div[data-hook="inside_cart_form"] #subtotal span.order-total {
+    font-weight: bold;
+    color: #00ADEE;
+}
+
+/* radio button */
+#ck-button {
+    margin:4px;
+    background-color:#EFEFEF;
+    border-radius:4px;
+    border:1px solid #D0D0D0;
+    overflow:auto;
+    float:left;
+}
+#ck-button label {
+    float:left;
+    /*width:4.0em;*/
+}
+#ck-button label span {
+    text-align:center;
+    padding:3px 3px;
+    display:block;
+    cursor: pointer;
+}
+#ck-button label input {
+    position:absolute;
+    top:-20px;
+}
+#ck-button label input[type="radio"] {
+    margin-left: -999px;/* hide input */
+}
+#ck-button input:checked + span {
+    background-color:#aaa;
+    color:#f00;
 }

@@ -1,0 +1,73 @@
+
+<h2><lable> Images of Product:</lable> {{data.product.name}}</h2>
+
+<div class="panel-body" >
+    <form name="myform" class="form-inline" role="form" ng-submit="start(0)">
+        <div class="row">
+            <div class="col-xs-2 col-md-2">
+            </div>
+            <div class="form-group col-xs-5 col-md-5 ">
+                <div class="row">
+                <div class="form-group">
+                    <label>File Name:</label><br/>
+                    <input class="form-control" type="file"  ng-file-select="onFileSelect($files)" accept="image/*"  onclick="this.value=null">
+                </div>
+                </div>
+                <div class="row">
+                <div class="form-group">
+                    <label> Variant: </label><br/>
+                    <select stype='width:90%' class="form-control" ng-model="asset.variant" ng-options="variant.options for variant in asset.variants">
+                        <option value=""> -- All -- </option>
+                    </select>
+                </div>
+                </div>
+            </div>
+            <div class="form-group col-xs-5 col-md-5">
+                <label>Alternative Text:</label><br/>
+                <textarea class="form-control" rows="5" ng-model="asset.alt"/>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="form-group has-error" ng-show="error">
+                <p class="help-block">{{ error }}</p>
+            </div>
+            <div class="form-group has-success" ng-show="message">
+                <p class="help-block">{{ message }}</p>
+            </div>
+            <div class="form-group">
+                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Upload &nbsp;&nbsp; </button>
+            </div>
+        </div>
+    </form>
+    <br/>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Thumbnail</th>
+            <th>Variant</th>
+            <th>Alternative Text</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody ui-sortable="sortableOptions" ng-model="data.assets">
+        <tr ng-repeat="item in data.assets">
+            <td style="width:100px" class="col-md-2"><span class="glyphicon glyphicon-list"></span> <img height="42" width="42" ng-src="/uploads/images/{{item.attachment_file_path}}"/></td>
+            <td style="width:300px" class="col-md-3"> {{item.variant_id == asset.master_variant.id ? 'All': item.options}}</td>
+            <td style="width:300px" class="col-md-5">{{item.alt}} </td>
+            <td class="col-md-2 text-center">
+                <a ui-sref="admin.products.assets.edit({product_id: $stateParams.product_id, id: item.id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
+                <a ng-confirm-click="Are you sure?" ng-click="deleteAsset(item)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-xs-2 col-md-2"></div>
+        <div class="col-xs-8  col-md-8">
+        </div>
+        <div class="col-xs-2 col-md-2">
+            <a ui-sref="admin.products.assets.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+        </div>
+    </div>
+</div>

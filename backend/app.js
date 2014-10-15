@@ -11,11 +11,14 @@ var errorHandler = require('errorhandler');
 var fs = require('fs');
 var SessionStore = require('express-mysql-session');
 var modRewrite = require('connect-modrewrite');
+var multipart = require('connect-multiparty');
 
 var settings = require('./config/settings');
 var models = require('./models/');//index.js
 var mailer = require('./config/mailer');
+var log4js = require('log4js');
 
+//var log = log4js.getLogger("app");
 var app = express();
 
 //Passport-local Strategy and  DB Models
@@ -40,27 +43,18 @@ app.use(function(req, res, next){
 	});
 });
 
-// Configuration
-// app.use(function(req, res, next) {
-//     if ('HEAD' === req.method || 'OPTIONS' === req.method) return next();
-//     var writeHead = res.writeHead;
-//     res.writeHead = function() {
-//         res.cookie('XSRF-TOKEN', req.session && req.session._csrfSecret);
-//         writeHead.apply(res, arguments);
-//     };
-//     next();
-// });
-
-//app.set('views', __dirname + '../frontend/app/');
-// app.engine('html', require('ejs').renderFile);
-// app.set('view engine', 'html');
 app.use(favicon());
-app.use(logger('dev'));
+// replace this with the log4js connect-logger
+// app.use(logger('dev'));
+app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride());
 app.use(cookieParser());
-
+app.use(multipart({
+    uploadDir: settings.upload_path
+}));
 app.use(session({
     secret: 'your secret here',
     key: 'sid',

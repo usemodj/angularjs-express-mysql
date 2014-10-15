@@ -1,0 +1,44 @@
+﻿<div class="container">
+    <a ui-sref="forums.list">Forums List</a> &gt;
+    <ul style="display: inline-block;" class="list-inline"  ng-repeat="item in data.forums">
+        <li><a ui-sref="forums.topics.list({forum_id: item.id})">{{item.name}}</a> &gt;</li>
+    </ul>
+
+    <div>
+       <h2>{{data.topic.name}}</h2>
+    </div>
+    <div class="panel panel-default" ng-repeat="item in data.posts">
+        <div class="panel-heading">{{item.name}}</div>
+        <div class="panel-body">
+            {{item.content}}
+        </div>
+        <div class="well well-sm text-right">
+            <a class="btn btn-default" ng-confirm-click="Are you sure?" ng-click="deletePost(item)">Delete</a>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2>Reply </h2>
+            <form class="myform" name="form" ng-submit="replyPost(myform)"  novalidate>
+            <div class="form-group">
+                <label>Subject *:</label>
+                <input  class="form-control"  ng-model="newPost.name" required>
+            </div>
+            <div class="form-group">
+                <label>Message:</label>
+                <textarea  class="form-control" rows="8" ng-model="newPost.content"></textarea>
+            </div>
+            <div class="form-group has-error" ng-show="error">
+                <p class="help-block">{{error}}</p>
+            </div>
+            <div class="form-group has-success" ng-show="success">
+                <p class="help-block">{{message}}</p>
+            </div>
+
+                <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">Save</button>
+            <button class="btn btn-primary" ng-click="cancelEdit()">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>

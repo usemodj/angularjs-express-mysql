@@ -1,0 +1,25 @@
+﻿
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h2>View Topic</h2>
+        <form class="myform" name="form" ng-submit="addTopic(myform)"  novalidate>
+        <div class="form-group">
+            <label>Subject *:</label>
+            <input  class="form-control"  ng-model="newTopic.name" required>
+        </div>
+        <div class="form-group">
+            <label>Message:</label>
+            <textarea  class="form-control" rows="8" ng-model="newTopic.content"></textarea>
+        </div>
+        <div class="form-group has-error" ng-show="error">
+            <p class="help-block">{{ error }}</p>
+        </div>
+        <div class="form-group has-success" ng-show="success">
+            <p class="help-block">{{ message }}</p>
+        </div>
+
+            <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">Save</button>
+        <button class="btn btn-primary" ng-click="cancelEdit()">Cancel</button>
+        </form>
+    </div>
+</div>

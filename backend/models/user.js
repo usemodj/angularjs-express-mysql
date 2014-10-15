@@ -64,25 +64,11 @@ module.exports = function(orm, db) {
         autoFetch: true,
         autoFetchLimit: 2,
         methods: {
-
             serialize: function() {
-//                var role;
-//                User.get(function(err, user){
-//                    if(err) {
-//                        console.log(err);
-//                    }
-//                    else {
-//                        console.log('>>serialize user:'+ JSON.stringify(user));
-//                        user.getRole(function(err, r){
-//                            if(err) throw err;
-//                            role = r;
-//                        });
-//
-//                    }
-//                });
                 return {
-                    email: this.email
-                    ,role: this.role
+                    id: this.id,
+                    email: this.email,
+                    role: this.role
                 };
             },
             /**

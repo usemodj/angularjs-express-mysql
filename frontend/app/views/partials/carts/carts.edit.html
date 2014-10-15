@@ -1,0 +1,68 @@
+<h2><label>Editing Product:</label> {{data.product.name}}</h2>
+
+<div class="panel-body" >
+    <form name="myform" class="form-inline" role="form" ng-submit="updateVariant(myform)">
+        <div class="row">
+            <div class="form-group col-xs-6 col-md-6">
+
+                <div ng-repeat="(key, optionType) in data.product.option_types">
+                    <label>{{optionType.presentation}}:</label>{{variant.options[optionType.id]}}
+                    <select style="width:100%" ui-select2  ng-model="variant.options[optionType.id]" placeholder="Pick a option value" >
+                        <option ng-repeat="option_value in optionType.option_values" value="{{option_value.id}}" ng-selected="{{variant.options[optionType.id] == option_value.id.toString()}}">{{option_value.presentation}}</option>
+                    </select>
+
+                </div>
+                <div>
+                    <label>SKU*:</label>
+                    <input class="form-control" ng-model="variant.sku" placeholder="Enter sku" required>
+                </div>
+                <div>
+                    <label>Price*:</label>
+                    <input class="form-control" type="number" min="0" name="price" ng-model="variant.price" required/>
+                    <p class="error" ng-show="myform.price.$error.number">Not valid number!</p>
+                </div>
+                <div>
+                    <label>Cost price:</label>
+                    <input class="form-control" type="number" min="0" name="cost_price" ng-model="variant.cost_price" required/>
+                    <p class="error" ng-show="myform.cost_price.$error.number">Not valid number!</p>
+                </div>
+            </div>
+            <div class="form-group col-xs-6 col-md-6">
+                <div>
+                    <label>Weight:</label>
+                    <input class="form-control" type="number" min="0" name="weight" ng-model="variant.weight" />
+                    <p class="error" ng-show="myform.weight.$error.number">Not valid number!</p>
+                </div>
+                <div>
+                    <label>Height:</label>
+                    <input class="form-control" type="number" min="0" name="height" ng-model="variant.height" />
+                    <p class="error" ng-show="myform.height.$error.number">Not valid number!</p>
+                </div>
+                <div>
+                    <label>Width:</label>
+                    <input class="form-control" type="number" min="0" name="width" ng-model="variant.width" />
+                    <p class="error" ng-show="myform.width.$error.number">Not valid number!</p>
+                </div>
+                <div>
+                    <label>Depth:</label>
+                    <input class="form-control" type="number" min="0" name="depth" ng-model="variant.depth" required/>
+                    <p class="error" ng-show="myform.depth.$error.number">Not valid number!</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="text-center col-xs-12 col-md-12">
+                <br>
+                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Update</button>
+            </div>
+        </div>
+        <div class="form-group has-error" ng-show="error">
+            <p class="help-block">{{ error }}</p>
+        </div>
+        <div class="form-group has-success" ng-show="success">
+            <p class="help-block">{{ message }}</p>
+        </div>
+
+    </form>
+
+ </div>

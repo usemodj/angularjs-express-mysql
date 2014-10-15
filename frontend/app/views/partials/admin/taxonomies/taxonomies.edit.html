@@ -1,0 +1,90 @@
+<h2>Edit Taxonomy</h2>
+
+<div class="panel-body" >
+    <form name="myform" class="form-inline" role="form">
+        <div class="row">
+            <div class="text-right form-group col=xs-2 col-md-2">
+                <label>Name* :</label>
+            </div>
+            <div class="form-group col-xs-6 col-md-6">
+                <input class="form-control" ng-model="taxonomy.name" placeholder="Enter taxonomy" required>
+            </div>
+            <div class="form-group col-xs-4 col-md-4">
+            </div>
+        </div>
+        <div class="form-group has-error" ng-show="error">
+            <p class="help-block">{{ error }}</p>
+        </div>
+        <div class="form-group has-success" ng-show="message">
+            <p class="help-block">{{ message }}</p>
+        </div>
+
+    <br/>
+    <div class="row">
+        <div class="col-md-10 col-md-push-2">
+            <h3>Tree view
+                <a href="" class="btn btn-default pull-right" ng-click="collapseAll()">Collapse all</a>
+                <a href="" class="btn btn-default pull-right" ng-click="expandAll()">Expand all</a>
+
+            </h3>
+            <br/>
+
+            <!-- Nested node template -->
+            <script type="text/ng-template" id="nodes_renderer.html">
+                <div ui-tree-handle class="tree-node tree-node-content bg-success" >
+                    <div class="bg-success" style="background-color: #f1fbe5;border-bottom:thin solid #aacccc" ng-show="!this.editing">
+                        <a class="btn btn-success btn-xs" ng-if="node.children && node.children.length > 0" data-nodrag ng-click="toggle(this)"><span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span></a>
+                        &nbsp; {{node.name}}
+                        <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this)"><span class="glyphicon glyphicon-remove"></span></a>
+                        <a class="pull-right btn btn-primary btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;"><span class="glyphicon glyphicon-plus"></span></a>
+                        <a class="pull-right btn btn-info btn-xs" data-nodrag ng-click="editItem(this)"><i class="glyphicon glyphicon-pencil"></i></a>
+                    </div>
+                    <div class="group-title angular-ui-tree-handle" data-nodrag ng-show="this.editing">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <label class="sr-only" for="taxonName">Taxon name</label>
+                                <input type="text" class="form-control" placeholder="Taxon name" ng-model="node.name">
+                            </div>
+                            <button type="submit" class="btn btn-default" ng-click="saveItem(this)">Save</button>
+                            <button type="submit" class="btn btn-default" ng-click="cancelEditingItem(this)">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+
+                <ol ui-tree-nodes="" ng-model="node.children" ng-class="{hidden: collapsed}">
+                    <li ng-repeat="node in node.children" ui-tree-node ng-include="'nodes_renderer.html'">
+                    </li>
+                </ol>
+            </script>
+
+            <div ui-tree id="tree-root">
+                <ol ui-tree-nodes="" ng-model="taxonomy.nodes">
+                    <li ng-repeat="node in taxonomy.nodes" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-2 col-md-2"></div>
+        <div class="text-center col-xs-6  col-md-6">
+            <button ng-disabled="myform.$invalid" class="btn btn-primary"  ng-click="updateTaxonomy(myform)"><span class="glyphicon glyphicon-send"></span> Update</button>
+        </div>
+        <div class="col-xs-4 col-md-4">
+            <a ui-sref="admin.products.taxonomies.list" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-chevron-left"></span> Back</a>
+            <a ui-sref="admin.products.taxonomies.edit({id: taxonomy.id})" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+        </div>
+    </div>
+    </form>
+
+    <div class="col-md-10">
+        <h3>Data binding</h3>
+        <div class="info">
+            {{info}}
+        </div>
+        <pre class="code">{{ taxonomy.nodes | json }}</pre>
+    </div>
+
+</div>

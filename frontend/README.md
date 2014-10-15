@@ -18,3 +18,9 @@ Install:
 
 app.js:
  var myAppModule = angular.module('MyApp', ['ui.select2']);
+
+## angular-i18n locale
+
+ $ bower install angular-i18n --save
+index.html:
+  <script src="bower_components/angular-i18n/angular-locale_ko.js"></script>

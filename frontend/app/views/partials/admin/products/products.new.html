@@ -1,0 +1,86 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-md-push-9">
+            <div class="list-group" >
+                <div class="list-group-item">
+                    <strong>Nested Menu</strong>
+                </div>
+                <a ui-sref="admin.products.edit({id: $stateParams.id})" active-nav class="list-group-item"> Product Details</a>
+                <a ui-sref="admin.products.variants.list({product_id: $stateParams.id})" active-nav class="list-group-item"> Variants</a>
+            </div>
+        </div>
+        <div class="col-md-9 col-md-pull-3">
+            <div class="panel-body">
+                <div class="row info">
+                    <div class="form-group col-xs-7 col-md-7">
+                       <h2><label>New Product:</label>
+                        {{newProduct.name}}</h2>
+                    </div>
+                    <div class="form-group col-xs-5 col-md-5">
+                        <button class="btn btn-primary" ui-sref="admin.products.list"><span class="glyphicon glyphicon-arrow-left"></span> Back To Products List</button>
+                        <button class="btn btn-primary" ui-sref="admin.products.new"><span class="glyphicon glyphicon-plus"></span> New Product</button>
+                    </div>
+                </div>
+
+                <form class="form" name="myform" ng-submit="createProduct(myform)"  novalidate>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="form-group col-xs-8 col-md-8">
+                                <label>Name*:</label>
+                                <input class="form-control" type="text" ng-model="newProduct.name" required autofocus on-focus />
+                            </div>
+                            <div class="form-group col-xs-4 col-md-4" ng-class="{'has-error': myform.price.$invalid}" >
+                                <label>Master Price*:</label>
+                                <input class="form-control" type="number" min="0" name="price" ng-model="newProduct.variant.price" required/>
+                                <p class="error" ng-show="myform.price.$error.number">Not valid number!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="form-group col-xs-8 col-md-8">
+                                <label>Slug*:</label> Unique Key?
+                                <input class="form-control" type="text" ng-model="newProduct.slug" required />
+                            </div>
+                            <div class="form-group col-xs-2 col-md-2" ng-class="{'has-error': myform.cost_price.$invalid}">
+                                <label>Cost Price:</label>
+                                <input class="form-control" type="number" min="0" name="cost_price" ng-model="newProduct.variant.cost_price"/>
+                                <p class="error" ng-show="myform.cost_price.$error.number">Not valid number!</p>
+                            </div>
+                            <div class="form-group col-xs-2 col-md-2">
+                                <label>Cost Currency:</label>
+                                <input class="form-control" type="text" ng-model="newProduct.variant.cost_currency" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="form-group col-xs-8 col-md-8">
+                                <label>SKU:</label>
+                                <input class="form-control" type="text" ng-model="newProduct.variant.sku"/>
+                            </div>
+                            <div class="form-group col-xs-4 col-md-4">
+                                <div class="form-group" ng-class="{'has-error': myform.available_on.$invalid}">
+                                    <label>Available On:</label>
+                                    <input class="form-control" placeholder="yyyy-mm-dd" type="text"  name="available_on" ng-model="newProduct.available_on" jqdatepicker/>
+                                    <p class="error" ng-show="myform.available_on.$error.date">Not valid date!</p>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <div class="form-group has-error" ng-show="error">
+                            {{error}}
+                        </div>
+                        <div class="form-group has-success" ng-show="message">
+                            {{message}}
+                        </div>
+                        <button class="btn btn-primary" type="submit" ng-disabled="myform.$invalid">Save</button>
+                        <button class="btn btn-primary" ng-click="cancelEdit()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

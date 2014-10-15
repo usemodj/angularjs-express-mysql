@@ -1,0 +1,84 @@
+<div class="container">
+    <div class="pull-left">
+        <a ui-sref="products.list"> Home </a>
+    </div>
+    <div class="pull-right">
+        <a ui-sref="carts.list"><span class="glyphicon glyphicon-shopping-cart"></span> Cart </a>
+    </div>
+    <h2>Order {{data.order.number}}</h2>
+
+    <div class="row">
+        <div class="col-md-4">
+            <label>Billing Address:</label><br/>
+            {{data.order.bill_address.name}}<br/>
+            {{data.order.bill_address.zipcode}}<br/>
+            {{data.order.bill_address.address1}}<br/>
+            {{data.order.bill_address.address2}}<br/>
+            Phone: {{data.order.bill_address.phone}}<br/>
+            Mobile: {{data.order.bill_address.mobile}}
+        </div>
+        <div class="col-md-4">
+            <label>Shipping Address:</label><br/>
+            {{data.order.ship_address.name}}<br/>
+            {{data.order.ship_address.zipcode}}<br/>
+            {{data.order.ship_address.address1}}<br/>
+            {{data.order.ship_address.address2}}<br/>
+            Phone: {{data.order.ship_address.phone}}<br/>
+            Mobile: {{data.order.ship_address.mobile}}
+        </div>
+        <div class="col-md-2">
+            <label>Shipments:</label><br/>
+            {{data.order.shipping_method.name}}({{data.order.shipping_method.currency}})<br/>
+            {{data.order.shipping_method.amount | currency}}
+        </div>
+        <div class="col-md-2">
+            <label>Payments:</label><br/>
+            {{data.order.payment_method.name}}<br/>
+            {{data.order.payment_method.description}}
+        </div>
+    </div>
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th colspan="2" class="text-center">Item</th>
+            <th class="text-center">Price</th>
+            <th class="text-center">Qty</th>
+            <th class="text-center">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="line_item in data.order.line_items">
+            <td class="col-md-1"><img width="72px" height="72px" ng-src="/uploads/images/{{line_item.attachment_file_path}}"></td>
+            <td class="col-md-5"><a ui-sref="products.view({id:line_item.product_id})"><strong>{{line_item.name}}</strong><br/> {{line_item.options}}</a></td>
+            <td class="col-md-2 text-right">{{line_item.price | currency}}</td>
+            <td class="col-md-1 text-center">{{line_item.quantity}}
+            </td>
+            <td class="col-md-2 text-right">{{line_item.price * line_item.quantity | currency}}</td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <th class="text-center">
+                <div>SubTotal:</div>
+                <div>Shipping:</div>
+                <div>Total:</div>
+            </th>
+            <td class="text-right">
+                <div>{{data.order.item_total | currency}}</div>
+                <div>{{data.order.shipment_total | currency}}</div>
+                <div>{{data.order.total | currency}}</div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-xs-2 col-md-2"></div>
+        <div class="col-xs-6  col-md-6">
+        </div>
+        <div class="col-xs-4 col-md-4 text-right">
+            <a ui-sref="orders.list" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-arrow-left"></span> Back </a>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,52 @@
+
+<h2><lable> Images of Product:</lable> {{data.product.name}}</h2>
+
+<div class="panel-body" >
+    <form name="myform" class="form-inline" role="form" ng-submit="uploadFile()">
+        <div class="row">
+            <div class="col-xs-3 col-md-3">
+                <img height="120" width="120" ng-src="/uploads/images/{{asset.attachment_file_path}}" />
+            </div>
+            <div class="form-group col-xs-4 col-md-4 ">
+                <div class="row">
+                <div class="form-group">
+                    <label>File Name:</label><br/>
+                    <input class="form-control" type="file"  ng-file-select="onFileSelect($files)" accept="image/*"  onclick="this.value=null">
+                </div>
+                </div>
+                <div class="row">
+                <div class="form-group">
+                    <label> Variant: </label><br/>
+                    <select stype='width:90%' class="form-control" ng-model="asset.variant.id" ng-options="variant.id as variant.sku for variant in asset.variants">
+                        <option value=""> -- All -- </option>
+                    </select>
+                </div>
+                </div>
+            </div>
+            <div class="form-group col-xs-5 col-md-5">
+                <label>Alternative Text:</label><br/>
+                <textarea class="form-control" rows="5" ng-model="asset.alt"/>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="form-group has-error" ng-show="error">
+                <p class="help-block">{{ error }}</p>
+            </div>
+            <div class="form-group has-success" ng-show="message">
+                <p class="help-block">{{ message }}</p>
+            </div>
+            <div class="form-group">
+                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Upload &nbsp;&nbsp; </button>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-xs-2 col-md-2"></div>
+        <div class="col-xs-8  col-md-8">
+        </div>
+        <div class="col-xs-2 col-md-2">
+            <a ui-sref="admin.products.assets.edit" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="pull-left">
+        <a ui-sref="products.list"> Home </a>
+    </div>
+    <div class="pull-right">
+        <a ui-sref="carts.list"><span class="glyphicon glyphicon-shopping-cart"></span> Cart </a>
+    </div>
+    <h2>My Orders</h2>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="text-center">Number</th>
+            <th class="text-center">Date</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Payment State</th>
+            <th class="text-center">Shipment State</th>
+            <th class="text-center">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in data.orders">
+            <td class="col-md-2 text-center"><a ui-sref="orders.view({id:item.id})">{{item.number}}</a></td>
+            <td class="col-md-2 text-center">{{item.completed_at}}</a></td>
+            <td class="col-md-2 text-center">{{item.state}}</td>
+            <td class="col-md-2 text-center">{{item.payment_state}}</td>
+            <td class="col-md-2 text-center">{{item.shipment_state}}</td>
+            <td class="col-md-2 text-right">{{item.total | currency}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-xs-2 col-md-2">Page:{{page}}/{{numPages}} ({{totalItems}})</div>
+        <div class="col-xs-8  col-md-8">
+            <pagination total-items="totalItems" ng-model="page" max-size="3" items-per-page="10"
+                        num-pages="numPages" ng-change="pageChanged()"></pagination>
+        </div>
+        <div class="col-xs-2 col-md-2">
+            <a ui-sref="orders.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,59 @@
+<h2>Payment Methods</h2>
+
+<div class="panel-body" >
+    <form name="myform" class="form-inline" role="form" ng-submit="createPaymentMethod(myform)">
+        <div class="row">
+            <div class="form-group col-xs-3 col-md-3">
+                <label>Name*:</label><br/>
+                <input class="form-control" ng-model="newPaymentMethod.name" placeholder="Enter name" required>
+            </div>
+            <div class="form-group col-xs-6 col-md-6">
+                <label>Description*:</label><br/>
+                <input class="form-control" ng-model="newPaymentMethod.description" placeholder="Enter description" required>
+            </div>
+            <div class="form-group col-xs-1 col-md-1">
+                <label>Active:</label><br/>
+                <input type="checkbox" class="form-control" ng-model="newPaymentMethod.active">
+            </div>
+            <div class="col-xs-2 col-md-2">
+                <br>
+                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Create</button>
+            </div>
+        </div>
+        <div class="form-group has-error">
+            <p class="help-block">{{ error }}</p>
+        </div>
+
+    </form>
+    <br/>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody ui-sortable="sortableOptions" ng-model="data.paymentMethods">
+        <tr ng-repeat="item in data.paymentMethods">
+            <td style="width:300px" class="col-xs-3 col-md-3"><span class="glyphicon glyphicon-list"></span> {{item.name}}</td>
+            <td style="width:300px" class="col-xs-6 col-md-6">{{item.description}} </td>
+            <td style="width:80px" class="col-xs-1 col-md-1">{{item.active}} </td>
+            <td class="col-md-2 text-center">
+                <a ui-sref="admin.products.payment_methods.edit({id: item.id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>
+                <a ng-confirm-click="Are you sure?" ng-click="deletePaymentMethod(item)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-xs-2 col-md-2"></div>
+        <div class="col-xs-8  col-md-8">
+        </div>
+        <div class="col-xs-2 col-md-2">
+            <a ui-sref="admin.products.payment_methods.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+        </div>
+    </div>
+</div>

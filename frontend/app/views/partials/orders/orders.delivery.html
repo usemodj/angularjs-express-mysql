@@ -1,0 +1,28 @@
+<div class="container">
+
+    <form name="myform" ng-submit="saveShipment()" novalidate>
+
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-5">
+                <h3>Delivery Information:</h3>
+
+                <div ng-repeat="item in data.shipping_methods">
+
+                    <input type="radio" ng-model="shipment.shipping_method.id" ng-value="item.id"> {{item.name}}
+                    ({{item.currency}}) {{item.amount | currency}}
+
+                </div>
+
+           </div>
+        </div>
+        <div class="row">
+            <div class="text-center">
+                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-send"></span> Save and Continue </button>
+
+            </div>
+        </div>
+    </form>
+</div>

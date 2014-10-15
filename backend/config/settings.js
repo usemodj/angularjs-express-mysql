@@ -2,7 +2,7 @@ var path = require('path');
 
 var settings = {
 
-    path: path.normalize(path.join(__dirname, '..')),
+    upload_path: path.normalize(path.join(__dirname, './../../frontend/app/uploads/')),
     port: process.env.NODE_PORT || 3000,
     database: {
         protocol: "mysql", // or  "postgresql"

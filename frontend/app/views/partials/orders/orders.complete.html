@@ -1,0 +1,27 @@
+<div class="container">
+
+    <form name="myform" ng-submit="savePayment()" novalidate>
+
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-5">
+                <h3>Payment Information:</h3>
+
+
+                <div ng-repeat="item in payment_methods">
+                    <input type="radio" ng-model="payment.payment_method" ng-value="item"> {{item.name}}<br/>
+                    {{item.description}}
+                </div>
+
+           </div>
+        </div>
+        <div class="row">
+            <div class="text-center">
+                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-send"></span> Save and Continue </button>
+
+            </div>
+        </div>
+    </form>
+</div>

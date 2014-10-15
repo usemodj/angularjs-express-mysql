@@ -10,7 +10,18 @@ var _ =           require('underscore')
     , ProductCtrl =  require('./controllers/products')
     , OptionTypeCtrl =  require('./controllers/option_types')
     , OptionValueCtrl =  require('./controllers/option_values')
+    , TaxonomyCtrl =  require('./controllers/taxonomies')
+    , TaxonCtrl =  require('./controllers/taxons')
+    , VariantCtrl =  require('./controllers/variants')
+    , AssetCtrl =  require('./controllers/assets')
+    , OrderCtrl =  require('./controllers/orders')
+    , ShippingMethodCtrl =  require('./controllers/shipping_methods')
+    , PaymentMethodCtrl =  require('./controllers/payment_methods')
+    , ShipmentCtrl =  require('./controllers/shipments')
+    , ForumCtrl =  require('./controllers/forums')
+    , TopicCtrl =  require('./controllers/topics')
     ;
+
 var routes = [
 
     // Views
@@ -102,17 +113,137 @@ var routes = [
         accessLevel: accessLevels.admin
     },
     {
-        path: '/products/:id',
+        path: '/admin/products/:id/edit',
         httpMethod: 'GET',
         middleware: [ProductCtrl.product],
         accessLevel: accessLevels.admin
     },
     {
-        path: '/products/:id',
+        path: '/admin/products/create_clone',
+        httpMethod: 'POST',
+        middleware: [ProductCtrl.createClone],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/products/:id',
+        httpMethod: 'GET',
+        middleware: [ProductCtrl.product],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/products/',
+        httpMethod: 'POST',
+        middleware: [ProductCtrl.createProduct],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/products/:id',
         httpMethod: 'PUT',
         middleware: [ProductCtrl.updateProduct],
         accessLevel: accessLevels.admin
     },
+    {
+        path: '/admin/products/:id',
+        httpMethod: 'DELETE',
+        middleware: [ProductCtrl.deleteProduct],
+        accessLevel: accessLevels.admin
+    },
+    // Products public
+    {
+        path: '/products/list',
+        httpMethod: 'POST',
+        middleware: [ProductCtrl.listProducts],
+        accessLevel: accessLevels.public
+    },
+    {
+        path: '/products/:id',
+        httpMethod: 'GET',
+        middleware: [ProductCtrl.viewProduct],
+        accessLevel: accessLevels.public
+    },
+
+    // Orders Resource
+    {
+        path: '/orders/',
+        httpMethod: 'POST',
+        middleware: [OrderCtrl.addCart],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/orders/cart',
+        httpMethod: 'GET',
+        middleware: [OrderCtrl.getCart],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/orders/update',
+        httpMethod: 'POST',
+        middleware: [OrderCtrl.updateCart],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/orders/address',
+        httpMethod: 'GET',
+        middleware: [OrderCtrl.updateAddressState],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/orders/address',
+        httpMethod: 'POST',
+        middleware: [OrderCtrl.saveAddress],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/orders/shipment',
+        httpMethod: 'POST',
+        middleware: [OrderCtrl.saveShipment],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/orders/payment',
+        httpMethod: 'POST',
+        middleware: [OrderCtrl.savePayment],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/orders/payment_methods',
+        httpMethod: 'GET',
+        middleware: [OrderCtrl.getPaymentMethods],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/orders/',
+        httpMethod: 'GET',
+        middleware: [OrderCtrl.getOrder],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/orders/:id(\\d+)',
+        httpMethod: 'GET',
+        middleware: [OrderCtrl.getOrderById],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/orders/list/:page?',
+        httpMethod: 'GET',
+        middleware: [OrderCtrl.getOrderList],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/admin/orders/search',
+        httpMethod: 'POST',
+        middleware: [OrderCtrl.searchOrders],
+        accessLevel: accessLevels.admin
+    },
+
+    // Shipments resource
+    {
+        path: '/shipments/get_by_order_id',
+        httpMethod: 'POST',
+        middleware: [ShipmentCtrl.getByOrderId],
+        accessLevel: accessLevels.user
+    },
+
     //OptionTypes Resource
     {
         path: '/option_types',
@@ -170,6 +301,279 @@ var routes = [
         accessLevel: accessLevels.admin
     },
 
+    //Taxonomies resource
+    {
+        path: '/taxonomies',
+        httpMethod: 'GET',
+        middleware: [TaxonomyCtrl.index],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/taxonomies',
+        httpMethod: 'POST',
+        middleware: [TaxonomyCtrl.create],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/taxonomies/:id',
+        httpMethod: 'GET',
+        middleware: [TaxonomyCtrl.taxonomy],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/taxonomies/:id',
+        httpMethod: 'DELETE',
+        middleware: [TaxonomyCtrl.deleteTaxonomy],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/taxonomies/:id',
+        httpMethod: 'PUT',
+        middleware: [TaxonomyCtrl.updateTaxonomy],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/taxonomies',
+        httpMethod: 'POST',
+        middleware: [TaxonomyCtrl.updatePosition],
+        accessLevel: accessLevels.admin
+    },
+
+    //Taxons resource
+    {
+        path: '/taxons',
+        httpMethod: 'GET',
+        middleware: [TaxonCtrl.index],
+        accessLevel: accessLevels.admin
+    },
+
+    //Shipping Method Resource
+    {
+        path: '/shipping_methods',
+        httpMethod: 'GET',
+        middleware: [ShippingMethodCtrl.index],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/shipping_methods',
+        httpMethod: 'POST',
+        middleware: [ShippingMethodCtrl.create],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/shipping_methods/:id',
+        httpMethod: 'GET',
+        middleware: [ShippingMethodCtrl.shippingMethod],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/shipping_methods/:id',
+        httpMethod: 'PUT',
+        middleware: [ShippingMethodCtrl.updateShippingMethod],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/shipping_methods/:id',
+        httpMethod: 'DELETE',
+        middleware: [ShippingMethodCtrl.deleteShippingMethod],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/shipping_methods',
+        httpMethod: 'POST',
+        middleware: [ShippingMethodCtrl.updatePosition],
+        accessLevel: accessLevels.admin
+    },
+
+    //Payment Method Resource
+    {
+        path: '/payment_methods',
+        httpMethod: 'GET',
+        middleware: [PaymentMethodCtrl.index],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/payment_methods',
+        httpMethod: 'POST',
+        middleware: [PaymentMethodCtrl.create],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/payment_methods/:id',
+        httpMethod: 'GET',
+        middleware: [PaymentMethodCtrl.paymentMethod],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/payment_methods/:id',
+        httpMethod: 'PUT',
+        middleware: [PaymentMethodCtrl.updatePaymentMethod],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/payment_methods/:id',
+        httpMethod: 'DELETE',
+        middleware: [PaymentMethodCtrl.deletePaymentMethod],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/payment_methods',
+        httpMethod: 'POST',
+        middleware: [PaymentMethodCtrl.updatePosition],
+        accessLevel: accessLevels.admin
+    },
+
+    // Variants resource
+    {
+        path: '/admin/variants/search',
+        httpMethod: 'POST',
+        middleware: [VariantCtrl.searchVariants],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/variants/',
+        httpMethod: 'POST',
+        middleware: [VariantCtrl.create],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/variants/:id',
+        httpMethod: 'GET',
+        middleware: [VariantCtrl.variant],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/variants/:id',
+        httpMethod: 'PUT',
+        middleware: [VariantCtrl.updateVariant],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/variants/:id',
+        httpMethod: 'DELETE',
+        middleware: [VariantCtrl.deleteVariant],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/variants/position',
+        httpMethod: 'POST',
+        middleware: [VariantCtrl.updatePosition],
+        accessLevel: accessLevels.admin
+    },
+
+    // Assets Resource
+    {
+        path: '/admin/assets/position',
+        httpMethod: 'POST',
+        middleware: [AssetCtrl.updatePosition],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/assets/:id',
+        httpMethod: 'DELETE',
+        middleware: [AssetCtrl.deleteAsset],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/products/:product_id/assets/',
+        httpMethod: 'POST',
+        middleware: [AssetCtrl.create],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/products/:product_id/assets/',
+        httpMethod: 'GET',
+        middleware: [AssetCtrl.index],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/products/:product_id/assets/:id',
+        httpMethod: 'GET',
+        middleware: [AssetCtrl.getAsset],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/products/:product_id/assets/:id',
+        httpMethod: 'POST',
+        middleware: [AssetCtrl.updateAsset],
+        accessLevel: accessLevels.admin
+    },
+    //Forums Resource
+    {
+        path: '/admin/forums/search',
+        httpMethod: 'POST',
+        middleware: [ForumCtrl.index],
+        accessLevel: accessLevels.public
+    },
+    {
+        path: '/admin/forums/add',
+        httpMethod: 'POST',
+        middleware: [ForumCtrl.add],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/forums/:id(\\d+)',
+        httpMethod: 'GET',
+        middleware: [ForumCtrl.edit],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/forums/:id',
+        httpMethod: 'PUT',
+        middleware: [ForumCtrl.update],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/forums/:id(\\d+)',
+        httpMethod: 'DELETE',
+        middleware: [ForumCtrl.remove],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/forums/rebuild_tree',
+        httpMethod: 'GET',
+        middleware: [ForumCtrl.rebuildTree],
+        accessLevel: accessLevels.admin
+    },
+
+    //Forums Resource
+    {
+        path: '/forums/topics/search',
+        httpMethod: 'POST',
+        middleware: [TopicCtrl.index],
+        accessLevel: accessLevels.public
+    },
+    {//add new topics
+        path: '/forums/:forum_id/topics',
+        httpMethod: 'POST',
+        middleware: [TopicCtrl.add],
+        accessLevel: accessLevels.user
+    },
+    {//view topic
+        path: '/forums/:forum_id/topics/:id',
+        httpMethod: 'GET',
+        middleware: [TopicCtrl.viewTopic],
+        accessLevel: accessLevels.public
+    },
+    {
+        path: '/forums/topics/reply',
+        httpMethod: 'POST',
+        middleware: [TopicCtrl.replyPost],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/forums/topics/delete_post',
+        httpMethod: 'POST',
+        middleware: [TopicCtrl.deletePost],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/forums/topics/sticky',
+        httpMethod: 'POST',
+        middleware: [TopicCtrl.setSticky],
+        accessLevel: accessLevels.admin
+    },
+
     // All other get requests should be handled by AngularJS's client-side routing system
     {
         path: '/*',
@@ -224,14 +628,14 @@ function ensureAuthorized(req, res, next) {
     if(role) {
         //console.log('>>ensureAuthorized req.user:');
         //console.log(JSON.stringify(req.user));
-        if (!(accessLevel.bit_mask & role.bit_mask)) return res.send(403);
+        if (!(accessLevel.bit_mask & role.bit_mask)) return res.status(403).end();
         return next();
     } else if(req.user) {
         var Role = req.models.roles;
         Role.get(req.user.role_id, function(err, role){
             req.user.role = role;
 
-            if (!(accessLevel.bit_mask & role.bit_mask)) return res.send(403);
+            if (!(accessLevel.bit_mask & role.bit_mask)) return res.status(403).end();
             return next();
         });
     }

@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-8 col-md-8">
+            <h2>Products List</h2>
+        </div>
+        <div class="col-xs-4 col-md-4 text-center">
+            <br/>
+            <button class="btn btn-primary" ui-sref="admin.products.new"><span class="glyphicon glyphicon-plus"></span> New Product &nbsp;&nbsp; </button>
+        </div>
+    </div>
+    <div class="panel-body" >
+        <form name="form" class="form-inline" role="form" ng-submit="searchProducts(form)">
+            <div class="row">
+                <div class="form-group col-xs-4 col-md-4">
+                    <label>Name:</label><br/>
+                    <input class="form-control" ng-model="conditions.name" placeholder="Enter name">
+                </div>
+                <div class="form-group col-xs-3 col-md-3">
+                    <label>SKU:</label><br/>
+                    <input class="form-control" ng-model="conditions.sku" placeholder="Enter sku">
+                </div>
+                <div class="form-group col-xs-3 col-md-3">
+                    <label><br/>
+                        <input type="checkbox" ng-model="conditions.deleted"> Show Deleted
+                    </label>
+                </div>
+                <div class="col-xs-2 col-md-2">
+                    <br>
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search form-control-feedback"></span> Search</button>
+                </div>
+            </div>
+        </form>
+        <br/>
+
+        <div class="">
+            <ul id="products" class="inline product-listing">
+                <li class="columns three alpha" ng-repeat="item in data.products">
+                    <div class="clearfix">
+                    <div class="product-image">
+                        <a ui-sref="products.view({id: item.id})">
+                            <img width="200px" height="190px" ng-src="/uploads/images/{{item.file_path}}" alt="{{item.alt}}"></img>
+                        </a>
+                    </div>
+                    <a class="info" ui-sref="products.view({id: item.id})">{{item.name}}</a>
+                    <span class="price selling">{{item.price}}</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="row">
+            <div class="col-xs-2 col-md-2">Page:{{page}}/{{numPages}} ({{totalItems}})</div>
+            <div class="col-xs-8  col-md-8">
+                <pagination total-items="totalItems" ng-model="page" max-size="3" items-per-page="10"
+                            num-pages="numPages" ng-change="pageChanged()"></pagination>
+            </div>
+            <div class="col-xs-2 col-md-2">
+                <a ui-sref="admin.products.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+            </div>
+        </div>
+    </div>
+</div>

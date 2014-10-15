@@ -28,7 +28,7 @@ module.exports = function(orm, db) {
     }, {
         //cache: false,
         autoFetch: true,
-        autoFetchLimit: 2,
+        autoFetchLimit: 1,
         methods: {
 
         },
@@ -54,5 +54,6 @@ module.exports = function(orm, db) {
     // creates column 'customer_id' in 'users' table
     // User.hasOne('customer', db.models.customers, { required: true, reverse:'users', autoFetch: true });
     //Variant.hasOne('product', db.models.products, { reverse: 'variants', autoFetch:false, autoFetchLimit:21 });
-    OptionValue.hasOne('option_type', db.models.option_types, { reverse: 'optionValues'});
+    OptionValue.hasOne('option_type', db.models.option_types, { reverse: 'values'});
+    OptionValue.sync();
 };

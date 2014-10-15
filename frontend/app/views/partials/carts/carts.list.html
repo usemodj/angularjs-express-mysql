@@ -1,0 +1,55 @@
+<div class="container">
+    <div class="pull-left">
+        <a ui-sref="products.list"> Home </a>
+    </div>
+    <div class="pull-right">
+        <a ui-sref="carts.list"><span class="glyphicon glyphicon-shopping-cart"></span> Cart </a>
+    </div>
+    <h2>Shopping Cart</h2>
+    <form name="myform" ng-submit="updateCart()" novalidate>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th colspan="2" class="text-center">Item</th>
+            <th class="text-center">Price</th>
+            <th class="text-center">Qty</th>
+            <th class="text-center">Total</th>
+            <th class="text-center"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="line_item in data.order.line_items">
+            <td class="col-md-1"><img width="72px" height="72px" ng-src="/uploads/images/{{line_item.attachment_file_path}}"></td>
+            <td class="col-md-5"><a ui-sref="products.view({id:line_item.product_id})"><strong>{{line_item.name}}</strong><br/> {{line_item.options}}</a></td>
+            <td class="col-md-2 text-right">{{line_item.price | currency}}</td>
+            <td class="col-md-1">
+                <input style="width:80px" class="form-control" type="number" min="0" name="quantity"
+                       ng-model="line_item.quantity"/>
+                <p class="error" ng-show="myform.quantity.$error.number">Not valid number!</p>
+            </td>
+            <td class="col-md-2 text-right">{{line_item.price * line_item.quantity | currency}}</td>
+            <td class="col-md-1 text-center">
+                <a ng-click="deleteLineItem(line_item)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-remove"></span></a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <th class="text-center">Total:</th>
+            <td class="text-right">{{data.order.item_total | currency}}</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-xs-2 col-md-2"></div>
+        <div class="col-xs-6  col-md-6">
+        </div>
+        <div class="col-xs-4 col-md-4">
+            <button type="submit" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-repeat"></span> Update </button>
+            <a ng-click="checkout()" class="btn btn-primary" >
+                <span class="glyphicon glyphicon-send"></span> Checkout </a>
+        </div>
+    </div>
+    </form>
+</div>

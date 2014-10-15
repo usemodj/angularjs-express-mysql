@@ -1,0 +1,99 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-8 col-md-8">
+            <h2>Topics List
+            </h2>
+        </div>
+        <div class="col-xs-4 col-md-4 text-center">
+        </div>
+    </div>
+    <div class="panel-body" >
+        <form name="form" class="" role="form" ng-submit="searchTopics(form)">
+            <div class="row">
+               <div class="form-group col-xs-2 col-md-2">
+                    <label>Name:</label><br/>
+                    <input class="form-control" ng-model="conditions.name" placeholder="Name">
+                </div>
+                <div class="form-group col-xs-2 col-md-2">
+                    <label>Written by:</label><br/>
+                    <input class="form-control" ng-model="conditions.email" placeholder="Email">
+                </div>
+                <div class="form-group col-xs-2 col-md-2">
+                    <label><br/>
+                        <input type="checkbox" ng-model="conditions.locked"> Only Show Locked
+                    </label>
+                </div>
+                <div class="col-xs-2 col-md-2">
+                    <br>
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search form-control-feedback"></span> Search</button>
+                </div>
+            </div>
+        </form>
+        <br/>
+        <div class="row">
+            <div class="col-md-10">
+                <a ui-sref="forums.list">Forums List</a> &gt;
+
+                <ul style="display: inline-block;" class="list-inline" ng-repeat="item in data.forums">
+                    <li><a ui-sref="forums.topics.list({forum_id: item.id})">{{item.name}}</a> &gt;</li>
+                </ul>
+                <div class="col-md-10 text-right"><a class=" btn btn-default" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})">New Topic</a></div>
+
+
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Written by</th>
+                        <th>views</th>
+                        <th>replies</th>
+                        <th>last_post</th>
+                        <th>Updated at</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in data.sticky_topics">
+                        <td>{{item.id}}</td>
+                        <td>Sticky: <a ui-sref="forums.topics.view({forum_id: item.forum_id, id: item.id})">{{item.name}}</a></td>
+                        <td>{{item.email}}</td>
+                        <td>{{item.views}}</td>
+                        <td>{{item.replies}}</td>
+                        <td>{{item.last_post}}</td>
+                        <td>{{item.updated_at}}</td>
+                        <td class="text-center">
+                            <a ng-hide="user.role.title != 'admin'" ng-confirm-click="Are you sure?" ng-click="unsticky(item)" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="Unsticky"><span class="glyphicon glyphicon-flag"></span></a>
+
+                        </td>
+                    </tr>
+                    <tr ng-repeat="item in data.topics">
+                        <td>{{item.id}}</td>
+                        <td><a ui-sref="forums.topics.view({forum_id: item.forum_id, id: item.id})">{{item.name}}</a></td>
+                        <td>{{item.email}}</td>
+                        <td>{{item.views}}</td>
+                        <td>{{item.replies}}</td>
+                        <td>{{item.last_post}}</td>
+                        <td>{{item.updated_at}}</td>
+                        <td class="text-center">
+                            <a ng-hide="user.role.title != 'admin'" ng-confirm-click="Are you sure?" ng-click="sticky(item)" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Sticky"><span class="glyphicon glyphicon-flag"></span></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-xs-2 col-md-2">Page:{{page}}/{{numPages}} ({{totalItems}})</div>
+                    <div class="col-xs-8  col-md-8">
+                        <pagination total-items="totalItems" ng-model="page" max-size="3" items-per-page="10"
+                                    num-pages="numPages" ng-change="pageChanged()"></pagination>
+                    </div>
+                    <div class="col-xs-2 col-md-2">
+                        <a ui-sref="forums.topics.list({forum_id: $stateParams.forum_id})" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                            <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

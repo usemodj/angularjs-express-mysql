@@ -25,7 +25,7 @@ module.exports = function(orm, db) {
     }, {
         //cache: false,
         autoFetch: true,
-        autoFetchLimit: 2,
+        autoFetchLimit: 1,
         methods: {
 
         },
@@ -52,4 +52,6 @@ module.exports = function(orm, db) {
     // User.hasOne('customer', db.models.customers, { required: true, reverse:'users', autoFetch: true });
     //Variant.hasOne('product', db.models.products, { reverse: 'variants', autoFetch:false, autoFetchLimit:1 });
     //Variant.hasOne('product', db.models.products, { autoFetch:true, autoFetchLimit:2 });
+    //OptionType.hasMany('products', db.models.products, {}, {});
+    //OptionType.sync();
 };

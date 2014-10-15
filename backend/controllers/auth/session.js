@@ -9,8 +9,8 @@ module.exports = {
             var error = err || info;
             if (error) return res.json(400, error);
             // Update login info
-            console.log('>> login:' + JSON.stringify(user));
-            console.log('>> login user.serialize:' + JSON.stringify(user.serialize()));
+            //console.log('>> login:' + JSON.stringify(user));
+            //console.log('>> login user.serialize:' + JSON.stringify(user.serialize()));
             //console.log('>> req.ip: ' + req.ip);
 
             if(user.active !== true){
@@ -67,9 +67,9 @@ module.exports = {
         console.log('>> logout req.user: '+ JSON.stringify(req.user));
         if (req.user) {
             req.logout();
-            res.send(200);
+            res.status(200).end();
         } else {
-            res.send(400, 'Not logged in');
+            res,status(400).send('Not logged in');
         }
     }
 

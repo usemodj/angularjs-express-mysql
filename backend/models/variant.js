@@ -21,6 +21,10 @@ module.exports = function(orm, db) {
         is_master: {
             type: 'boolean'
         },
+        deleted_at:{
+            type: 'date',
+            time: true
+        },
         product_id: {
             type: 'serial'
         },
@@ -50,7 +54,7 @@ module.exports = function(orm, db) {
 
     }, {
         //cache: false,
-        autoFetch: false,
+        autoFetch: true,
         autoFetchLimit: 1,
         methods: {
 
@@ -75,6 +79,7 @@ module.exports = function(orm, db) {
     });
     // creates column 'customer_id' in 'users' table
     // User.hasOne('customer', db.models.customers, { required: true, reverse:'users', autoFetch: true });
-    Variant.hasOne('product', db.models.products, { reverse: 'variants', autoFetch:false, autoFetchLimit:1 });
-    //Variant.hasOne('product', db.models.products, { autoFetch:true, autoFetchLimit:1 });
+    Variant.hasOne('product', db.models.products, { reverse: 'variants'});
+    Variant.hasMany('option_values', db.models.option_values, {}, {key:true});
+    Variant.sync();
 };

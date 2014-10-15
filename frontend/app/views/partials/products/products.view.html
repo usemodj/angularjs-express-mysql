@@ -1,0 +1,65 @@
+<div class="container">
+    <div class="row">
+    <div id="product-images" class="col-md-3 col-push-0">
+        <div class="row">
+            <div id="main-image">
+                <img width="340" height="340" ng-src="{{mainImage}}"/>
+            </div>
+        </div>
+        <div class="row">
+           <div id="thumbnails">
+               <ul id="product-thumbnails" class="thumbnails inline">
+                   <li class="" ng-repeat="item in data.assets">
+                       <a href="" alt="{{item.alt}}" ng-click="viewImage(item.file_path)">
+                           <img width="72" height="72" ng-src="/uploads/images/{{item.file_path}}"/>
+                       </a>
+                   </li>
+               </ul>
+           </div>
+        </div>
+        <div class="row">
+            <label>Properties</label>
+            <div ng-bind-html="data.product.properties"></div>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-5 col-pull-3">
+       <h2>{{data.product.name}}</h2>
+
+        <div ng-bind-html="data.product.description"></div>
+        <br/>
+        <div class="row">
+            <form name="myform" ng-submit="addToCart()" novalidate>
+            <div class="form-group col-xs-7 col-md-7">
+                <div>
+                    <label>Variants:</label>
+                </div>
+                <div class="list-group">
+                    <div class="" ng-repeat="item in data.variants">
+                        <div id="ck-button"  class="list-group-item">
+                            <label><input type="radio" class="form-control" ng-model="product.variant" ng-value="item"><span>{{item.options}}({{item.price | currency}})</span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-1"></div>
+            <div class="form-group col-xs-4 col-md-4">
+                <div id="product-price">
+                    <label>Price:</label>
+                    <div class="price">
+                        <strong>{{product.variant.price | currency}} {{item.cost_currency}}</strong>
+                    </div>
+                </div>
+                <div class="add-to-cart">
+                    <input style="width:60px" type="number" min="1" name="quantity" ng-model="product.quantity">
+                    <button class="btn btn-primary" type="submit" ng-disabled="myform.$invalid || product.variant == null || product.quantity == null"><span class="glyphicon glyphicon-plus"></span> Add to Cart &nbsp;&nbsp; </button>
+                    <div class="error" ng-show="myform.quantity.$error.number">
+                        Not valid number!</div>
+                </div>
+            </div>
+            </form>
+        </div>
+
+    </div>
+    </div>
+</div>

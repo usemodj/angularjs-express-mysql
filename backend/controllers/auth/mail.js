@@ -7,11 +7,11 @@ module.exports = function (app) {
             var email = req.query.email;
             req.models.users.one({email: email}, function (err, user) {
                 if (err) {
-                    console.log('>> get /auth/mail error:');
+                    //console.log('>> get /auth/mail error:');
                     console.log(err);
                     return next(err);
                 }
-                console.log('>> get /auth/email user:');
+                //console.log('>> get /auth/email user:');
                 console.log(user);
                 if (!user) {
                     var errors = [
@@ -28,7 +28,7 @@ module.exports = function (app) {
                     reset_password_token: user.encryptPassword(user.encrypted_password)
                 }, function (err, user) {
                     if (!err) {
-                        console.log('Reset password token!');
+                        //console.log('Reset password token!');
                         return res.json(200, user);
                     } else {
                         console.log(err);
@@ -42,9 +42,10 @@ module.exports = function (app) {
     app.post('/auth/mail',
         function (req, res, next) {
             var transport = req.transport;
-            console.log(req.body);
-            var email = req.body.email;
-            var message = req.body.message;
+            //console.log(req.body);
+            var message = {};
+            message.to = req.body.email;
+            message.html = req.body.message;
             transport.sendMail(message, function (error) {
                 if (error) {
                     console.log('Error occured');

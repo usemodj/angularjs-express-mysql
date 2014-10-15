@@ -1,0 +1,16 @@
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-md-push-9">
+            <div class="list-group" >
+                <div class="list-group-item">
+                    <strong> Menu </strong>
+                </div>
+                <a ng-class="{active: $state.includes('admin.products.edit')}" ui-sref="admin.products.edit({id: $stateParams.product_id})" class="list-group-item"> Product Details</a>
+                <a ng-class="{active: $state.includes('admin.products.assets')}" ui-sref="admin.products.assets.list({product_id: $stateParams.product_id})" class="list-group-item"> Images </a>
+                <a ng-class="{active: $state.includes('admin.products.variants')}" ui-sref="admin.products.variants.list({product_id: $stateParams.product_id})" class="list-group-item"> Variants</a>
+            </div>
+        </div>
+        <div class="col-md-9 col-md-pull-3" ui-view></div>
+    </div>
+</div>

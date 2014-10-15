@@ -33,6 +33,8 @@
  */
 
 var orm = require('orm');
+var transaction = require("orm-transaction");
+
 var settings = require('../config/settings');
 
 var connection = null;
@@ -46,6 +48,20 @@ function setup(db, cb) {
     require('./variant')(orm, db);
     require('./option_type')(orm, db);
     require('./option_value')(orm, db);
+    require('./taxonomy')(orm, db);
+    require('./taxon')(orm, db);
+    require('./variant')(orm, db);
+    require('./asset')(orm, db);
+    require('./order')(orm, db);
+    require('./line_item')(orm, db);
+    require('./state_change')(orm, db);
+    require('./payment_method')(orm, db);
+    require('./payment')(orm, db);
+    require('./shipping_method')(orm, db);
+    require('./shipment')(orm, db);
+    require('./forum')(orm, db);
+    require('./topic')(orm, db);
+    require('./post')(orm, db);
 
     return cb(null, db);
 }
@@ -58,7 +74,12 @@ module.exports = function(cb) {
 
         connection = db;
         db.settings.set('instance.returnAllErrors', true);
+        db.settings.set("connection.reconnect", true);
+        db.settings.set("connection.pool", true);
+        db.settings.set("connection.debug", true);
+
+        db.use(transaction);
         setup(db, cb);
-        //db.sync();
+        db.sync(); //create tables
     });
 };

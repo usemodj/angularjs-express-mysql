@@ -1,0 +1,43 @@
+<h2>Editing Shipping Method: {{shippingMethod.name}}</h2>
+
+<div class="panel-body" >
+    <form name="myform" class="form-inline" role="form" ng-submit="updateShippingMethod(myform)">
+        <div class="row">
+            <div class="form-group col-xs-5 col-md-5">
+                <label>Name*:</label><br/>
+                <input class="form-control" ng-model="shippingMethod.name" placeholder="Enter name" required>
+            </div>
+            <div class="form-group col-xs-3 col-md-3">
+                <label>Amount*:</label><br/>
+                <input class="form-control" ng-model="shippingMethod.amount" placeholder="Enter amount" required>
+            </div>
+            <div class="form-group col-xs-2 col-md-2">
+                <label>Amount*:</label><br/>
+                <input class="form-control" ng-model="shippingMethod.currency" placeholder="Enter currency" required>
+            </div>
+            <div class="col-xs-2 col-md-2">
+                <br>
+            </div>
+        </div>
+        <div class="form-group has-error">
+            <p class="help-block">{{ error }}</p>
+        </div>
+        <div class="form-group has-success">
+            <p class="help-block">{{ message }}</p>
+        </div>
+
+        <br/>
+        <div class="row">
+            <div class="col-xs-2 col-md-2"></div>
+            <div class="text-center col-xs-6 col-md-6">
+                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Update</button>
+            </div>
+            <div class="text-right col-xs-4 col-md-4">
+                <a ui-sref="admin.products.shipping_methods.list" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-chevron-left"></span> Back</a>
+                <a ui-sref="admin.products.shipping_methods.edit({id: shippingMethod.id})" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+            </div>
+        </div>
+    </form>
+</div>
