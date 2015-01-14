@@ -11,51 +11,17 @@
         <form name="form" class="" role="form" ng-submit="searchForums(form)">
             <div class="row">
                 <div class="form-group col-xs-2 col-md-2">
-                    <label>Date Range:</label><br/>
-                    <input class="form-control" ng-model="conditions.from" placeholder="Start" jqdatepicker>
-
-                </div>
-                <div class="col-xs-1 col-md-1" style="width:10px;">
-                    <br/>
-                    <div class="glyphicon glyphicon-arrow-right"></div>
-                </div>
-                <div class="form-group col-xs-2 col-md-2">
-                    <br/>
-                    <input class="form-control" ng-model="conditions.to" placeholder="Stop" jqdatepicker>
-                </div>
-                <div class="form-group col-xs-2 col-md-2">
-                    <label>Order#:</label><br/>
-                    <input class="form-control" ng-model="conditions.number" placeholder="Number">
-                </div>
-                <div class="form-group col-xs-2 col-md-2">
                     <label>Name:</label><br/>
                     <input class="form-control" ng-model="conditions.name" placeholder="Name">
                 </div>
                 <div class="form-group col-xs-2 col-md-2">
-                    <label><br/>
-                        <input type="checkbox" ng-model="conditions.completed"> Only Show Complete Orders
-                    </label>
+                    <label>Description:</label><br/>
+                    <input class="form-control" ng-model="conditions.description" placeholder="Description">
                 </div>
-            </div>
-            <div class="row">
                 <div class="form-group col-xs-2 col-md-2">
-                    <label>Status:</label><br/>
-                    <select class="form-control" ng-model="conditions.state" >
-                        <option value="">-- state --</option>
-                        <option>cart</option>
-                        <option>address</option>
-                        <option>delivery</option>
-                        <option>payment</option>
-                        <option>confirm</option>
-                        <option>complete</option>
-                        <option>canceled</option>
-                        <option>awaiting return</option>
-                        <option>returned</option>
-                    </select>
-                </div>
-                <div class="form-group col-xs-3 col-md-3">
-                    <label>Email:</label><br/>
-                    <input class="form-control" ng-model="conditions.email" placeholder="Email">
+                    <label><br/>
+                        <input type="checkbox" ng-model="conditions.locked"> Only Show Locked
+                    </label>
                 </div>
                 <div class="col-xs-2 col-md-2">
                     <br>
@@ -83,7 +49,7 @@
                     <tbody>
                     <tr ng-repeat="item in data.forums">
                         <td>{{item.id}}</td>
-                        <td>{{"&nbsp;&nbsp;&nbsp;".repeat(item.level)}}{{item.name}}</td>
+                        <td><a ui-sref="forums.topics.list({forum_id: item.id})" >{{"&nbsp;&nbsp;&nbsp;".repeat(item.level)}}{{item.name}}</a></td>
                         <td>{{item.description}}</td>
                         <td>{{item.locked}}</td>
                         <td>{{item.topic_count}}</td>

@@ -29,6 +29,8 @@ angular.module('frontendApp')
     $scope.searchForums = function(form){
         forums.searchForums({
             name: $scope.conditions.name,
+            description: $scope.conditions.description,
+            locked: $scope.conditions.locked,
             page: $scope.page
         }, function(err, data){
             //console.log('>> data:'+ JSON.stringify(data));

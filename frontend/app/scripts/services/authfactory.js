@@ -43,7 +43,7 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                         rememberMe: userinfo.rememberMe
                     }, function(user) {
                         //console.log('>> authfactory login user:'+JSON.stringify(user));
-                        //$rootScope.currentUser= user;
+                        $rootScope.currentUser= user;
                         $cookieStore.put('user', user);
                         changeUser(user)
                         return cb();
@@ -56,7 +56,7 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                 logout: function(callback) {
                     var cb = callback || angular.noop;
                     SessionFactory.delete(function(res) {
-                            //$rootScope.currentUser = null;
+                            $rootScope.currentUser = null;
                             $cookieStore.remove('user');
                             changeUser({
                                 email:'',
@@ -74,9 +74,9 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                     var cb = callback || angular.noop;
                     UserFactory.save(userinfo,
                         function(user) {
-                            //$rootScope.currentUser = user;
-                            //$cookieStore.put('user', user);
-                            //changeUser(user);
+                            $rootScope.currentUser = user;
+                            $cookieStore.put('user', user);
+                            changeUser(user);
                             return cb(null);
                         },
                         function(err) {

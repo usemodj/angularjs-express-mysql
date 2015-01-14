@@ -131,8 +131,8 @@ module.exports = {
         var perPages = 20;
         var page = parseInt(req.params['page']) || 1;
         if( isNaN(page) || page < 1) page = 1;
-        console.log('>>req.body:'+ JSON.stringify(req.body));
-        console.log('>> page:'+ page);
+        log.debug('>>req.body:'+ JSON.stringify(req.body));
+        log.debug('>> page:'+ page);
 
         var name = req.body.name || "";
         var sku = req.body.sku;
@@ -149,14 +149,14 @@ module.exports = {
         }
 
         if(deleted === undefined || deleted === false) conditions.deleted_at = null;
-        console.log('>>conditions:'+ JSON.stringify(conditions));
-        console.log(conditions);
+        log.debug('>>conditions:'+ JSON.stringify(conditions));
+        log.debug(conditions);
         Product.find(conditions).order('-id').limit(perPages).offset((page -1)*perPages).run(function(err, products) {
             if (err) {
-                console.log(">>error:"+ err);
+                log.debug(">>error:"+ err);
                 return next(err);
             }
-            console.log('>>products:'+ JSON.stringify(products));
+            log.debug('>>products:'+ JSON.stringify(products));
 //            var listUsers = [];
 //            async.eachSeries(users, function(user, callback){
 //                Role.get(user.role_id, function(err, role){
@@ -187,8 +187,8 @@ module.exports = {
         var perPages = 10;
         var page = parseInt(req.params['page']) || 1;
         if( isNaN(page) || page < 1) page = 1;
-        console.log('>>req.body:'+ JSON.stringify(req.body));
-        console.log('>> page:'+ page);
+        log.debug('>>req.body:'+ JSON.stringify(req.body));
+        log.debug('>> page:'+ page);
 
         var name = req.body.name || "";
         var sku = req.body.sku;
@@ -351,7 +351,7 @@ module.exports = {
             meta_description: productData.meta_description,
             meta_keywords: productData.meta_keywords,
         };
-        console.log(productData);
+        log.debug(productData);
 
         Product.create(conditions, function(err, product){
             if(err) return next(err);
@@ -393,8 +393,8 @@ module.exports = {
        var Taxon = req.models.taxons;
        var OptionType = req.models.option_types;
        var Variant = req.models.variants;
-       console.log('>>req.body:');
-       console.log(req.body);
+        log.debug('>>req.body:');
+        log.debug(req.body);
        //console.log(req.models.products);
        var productData = req.body;
        var taxon_ids = productData.taxon_ids || [];
@@ -405,7 +405,7 @@ module.exports = {
           if(err) return res.json(500, err);
            productData['option_types'] = [];
            productData['taxons'] = [];
-           console.log(productData);
+           log.debug(productData);
 
            delete product.option_types;
            delete product.taxons;
@@ -420,13 +420,13 @@ module.exports = {
            };
            product.save(productData, function(err){
                if(err) return res.status(500).json(err);
-               console.log('>> product data saved!');
+               log.debug('>> product data saved!');
                Variant.get(variant_id, function(err, variant){
                    if(err) return res.status(500).json(err);
                    productData.variant.is_master = true;
                    variant.save(productData.variant, function(err){
                        if(err) return res.json(500, err);
-                       console.log('>> variant data saved!');
+                       log.debug('>> variant data saved!');
                        var optionTypes = [];
                        async.eachSeries(option_type_ids, function(option_type_id, callback){
                            OptionType.get(option_type_id, function(err, optionType){
@@ -512,8 +512,8 @@ module.exports = {
                 ' ORDER BY a.position, a.id;',[product_id],
                 function(err, assets){
                     if(err) return next(err);
-                    product.properties = markdown.toHTML(product.properties);
-                    product.description = markdown.toHTML(product.description);
+                    product.properties = (product.properties != null)? markdown.toHTML(product.properties) : '';
+                    product.description = (product.description != null)? markdown.toHTML(product.description) : '';
                     res.json({
                         product: product,
                         variants: variants,

@@ -12,24 +12,17 @@
             <div class="row">
                <div class="form-group col-xs-2 col-md-2">
                     <label>Name:</label><br/>
-                    <input class="form-control" ng-model="conditions.number" placeholder="Number">
-                </div>
-                <div class="form-group col-xs-2 col-md-2">
-                    <label>Description:</label><br/>
                     <input class="form-control" ng-model="conditions.name" placeholder="Name">
                 </div>
                 <div class="form-group col-xs-2 col-md-2">
-                    <label><br/>
-                        <input type="checkbox" ng-model="conditions.locked"> Only Show Locked
-                    </label>
+                    <label>Description:</label><br/>
+                    <input class="form-control" ng-model="conditions.description" placeholder="Description">
                 </div>
                 <div class="col-xs-2 col-md-2">
                     <br>
                     <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search form-control-feedback"></span> Search</button>
                 </div>
             </div>
-
-
         </form>
         <br/>
         <div class="row">
@@ -41,7 +34,6 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Description</th>
-                        <th>Locked</th>
                         <th>Topics</th>
                         <th>Posts</th>
                         <th>Updated at</th>
@@ -53,7 +45,6 @@
                         <td>{{item.id}}</td>
                         <td><a ui-sref="forums.topics.list({forum_id: item.id})" >{{"&nbsp;&nbsp;&nbsp;".repeat(item.level)}}{{item.name}}</a></td>
                         <td>{{item.description}}</td>
-                        <td>{{item.locked}}</td>
                         <td>{{item.topic_count}}</td>
                         <td>{{item.posts}}</td>
                         <td>{{item.updated_at}}</td>

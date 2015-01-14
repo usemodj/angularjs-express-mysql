@@ -1,0 +1,26 @@
+# jinny <usemodj@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2014-10-25 09:23+0900\n"
+"Last-Translator: jinny <usemodj@gmail.com>\n"
+"Language: ko\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Virtaal 0.7.1\n"
+
+#: app/views/partials/navbar.html
+msgid "Forums"
+msgstr "포럼"
+
+#: app/views/partials/navbar.html
+msgid "Login"
+msgstr "로그인"
+
+#: app/views/partials/navbar.html
+msgid "My Order"
+msgstr "내주문"
+
+#: app/views/partials/navbar.html
+msgid "Signup"
+msgstr "회원가입"

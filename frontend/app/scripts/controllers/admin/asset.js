@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('frontendApp')
-  .controller('AdminAssetCtrl',  [ '$scope', '$http', '$timeout', '$upload', '$state', '$stateParams', 'assets', function($scope, $http, $timeout, $upload, $state, $stateParams, assets) {
+  .controller('AdminAssetCtrl',  [ '$scope', '$http', '$timeout', '$upload', '$state', '$stateParams','$location', 'assets',
+        function($scope, $http, $timeout, $upload, $state, $stateParams, $location, assets) {
         $scope.fileReaderSupported = window.FileReader != null && (window.FileAPI == null || FileAPI.html5 != false);
         $scope.error = '';
         $scope.message = '';
@@ -18,13 +19,13 @@ angular.module('frontendApp')
 
         $scope.sortableOptions = {
             change: function(e, ui) {
-                console.log("change");
-                //console.log(ui);
+                //console.log("change");
+
                 var entry = $scope.data.assets.map(function(item){
                     return item.id;
                 }).join(',');
                 beforeSort = entry;
-                console.log('>>beforeSort:'+beforeSort);
+                //console.log('>>beforeSort:'+beforeSort);
 
             },
             // called after a node is dropped
@@ -35,9 +36,9 @@ angular.module('frontendApp')
                     return item.id;
                 }).join(',');
                 sorted = entry != beforeSort;
-                console.log('>>beforeSort:'+ beforeSort);
-                console.log('>>entry:'+ entry);
-                console.log('>>sorted:'+ sorted);
+                //console.log('>>beforeSort:'+ beforeSort);
+                //console.log('>>entry:'+ entry);
+                //console.log('>>sorted:'+ sorted);
                 // IF sorted == true, updatePosition()
                 if(sorted){
                     $scope.updatePosition(entry);
@@ -150,7 +151,11 @@ angular.module('frontendApp')
             assets.getAssets({product_id: $stateParams.product_id}, function(err, data){
                 $scope.data.product = data.product;
                 $scope.data.assets = data.assets;
+                $scope.copy = [];
 
+                for(var i = 0; i < data.assets.length; i++){
+                    $scope.copy.push($location.protocol()+'://'+ $location.host()+ ':' + $location.port() + '/uploads/images/'+data.assets[i].attachment_file_path);
+                }
                 for(var i = 0; i < data.product.variants.length; i++){
 
                     (data.product.variants[i].is_master == true)?

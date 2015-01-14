@@ -24,3 +24,6 @@ app.js:
  $ bower install angular-i18n --save
 index.html:
   <script src="bower_components/angular-i18n/angular-locale_ko.js"></script>
+
+## ng-clip : Copy to clipboard using AngularJS
+  https://github.com/asafdav/ng-clip

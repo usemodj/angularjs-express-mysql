@@ -14,7 +14,7 @@ var modRewrite = require('connect-modrewrite');
 var multipart = require('connect-multiparty');
 
 var settings = require('./config/settings');
-var models = require('./models/');//index.js
+var models = require('./models/index');//index.js
 var mailer = require('./config/mailer');
 var log4js = require('log4js');
 

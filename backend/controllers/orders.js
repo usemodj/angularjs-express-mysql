@@ -19,7 +19,7 @@ var getOrderItems = function(order_id, req, res, callback){
             if (err || order == null) return callback(err);
 
             var sql = 'SELECT DISTINCT li.*, sv1.options, a3.attachment_file_path FROM \n'+
-                ' (SELECT l.*, p.id AS product_id, p.name, p.shipment_cost FROM line_items l,variants v, products p \n'+
+                ' (SELECT l.*, p.id AS product_id, p.name FROM line_items l,variants v, products p \n'+
                 ' WHERE l.variant_id = v.id AND v.product_id = p.id AND l.order_id = ? \n'+
                 ' ) li \n'+
                 ' INNER JOIN \n'+
@@ -180,7 +180,7 @@ module.exports = {
 
     addCart: function(req, res, next){
         //console.log(req);
-        log.debug('>>remoteAddress:'+ req.connection.remoteAddress);
+        //log.debug('>>remoteAddress:'+ req.connection.remoteAddress);
 
         var Order = req.models.orders;
         var LineItem = req.models.line_items;
@@ -274,7 +274,7 @@ module.exports = {
                 if (err || order == null) return next(err);
 
                 var sql = 'SELECT DISTINCT li.*, sv1.options, a3.attachment_file_path FROM \n'+
-                    ' (SELECT l.*, p.id AS product_id, p.name, p.shipment_cost FROM line_items l,variants v, products p \n'+
+                    ' (SELECT l.*, p.id AS product_id, p.name FROM line_items l,variants v, products p \n'+
                     ' WHERE l.variant_id = v.id AND v.product_id = p.id AND l.order_id = ? \n'+
                     ' ) li \n'+
                     ' INNER JOIN \n'+
@@ -735,7 +735,7 @@ module.exports = {
                 if (err || order == null) return next(err);
 
                 var sql = 'SELECT DISTINCT li.*, sv1.options, a3.attachment_file_path FROM \n'+
-                    ' (SELECT l.*, p.id AS product_id, p.name, p.shipment_cost FROM line_items l,variants v, products p \n'+
+                    ' (SELECT l.*, p.id AS product_id, p.name FROM line_items l,variants v, products p \n'+
                     ' WHERE l.variant_id = v.id AND v.product_id = p.id AND l.order_id = ? \n'+
                     ' ) li \n'+
                     ' INNER JOIN \n'+

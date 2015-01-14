@@ -426,9 +426,42 @@ module.exports = function (grunt) {
         configFile: 'karma.conf.js',
         singleRun: true
       }
-    }
+    },
+
+      'nggettext_extract': {
+          pot: {
+              options: {
+                  extensions: {
+                      htm: 'html',
+                      html: 'html',
+                      php: 'html',
+                      phtml: 'html',
+                      tml: 'html',
+                      jsp: 'html',
+                      js: 'js'
+                  }
+              },
+              files: {
+                  'lang/template.pot': [
+                      '**/*.html',
+                      '**/*.jsp',
+                      '**/langkeys.js' ]
+              }
+          }
+      },
+      'nggettext_compile': {
+          all: {
+              files: {
+                  'app/translations.js': ['lang/*.po']
+              }
+          }
+      }
   });
 
+    grunt.loadNpmTasks('grunt-angular-gettext');
+
+    grunt.registerTask('extract', ['nggettext_extract']);
+    grunt.registerTask('compile', ['nggettext_compile']);
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {

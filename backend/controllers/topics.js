@@ -12,6 +12,7 @@ module.exports = {
         //var Topic = req.models.topics;
         var perPages = 10;
 
+        log.debug(req.cookies);
         var body = req.body;
         var page = body.page || 1;
         if( isNaN(page) || page < 1) page = 1;

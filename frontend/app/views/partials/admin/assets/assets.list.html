@@ -51,7 +51,9 @@
         </thead>
         <tbody ui-sortable="sortableOptions" ng-model="data.assets">
         <tr ng-repeat="item in data.assets">
-            <td style="width:100px" class="col-md-2"><span class="glyphicon glyphicon-list"></span> <img height="42" width="42" ng-src="/uploads/images/{{item.attachment_file_path}}"/></td>
+            <td style="width:100px" class="col-md-2"><span class="glyphicon glyphicon-list"></span> <img height="42" width="42" ng-src="/uploads/images/{{item.attachment_file_path}}"/>
+                <input ng-model="copy[$index]"><button class="btn btn-default" clip-copy="copy[$index]">Copy to clipboard</button>
+            </td>
             <td style="width:300px" class="col-md-3"> {{item.variant_id == asset.master_variant.id ? 'All': item.options}}</td>
             <td style="width:300px" class="col-md-5">{{item.alt}} </td>
             <td class="col-md-2 text-center">

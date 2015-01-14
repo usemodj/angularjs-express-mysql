@@ -3,7 +3,7 @@ var _ = require('underscore');
 var async = require('async');
 
 module.exports = {
-    //Admin index
+    //Public index
     index: function(req, res, next) {
         //console.log(req);
         var Query = req.db.driver.query;
@@ -16,40 +16,78 @@ module.exports = {
         console.log('>>req.body:'+ JSON.stringify(req.body));
         console.log('>> page:'+ page);
         var name = body.name || "";
+        var description = body.description || "";
+        var locked = body.locked;
+
         var conditions = {};
         if(name && name.length !== 0) {
-            name = '%'+Query.escape(name)+'%';
-            conditions.name = name;
+            conditions.name = '%'+Query.escape(name)+'%';
+        }
+        if(description && description.length !== 0) {
+            conditions.description = '%'+Query.escape(description)+'%';
+        }
+        if(locked == true){
+            conditions.locked = locked;
         }
 
         var where = '';
-
         if(conditions.name) {
-            where += ' and LOWER(f.name) like '+ Query.escapeVal(conditions.name);
+            where += ' AND LOWER(f.name) LIKE '+ Query.escapeVal(conditions.name);
         }
-
-        Forum.getRoot(function(err, forum){
-            if(err) return next(err);
-            Forum.getDescendantsCount(forum.id, function(err, count){
+        if(conditions.description) {
+            where += ' AND LOWER(f.description) LIKE '+ Query.escapeVal(conditions.description);
+        }
+        if(conditions.locked){
+            where += ' AND f.locked = true ';
+        }
+        if(!where) {
+            Forum.getRoot(function (err, forum) {
+                if (err) return next(err);
+                Forum.getDescendantsCount(forum.id, function (err, count) {
+                    if (err) return next(err);
+                    if (count > 0) {
+                        Forum.getDescendantsLevel(forum.id, page, perPages, function (err, forums) {
+                            if (err) return next(err);
+                            res.json({
+                                forums: forums,
+                                count: count,
+                                page: page
+                            });
+                        })
+                    } else {
+                        res.json({
+                            forums: null,
+                            count: count,
+                            page: page
+                        });
+                    }
+                });
+            });
+        } else {
+            sql = 'SELECT f.* FROM forums f \n'+
+                  ' WHERE 1 = 1 '+ where;
+            req.db.driver.execQuery('SELECT COUNT(*) AS total FROM ('+ sql+') tbl;', function(err, count){
                 if(err) return next(err);
-                if(count > 0){
-                    Forum.getDescendantsLevel(forum.id, page, perPages, function(err, forums){
+                var total = count[0].total;
+                if( total > 0){
+                    req.db.driver.execQuery(sql, function(err, forums){
                         if(err) return next(err);
                         res.json({
                             forums: forums,
-                            count: count,
+                            count: total,
                             page: page
-                        })
-                    })
+                        });
+                    });
                 } else {
                     res.json({
                         forums: null,
-                        count: count,
+                        count: 0,
                         page: page
-                    })
+                    });
                 }
+
             });
-        });
+        }
     },
 
     add: function(req, res, next){

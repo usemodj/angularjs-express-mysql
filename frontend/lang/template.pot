@@ -1,0 +1,20 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: app/views/partials/navbar.html
+msgid "Forums"
+msgstr ""
+
+#: app/views/partials/navbar.html
+msgid "Login"
+msgstr ""
+
+#: app/views/partials/navbar.html
+msgid "My Order"
+msgstr ""
+
+#: app/views/partials/navbar.html
+msgid "Signup"
+msgstr ""

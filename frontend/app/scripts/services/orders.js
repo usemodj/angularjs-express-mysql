@@ -43,7 +43,7 @@ angular.module('frontendApp')
 
         getCart: function(callback){
             var cb = callback || angular.noop;
-            $http.get('/orders/cart')
+            $http.get('/carts')
                 .success(function(data, status, headers, config){
                     //console.log('>> status:'+ status);
                     return cb(null, data);
@@ -57,7 +57,7 @@ angular.module('frontendApp')
 
         updateCart: function(data, callback){
             var cb = callback || angular.noop;
-            $http.post('/orders/update', data)
+            $http.post('/carts/update', data)
                 .success(function(data, status, headers, config){
                     //console.log('>> status:'+ status);
                     return cb(null, data);

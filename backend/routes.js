@@ -164,19 +164,19 @@ var routes = [
 
     // Orders Resource
     {
-        path: '/orders/',
+        path: '/carts/',
         httpMethod: 'POST',
         middleware: [OrderCtrl.addCart],
         accessLevel: accessLevels.user
     },
     {
-        path: '/orders/cart',
+        path: '/carts',
         httpMethod: 'GET',
         middleware: [OrderCtrl.getCart],
         accessLevel: accessLevels.user
     },
     {
-        path: '/orders/update',
+        path: '/carts/update',
         httpMethod: 'POST',
         middleware: [OrderCtrl.updateCart],
         accessLevel: accessLevels.user
@@ -536,7 +536,7 @@ var routes = [
         accessLevel: accessLevels.admin
     },
 
-    //Forums Resource
+    //Forum Topics Resource
     {
         path: '/forums/topics/search',
         httpMethod: 'POST',

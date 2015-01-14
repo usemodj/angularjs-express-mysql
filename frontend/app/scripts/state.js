@@ -103,7 +103,7 @@ angular.module('frontendApp.state', ['ui.router'])
                 //template: '<ui-view/>',
                 templateUrl: 'views/partials/orders/layout.html',
                 data: {
-                    access: access.public
+                    access: access.user
                 }
             })
             .state('orders.list', {
@@ -149,7 +149,7 @@ angular.module('frontendApp.state', ['ui.router'])
                 template: '<ui-view/>',
                 //templateUrl: 'views/partials/products/layout.html',
                 data: {
-                    access: access.public
+                    access: access.user
                 }
             })
             .state('carts.list', {
@@ -517,9 +517,10 @@ angular.module('frontendApp.state', ['ui.router'])
             function error(response) {
                 var status = response.status;
                 if (status === 401 || status === 403) {
-                    //$rootScope.redirect = $location.url(); // save the current url so we can redirect the user back
-                    //$rootScope.currentUser = null;
+                    $rootScope.redirect = $location.url(); // save the current url so we can redirect the user back
+                    $rootScope.currentUser = null;
                     $location.path('/login');
+
                 }
                 return $q.reject(response);
             }
@@ -527,6 +528,6 @@ angular.module('frontendApp.state', ['ui.router'])
                 return promise.then(success, error);
             }
         }];
-        $httpProvider.responseInterceptors.push(interceptor);
+        $httpProvider.interceptors.push(interceptor);
     }
 ]);

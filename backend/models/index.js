@@ -63,9 +63,14 @@ function setup(db, cb) {
     require('./topic')(orm, db);
     require('./post')(orm, db);
 
+    db.sync(); //create tables
+
     return cb(null, db);
 }
 
+/*
+ *   cb(err, db)
+ */
 module.exports = function(cb) {
     if (connection) return cb(null, connection);
 
@@ -80,6 +85,5 @@ module.exports = function(cb) {
 
         db.use(transaction);
         setup(db, cb);
-        db.sync(); //create tables
     });
 };

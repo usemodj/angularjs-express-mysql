@@ -96,7 +96,7 @@ angular.module('frontendApp')
       },
       addToCart: function(data, callback){
           var cb = callback || angular.noop;
-          $http.post('/orders/', data)
+          $http.post('/carts/', data)
               .success(function(data, status, headers, config){
                   //console.log('>> status:'+ status);
                   return cb(null, data);
