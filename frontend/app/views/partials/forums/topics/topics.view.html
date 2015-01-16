@@ -3,17 +3,15 @@
     <ul style="display: inline-block;" class="list-inline"  ng-repeat="item in data.forums">
         <li><a ui-sref="forums.topics.list({forum_id: item.id})">{{item.name}}</a> &gt;</li>
     </ul>
-
     <div>
        <h2>{{data.topic.name}}</h2>
     </div>
     <div class="panel panel-default" ng-repeat="item in data.posts">
         <div class="panel-heading">{{item.name}}</div>
-        <div class="panel-body">
-            {{item.content}}
-        </div>
+        <div class="panel-body" ng-bind-html="item.content | markdown"></div>
         <div class="well well-sm text-right">
-            <a class="btn btn-default" ng-confirm-click="Are you sure?" ng-click="deletePost(item)">Delete</a>
+            <a class="btn btn-default" ng-click="editPost(item)">Edit</a>
+            <a ng-hide="item.root" class="btn btn-default" ng-confirm-click="Are you sure?" ng-click="deletePost(item)">Delete</a>
         </div>
     </div>
 
@@ -27,7 +25,7 @@
             </div>
             <div class="form-group">
                 <label>Message:</label>
-                <textarea  class="form-control" rows="8" ng-model="newPost.content"></textarea>
+                <textarea  class="form-control" rows="8" ng-model="newPost.content" markdown-editor></textarea>
             </div>
             <div class="form-group has-error" ng-show="error">
                 <p class="help-block">{{error}}</p>

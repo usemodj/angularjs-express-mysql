@@ -555,6 +555,12 @@ var routes = [
         middleware: [TopicCtrl.viewTopic],
         accessLevel: accessLevels.public
     },
+    {//delete topic
+        path: '/forums/:forum_id/topics/:id',
+        httpMethod: 'DELETE',
+        middleware: [TopicCtrl.deleteTopic],
+        accessLevel: accessLevels.user
+    },
     {
         path: '/forums/topics/reply',
         httpMethod: 'POST',
@@ -565,6 +571,12 @@ var routes = [
         path: '/forums/topics/delete_post',
         httpMethod: 'POST',
         middleware: [TopicCtrl.deletePost],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/forums/topics/post',
+        httpMethod: 'POST',
+        middleware: [TopicCtrl.updatePost],
         accessLevel: accessLevels.user
     },
     {

@@ -179,6 +179,9 @@ module.exports = function(orm, db) {
             });
     };
 
+    /*
+     * root - parent - parent - ... - node(id)
+     */
     Forum.getAncestors = function(id, callback){
         db.driver.execQuery('SELECT p.* FROM forums n, forums p \n'+
             ' WHERE n.lft BETWEEN p.lft AND p.rgt AND n.id = ? ORDER BY n.lft;',[id],
@@ -203,6 +206,7 @@ module.exports = function(orm, db) {
     };
     /*
      * level from sub-tree root
+     *  root - parent - parent - node(id) - child[level:1] - child[level:2] - ...
      */
     Forum.getDescendantsLevel = function(id, page, perPages, callback){
         var sql = 'SELECT node.*, (COUNT(parent.id) - (sub_tree.level + 1)) AS level \n'+
@@ -225,6 +229,7 @@ module.exports = function(orm, db) {
     };
     /*
      * level from top root
+     *  root - parent - parent - node(id)[level:3] - child[level:4] - child[level:5] - ...
      */
     Forum.getDescendants = function(id, callback){
         db.driver.execQuery('SELECT o.*, COUNT(p.id)-1 AS level FROM forums AS n, forums AS p, forums AS o \n'+

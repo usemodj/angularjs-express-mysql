@@ -23,6 +23,7 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                     if(role === undefined){
                         role = currentUser.role;
                     }
+                    $rootScope.currentUser = currentUser;
                     return accessLevel.bit_mask & role.bit_mask;
                 },
 
@@ -45,7 +46,7 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                         //console.log('>> authfactory login user:'+JSON.stringify(user));
                         $rootScope.currentUser= user;
                         $cookieStore.put('user', user);
-                        changeUser(user)
+                        changeUser(user);
                         return cb();
                     }, function(err) {
                         console.log('>>authfactory login error:'+ JSON.stringify(err));

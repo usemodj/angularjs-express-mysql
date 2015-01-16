@@ -10,6 +10,9 @@ module.exports = function(orm, db) {
         content: {
             type: 'text', big: true
         },
+        root: {
+            type: 'boolean', defaultValue: false
+        },
         user_id: {
             type: 'serial'
         },

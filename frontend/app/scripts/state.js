@@ -205,7 +205,7 @@ angular.module('frontendApp.state', ['ui.router'])
             .state('forums.topics.edit', {
                 url: ':forum_id/topics/:id/edit',
                 templateUrl: 'views/partials/forums/topics/topics.edit.html',
-                controller: 'EditTopicCtrl'
+                controller: 'ViewTopicCtrl'
             })
         ;
 
@@ -467,67 +467,67 @@ angular.module('frontendApp.state', ['ui.router'])
         $urlRouterProvider.when('#/', '/products');
         $urlRouterProvider.otherwise('/404');
 
-        // FIX for trailing slashes. Gracefully "borrowed" from https://github.com/angular-ui/ui-router/issues/50
-        $urlRouterProvider.rule(function($injector, $location) {
-            if($location.protocol() === 'file')
-                return;
-
-            var path = $location.path()
-            // Note: misnomer. This returns a query object, not a search string
-                , search = $location.search()
-                , params
-                ;
-
-            // check to see if the path already ends in '/'
-            if (path[path.length - 1] === '/') {
-                return;
-            }
-
-            // If there was no search string / query params, return with a `/`
-            if (Object.keys(search).length === 0) {
-                return path + '/';
-            }
-            //console.log('>>search:'+ JSON.stringify(search));
-            // Otherwise build the search string and return a `/?` prefix
-            params = [];
-            angular.forEach(search, function(v, k){
-                params.push(k + '=' + v);
-            });
-            return path + '/?' + params.join('&');
-        });
-
-        // gets rid of the # in urls
-        //$locationProvider.html5Mode(false); //.hashPrefix('!');
-        /*
-         * Set up an interceptor to watch for 401 errors. The
-         * server, rather than redirect to a login page (or
-         * whatever), just returns a 401 error if it receives a
-         * request that should have a user session going. Angular
-         * catches the error below and says what happens - in this
-         * case, we just redirect to a login page. You can get a
-         * little more complex with this strategy, such as queueing
-         * up failed requests and re-trying them once the user logs
-         * in. Read all about it here:
-         * http://www.espeo.pl/2012/02/26/authentication-in-angularjs-application
-         */
-        var interceptor = ['$q', '$location', '$rootScope',function ($q, $location, $rootScope) {
-            function success(response) {
-                return response;
-            }
-            function error(response) {
-                var status = response.status;
-                if (status === 401 || status === 403) {
-                    $rootScope.redirect = $location.url(); // save the current url so we can redirect the user back
-                    $rootScope.currentUser = null;
-                    $location.path('/login');
-
-                }
-                return $q.reject(response);
-            }
-            return function (promise) {
-                return promise.then(success, error);
-            }
-        }];
-        $httpProvider.interceptors.push(interceptor);
+//        // FIX for trailing slashes. Gracefully "borrowed" from https://github.com/angular-ui/ui-router/issues/50
+//        $urlRouterProvider.rule(function($injector, $location) {
+//            if($location.protocol() === 'file')
+//                return;
+//
+//            var path = $location.path()
+//            // Note: misnomer. This returns a query object, not a search string
+//                , search = $location.search()
+//                , params
+//                ;
+//
+//            // check to see if the path already ends in '/'
+//            if (path[path.length - 1] === '/') {
+//                return;
+//            }
+//
+//            // If there was no search string / query params, return with a `/`
+//            if (Object.keys(search).length === 0) {
+//                return path + '/';
+//            }
+//            //console.log('>>search:'+ JSON.stringify(search));
+//            // Otherwise build the search string and return a `/?` prefix
+//            params = [];
+//            angular.forEach(search, function(v, k){
+//                params.push(k + '=' + v);
+//            });
+//            return path + '/?' + params.join('&');
+//        });
+//
+//        // gets rid of the # in urls
+//        //$locationProvider.html5Mode(false); //.hashPrefix('!');
+//        /*
+//         * Set up an interceptor to watch for 401 errors. The
+//         * server, rather than redirect to a login page (or
+//         * whatever), just returns a 401 error if it receives a
+//         * request that should have a user session going. Angular
+//         * catches the error below and says what happens - in this
+//         * case, we just redirect to a login page. You can get a
+//         * little more complex with this strategy, such as queueing
+//         * up failed requests and re-trying them once the user logs
+//         * in. Read all about it here:
+//         * http://www.espeo.pl/2012/02/26/authentication-in-angularjs-application
+//         */
+//        var interceptor = ['$q', '$location', '$rootScope',function ($q, $location, $rootScope) {
+//            function success(response) {
+//                return response;
+//            }
+//            function error(response) {
+//                var status = response.status;
+//                if (status === 401 || status === 403) {
+//                    $rootScope.redirect = $location.url(); // save the current url so we can redirect the user back
+//                    $rootScope.currentUser = null;
+//                    $location.path('/login');
+//
+//                }
+//                return $q.reject(response);
+//            }
+//            return function (promise) {
+//                return promise.then(success, error);
+//            }
+//        }];
+//        $httpProvider.interceptors.push(interceptor);
     }
 ]);

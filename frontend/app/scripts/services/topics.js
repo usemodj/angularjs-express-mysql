@@ -12,9 +12,9 @@ angular.module('frontendApp')
             },
             get: function (data, callback) { //GET
                 var cb = callback || angular.noop;
-                resource.get(data, function (forum) {
-                    console.log(forum);
-                    return cb(null, forum);
+                resource.get(data, function (topic) {
+                    console.log(topic);
+                    return cb(null, topic);
                 }, function (err) {
                     return cb(err, null);
                 });
@@ -84,6 +84,20 @@ angular.module('frontendApp')
                 var cb = callback || angular.noop;
                 //console.log(conditions);
                 $http.post('/forums/topics/delete_post', conditions)
+                    .success(function (data, status, headers, config) {
+                        console.log('>> status:' + status);
+                        return cb(null, data);
+                    }).error(function (data, status, headers, config) {
+                        console.log('>> error data:' + data);
+                        // called asynchronously if an error occurs
+                        // or server returns response with an error status.
+                        return cb(status, data);
+                    });
+            },
+            updatePost: function (post, callback) {
+                var cb = callback || angular.noop;
+                //console.log(conditions);
+                $http.post('/forums/topics/post/', post)
                     .success(function (data, status, headers, config) {
                         console.log('>> status:' + status);
                         return cb(null, data);

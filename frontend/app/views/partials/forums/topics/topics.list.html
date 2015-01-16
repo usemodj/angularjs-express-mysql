@@ -11,7 +11,7 @@
         <form name="form" class="" role="form" ng-submit="searchTopics(form)">
             <div class="row">
                <div class="form-group col-xs-2 col-md-2">
-                    <label>Name:</label><br/>
+                    <label>Topic:</label><br/>
                     <input class="form-control" ng-model="conditions.name" placeholder="Name">
                 </div>
                 <div class="form-group col-xs-2 col-md-2">
@@ -37,6 +37,9 @@
                 <ul style="display: inline-block;" class="list-inline" ng-repeat="item in data.forums">
                     <li><a ui-sref="forums.topics.list({forum_id: item.id})">{{item.name}}</a> &gt;</li>
                 </ul>
+                <ul class="list-unstyled" ng-repeat="item in data.child_forums">
+                    <li><a ui-sref="forums.topics.list({forum_id: item.id})">+{{"--".repeat(item.level)}} {{item.name}}</a> &gt;</li>
+                </ul>
                 <div class="col-md-10 text-right"><a class=" btn btn-default" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})">New Topic</a></div>
 
 
@@ -44,11 +47,12 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
+                        <th>Topic</th>
                         <th>Written by</th>
-                        <th>views</th>
-                        <th>replies</th>
-                        <th>last_post</th>
+                        <th>Locked</th>
+                        <th>Views</th>
+                        <th>Replies</th>
+                        <th>Last post</th>
                         <th>Updated at</th>
                         <th></th>
                     </tr>
@@ -58,25 +62,28 @@
                         <td>{{item.id}}</td>
                         <td>Sticky: <a ui-sref="forums.topics.view({forum_id: item.forum_id, id: item.id})">{{item.name}}</a></td>
                         <td>{{item.email}}</td>
+                        <td>{{item.locked}}</td>
                         <td>{{item.views}}</td>
                         <td>{{item.replies}}</td>
                         <td>{{item.last_post}}</td>
                         <td>{{item.updated_at}}</td>
                         <td class="text-center">
-                            <a access-level="accessLevels.admin"  ng-confirm-click="Are you sure?" ng-click="unsticky(item)" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="Unsticky"><span class="glyphicon glyphicon-flag"></span></a>
-
+                            <a ng-show="currentUser.role.title == 'admin'"  ng-confirm-click="Are you sure?" ng-click="unsticky(item)" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="Unsticky"><span class="glyphicon glyphicon-flag"></span></a>
+                            <a ng-show="currentUser.role.title =='admin' || currentUser.email == item.email" ng-confirm-click="Are you sure?" ng-click="delete(item)" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="Delete topic"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
                     <tr ng-repeat="item in data.topics">
                         <td>{{item.id}}</td>
                         <td><a ui-sref="forums.topics.view({forum_id: item.forum_id, id: item.id})">{{item.name}}</a></td>
                         <td>{{item.email}}</td>
+                        <td>{{item.locked}}</td>
                         <td>{{item.views}}</td>
                         <td>{{item.replies}}</td>
                         <td>{{item.last_post}}</td>
                         <td>{{item.updated_at}}</td>
                         <td class="text-center">
-                            <a access-level="accessLevels.admin" ng-show="user.role.title == 'admin'" ng-confirm-click="Are you sure?" ng-click="sticky(item)" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Sticky"><span class="glyphicon glyphicon-flag"></span></a>
+                            <a ng-show="currentUser.role.title == 'admin'"  ng-confirm-click="Are you sure?" ng-click="sticky(item)" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Unsticky"><span class="glyphicon glyphicon-flag"></span></a>
+                            <a ng-show="currentUser.role.title =='admin' || currentUser.email == item.email" ng-confirm-click="Are you sure?" ng-click="delete(item)" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="Delete topic"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>
                     </tbody>

@@ -22,6 +22,7 @@ angular.module('frontendApp')
 
     $scope.deleteLineItem = function(item){
         $scope.data.order.line_items.splice($scope.data.order.line_items.indexOf(item), 1);
+        $scope.updateCart();
     };
 
     $scope.checkout = function(){

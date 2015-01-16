@@ -16,8 +16,8 @@ module.exports = {
         var body = req.body;
         var page = body.page || 1;
         if( isNaN(page) || page < 1) page = 1;
-        console.log('>>req.body:'+ JSON.stringify(req.body));
-        console.log('>> page:'+ page);
+        //console.log('>>req.body:'+ JSON.stringify(req.body));
+        //console.log('>> page:'+ page);
         var forum_id = body.forum_id;
         var name = body.name || "";
         var email = body.email || "";
@@ -60,36 +60,40 @@ module.exports = {
             ' ) t0 \n'+
             ' WHERE 1 = 1 ' + where ;
 
-            log.debug(sql);
-            req.db.driver.execQuery(stickySql, [forum_id], function(err, stickyTopics){
-                req.db.driver.execQuery('SELECT COUNT(*) AS total FROM ('+sql+') t1',[forum_id], function(err, data){
-                    if(err) return next(err);
-                    var total = data[0].total;
-                    if(total> 0) {
-                        req.db.driver.execQuery(sql + ' ORDER BY created_at DESC LIMIT ? OFFSET ? ;', [forum_id, perPages, (page - 1) * perPages], function (err, data) {
-                            if (err) return next(err);
+            Forum.getDescendants(forum_id, function(err, childForums){
+                log.debug(sql);
+                req.db.driver.execQuery(stickySql, [forum_id], function(err, stickyTopics){
+                    req.db.driver.execQuery('SELECT COUNT(*) AS total FROM ('+sql+') t1',[forum_id], function(err, data){
+                        if(err) return next(err);
+                        var total = data[0].total;
+                        if(total> 0) {
+                            req.db.driver.execQuery(sql + ' ORDER BY created_at DESC LIMIT ? OFFSET ? ;', [forum_id, perPages, (page - 1) * perPages], function (err, data) {
+                                if (err) return next(err);
+                                    res.json({
+                                        forums: forums,
+                                        child_forums: childForums,
+                                        sticky_topics: stickyTopics,
+                                        topics: data,
+                                        count: total,
+                                        page: page
+                                    });
+                                });
+
+                        } else {
                             res.json({
                                 forums: forums,
+                                child_forums: childForums,
                                 sticky_topics: stickyTopics,
-                                topics: data,
-                                count: total,
+                                topics: null,
+                                count: 0,
                                 page: page
                             });
-                        });
-                    } else {
-                        res.json({
-                            forums: forums,
-                            sticky_topics: stickyTopics,
-                            topics: null,
-                            count: 0,
-                            page: page
-                        });
 
-                    }
+                        }
+                    });
+
                 });
-
             });
-
         });
 
     },
@@ -122,6 +126,7 @@ module.exports = {
                     topic_id: topic.id,
                     name: topic.name,
                     content: body.content,
+                    root: true,
                     user_id:user.id,
                     ipaddress: ip
                 }, function (err, post) {
@@ -136,6 +141,24 @@ module.exports = {
                     });
                     res.json(topic);
                 });
+            });
+        });
+    },
+    deleteTopic: function(req, res, next){
+        //var Forum = req.models.forums;
+        var Topic = req.models.topics;
+        //var Post = req.models.posts;
+        var topic_id = req.params.id;
+        //var forum_id = req.params.forum_id;
+
+        Topic.get(topic_id, function(err, topic){
+            if(err) return next(err);
+            req.db.driver.execQuery('DELETE FROM posts WHERE topic_id = ? ', [topic.id], function(err) {
+                if(!err) {
+                    topic.remove(function (err) {
+                        return res.status(200);
+                    });
+                }
             });
         });
     },
@@ -165,7 +188,6 @@ module.exports = {
         });
     },
 
-
     replyPost: function(req, res, next){
         var Forum = req.models.forums;
         var Topic = req.models.topics;
@@ -187,6 +209,7 @@ module.exports = {
                 topic_id: body.topic_id,
                 name: body.name,
                 content: body.content,
+                root: false,
                 user_id:user.id,
                 ipaddress: ip
             }, function (err, post) {
@@ -254,7 +277,26 @@ module.exports = {
         });
 
     },
+    updatePost: function(req, res, next) {
+        //var Forum = req.models.forums;
+        var Topic = req.models.topics;
+        var Post = req.models.posts;
+        //var User = req.models.users;
+        var ip = req.connection.remoteAddress;
+        //var user = JSON.parse(req.cookies.user);
+        var body = req.body;
+        log.debug(body);
 
+        Post.get(body.id, function(err, post){
+           post.name = body.name;
+           post.content = body.content;
+           post.ipaddress = ip;
+           post.save(function(err){
+               if(err) return next(err);
+               return res.status(200);
+           });
+        });
+    },
     setSticky: function(req, res, next){
         var Topic = req.models.topics;
         var body = req.body;
@@ -267,50 +309,4 @@ module.exports = {
         });
     },
 
-    //////////////////////
-    update: function(req, res, next){
-        var Forum = req.models.forums;
-        var body = req.body;
-        log.debug(body);
-        Forum.one({id: body.id}, function(err, data){
-            if(err) return next(err);
-            log.debug(JSON.stringify(data));
-            data.name = body.name;
-            data.description = body.description;
-            data.locked = body.locked;
-
-            data.save(function(err, data){
-                if(err){
-                    log.warn(err);
-                    res.status(500).json(err);
-                }
-                res.json(data);
-            });
-        });
-    },
-
-    remove: function(req, res, next){
-        var Forum = req.models.forums;
-        var body = req.body;
-        log.debug(body);
-        var id = req.params.id;
-
-        Forum.one({id: id}, function(err, data){
-            if(err) return next(err);
-            log.debug(JSON.stringify(data));
-            Forum.deleteNodeAndDescendants(data, function(err, data){
-                if(err){
-                    log.warn(err);
-                    res.status(500).json(err);
-                }
-                res.json(data);
-            });
-        });
-    },
-
-    rebuildTree: function(req, res, next){
-        var Forum = req.models.forums;
-        Forum.rebuildTreeAll();
-        return res.status(200);
-    }
 }

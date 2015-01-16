@@ -59,7 +59,7 @@ var sendConfirmationMail = function(order, transport){
     var html = '<ul>';
     _.each(order.line_items, function(item){
         //log.debug('>>line_item:' + JSON.stringify(item));
-        html += '<li>'+ item.name + ': '+ item.price + ' x '+ item.quantity + '</li>'
+        html += '<li>'+ item.name + ': '+ item.price + ' x '+ item.quantity+'('+item.options+')' + '</li>'
     });
     html += '<p>Total: '+ order.item_total + ' + ' + order.shipment_total + '(Shipment)</p>';
 
