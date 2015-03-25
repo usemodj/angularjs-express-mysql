@@ -1,7 +1,9 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-8 col-md-8">
-            <h2>Forums List <a ng-confirm-click="Are you sure?" ng-click="rebuildTree()"  class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Rebuild Tree"><span class="glyphicon glyphicon-list"></span> Rebuild Tree </a>
+            <h2>Forums List
+                <a ng-confirm-click="Are you sure?" ng-click="createRoot()"  class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Create Root"><span class="glyphicon glyphicon-list"></span> Create Root </a>
+                <a ng-confirm-click="Are you sure?" ng-click="rebuildTree()"  class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Rebuild Tree"><span class="glyphicon glyphicon-list"></span> Rebuild Tree </a>
             </h2>
         </div>
         <div class="col-xs-4 col-md-4 text-center">
@@ -39,9 +41,9 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Description</th>
-                        <th>Locked</th>
                         <th>Topics</th>
                         <th>Posts</th>
+                        <th>Locked</th>
                         <th>Updated at</th>
                         <th></th>
                     </tr>
@@ -51,9 +53,9 @@
                         <td>{{item.id}}</td>
                         <td><a ui-sref="forums.topics.list({forum_id: item.id})" >{{"&nbsp;&nbsp;&nbsp;".repeat(item.level)}}{{item.name}}</a></td>
                         <td>{{item.description}}</td>
-                        <td>{{item.locked}}</td>
                         <td>{{item.topic_count}}</td>
                         <td>{{item.posts}}</td>
+                        <td>{{item.locked}}</td>
                         <td>{{item.updated_at}}</td>
                         <td class="text-center">
                             <a ui-sref="admin.forums.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>

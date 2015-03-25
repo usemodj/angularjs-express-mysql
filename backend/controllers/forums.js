@@ -42,7 +42,7 @@ module.exports = {
         }
         if(!where) {
             Forum.getRoot(function (err, forum) {
-                if (err) return next(err);
+                if (err || !forum) return next(err);
                 Forum.getDescendantsCount(forum.id, function (err, count) {
                     if (err) return next(err);
                     if (count > 0) {
@@ -102,7 +102,7 @@ module.exports = {
             Forum.insertNode(data, function(err, data){
                 if(err){
                     log.warn(err);
-                    res.status(500).json(err);
+                    return res.status(500).json(err);
                 }
                 res.json(data);
             });
@@ -132,9 +132,9 @@ module.exports = {
             data.save(function(err, data){
                 if(err){
                     log.warn(err);
-                    res.status(500).json(err);
+                    return res.status(500).json(err);
                 }
-                res.json(data);
+                return res.json(data);
             });
         });
     },
@@ -158,10 +158,21 @@ module.exports = {
             Forum.deleteNodeAndDescendants(forum, function(err, data){
                 if(err){
                     log.warn(err);
-                    res.status(500).json(err);
+                    return res.status(500).json(err);
                 }
-                res.json(data);
+                return res.json(data);
             });
+        });
+    },
+
+    createRoot: function(req, res, next){
+        var Forum = req.models.forums;
+        Forum.createRoot(function(err, root){
+            if(err){
+                log.warn(err);
+                return res.status(500).json(err);
+            }
+            return res.status(200).json(root);
         });
     },
 

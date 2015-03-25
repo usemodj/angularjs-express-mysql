@@ -92,6 +92,19 @@ angular.module('frontendApp')
                     // or server returns response with an error status.
                     return cb(status, data);
                 });
+        },
+        createRoot: function(callback){
+            var cb = callback || angular.noop;
+            $http.get('/admin/forums/create_root')
+                .success(function(data, status, headers, config){
+                    console.log('>> status:'+ status);
+                    return cb(null, data);
+                }).error(function(data, status, headers, config) {
+                    console.log('>> error data:'+ data);
+                    // called asynchronously if an error occurs
+                    // or server returns response with an error status.
+                    return cb(status, data);
+                });
         }
 
     };

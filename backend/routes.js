@@ -543,6 +543,12 @@ var routes = [
         middleware: [ForumCtrl.rebuildTree],
         accessLevel: accessLevels.admin
     },
+    {
+        path: '/admin/forums/create_root',
+        httpMethod: 'GET',
+        middleware: [ForumCtrl.createRoot],
+        accessLevel: accessLevels.admin
+    },
 
     //Forum Topics Resource
     {

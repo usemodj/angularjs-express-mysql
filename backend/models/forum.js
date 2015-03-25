@@ -171,6 +171,19 @@ module.exports = function(orm, db) {
       });
     };
 
+    Forum.createRoot = function(callback){
+        db.driver.execQuery('INSERT INTO forums (name, description, lft, rgt, created_at, updated_at) VALUES (?,?,?,?, now(), now());',
+            ['Root', 'Root node', 1, 2], function(err, forum){
+
+                if(err){
+                    log.warn(err);
+                    return callback(err, null);
+                }
+                return callback(null, forum);
+            });
+
+    };
+
     Forum.getRoot = function(callback){
         this.one({lft: 1},
             function(err, forum){

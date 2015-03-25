@@ -19,6 +19,13 @@ angular.module('frontendApp')
         $state.go('admin.forums.list', {page: $scope.page},{reload: true});
     };
 
+    $scope.createRoot = function(){
+        forums.createRoot(function(err, data){
+            if(err) $scope.error = err;
+        });
+        $state.go('admin.forums.list', {page: $scope.page},{reload: true});
+    };
+
     $scope.pageChanged = function() {
 
         $scope.searchForums();
