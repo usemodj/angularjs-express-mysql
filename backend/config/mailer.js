@@ -1,19 +1,20 @@
 var nodemailer = require('nodemailer');
+var smtpPool = require('nodemailer-smtp-pool');
 var transport = null;
 
 module.exports = function(cb) {
     if (transport) return cb(transport);
 
     // Create a SMTP transport object
-    transport = nodemailer.createTransport("SMTP", {
-        //service: 'Gmail', // use well known service.
+    transport = nodemailer.createTransport(smtpPool({
+        service: 'Gmail', // use well known service.
         // If you are using @gmail.com address, then you don't
         // even have to define the service name
         auth: {
             user: "nodesoft.blog@gmail.com",
             pass: "node3208"
         }
-    });
+    }));
 
     //console.log('SMTP Configured');
     return cb(transport);
@@ -21,7 +22,7 @@ module.exports = function(cb) {
 
 /**
  
- var transport = nodemailer.createTransport("SMTP", {
+ var transport = nodemailer.createTransport({
     service: "Gmail",
     auth: {
         user: "gmail.user@gmail.com",

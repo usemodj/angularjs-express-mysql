@@ -37,6 +37,8 @@
                 <th>SKU</th>
                 <th>Name</th>
                 <th>Master Price</th>
+                <th>Available On</th>
+                <th>Deleted At</th>
                 <th></th>
             </tr>
             </thead>
@@ -44,8 +46,9 @@
             <tr ng-repeat="item in data.products">
                 <td>{{item.sku}}</td>
                 <td>{{item.name}}</td>
-                <td>{{item.price}}
-                </td>
+                <td>{{item.price}}</td>
+                <td>{{item.available_on}}</td>
+                <td>{{item.deleted_at}}</td>
                 <td class="text-center">
                     <a ng-hide="item.deleted_at != null" ui-sref="admin.products.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                     <a ui-sref="admin.products.clone({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Clone"><span class="glyphicon glyphicon-file"></span></a>

@@ -1,12 +1,11 @@
-var _ =           require('underscore')
-    , path =      require('path')
-    //, passport =  require('passport')
+var _ = require('underscore')
+    , path = require('path')
     , userRoles = require('../frontend/app/scripts/common/routingConfig').userRoles
     , accessLevels = require('../frontend/app/scripts/common/routingConfig').accessLevels
-    //, User =      require('./models/user')
-    , SessionCtrl =  require('./controllers/auth/session')
+    , SessionCtrl =  require('./controllers/auth/sessions')
     , UserCtrl =  require('./controllers/auth/users')
     , RoleCtrl =  require('./controllers/auth/roles')
+    , MailCtrl =  require('./controllers/auth/mails')
     , ProductCtrl =  require('./controllers/products')
     , OptionTypeCtrl =  require('./controllers/option_types')
     , OptionValueCtrl =  require('./controllers/option_values')
@@ -44,6 +43,21 @@ var routes = [
         httpMethod: 'DELETE',
         middleware: [SessionCtrl.logout]
     },
+    {
+        path: '/auth/mail',
+        httpMethod: 'GET',
+        middleware: [MailCtrl.reset_password_token]
+    },
+    {
+        path: '/auth/mail',
+        httpMethod: 'POST',
+        middleware: [MailCtrl.mail_password]
+    },
+    {
+        path: '/auth/mail',
+        httpMethod: 'PUT',
+        middleware: [MailCtrl.reset_password]
+    },
 
     // User resource
     {
@@ -77,12 +91,6 @@ var routes = [
         httpMethod: 'PUT',
         middleware: [UserCtrl.changePassword],
         accessLevel: accessLevels.user
-    },
-    {
-        path: '/users',
-        httpMethod: 'POST',
-        middleware: [UserCtrl.changeRole],
-        accessLevel: accessLevels.admin
     },
     {
         path: '/users/:id',

@@ -3,9 +3,10 @@
 angular.module('frontendApp')
 .controller('ProductCtrl', ['$scope', '$state', '$stateParams', 'products', function ($scope, $state, $stateParams, products) {
     $scope.data = {};
+    $scope.conditions = {};
 
     $scope.listProducts = function(){
-        products.listProducts({},function(err, products){
+        products.listProducts($scope.conditions,function(err, products){
             $scope.data.products = products;
         });
     };

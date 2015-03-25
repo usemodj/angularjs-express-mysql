@@ -84,7 +84,7 @@ module.exports = function(orm, db) {
              */
 
             makeSalt: function() {
-                return crypto.randomBytes(16).toString('base64');
+                return crypto.randomBytes(16).toString('hex');
             },
 
             /**
@@ -93,17 +93,18 @@ module.exports = function(orm, db) {
             encryptPassword: function(password) {
                 if (!password || !this.password_salt) return '';
                 var salt = new Buffer(this.password_salt, 'base64');
-                return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
+                return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('hex');
             },
+            /*
             encryptPassword2: function(password, password_salt) {
                 if (!password || !password_salt) return '';
                 var salt = new Buffer(password_salt, 'base64');
-                return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
+                return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('hex');
             },
             randomToken: function() {
                 return Math.round((new Date().valueOf() * Math.random())) + '';
             }
-
+            */
         },
         validations: {
             //encrypted_password: orm.validators.equalToProperty(this.retype_password, 'Passwords don't match'),

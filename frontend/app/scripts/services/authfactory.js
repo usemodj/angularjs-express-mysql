@@ -141,7 +141,7 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                 },
 
                 passwordToken: function(email, callback) {
-                  MailFactory.get({email: email}, 
+                  MailFactory.get({email: email},
                     function(user){
                 	  	console.log('>> passwordToken user:');
                 	  	console.log(user);

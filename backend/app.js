@@ -30,7 +30,7 @@ app.use(function(req, res, next) {
         req.models = db.models;
         req.db = db;
         //passport-local strategy
-        require('./config/pass')(db);
+        require('./config/passport')(db);
 
         return next();
     });

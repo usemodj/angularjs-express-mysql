@@ -123,61 +123,7 @@ var log = require('log4js').getLogger("products");
 var markdown = require('markdown').markdown;
 
 module.exports = {
-    //search products POST, GET
-    index2: function(req, res, next) {
-        //console.log(req);
-        var Role = req.models.roles;
-        var Product = req.models.products;
-        var perPages = 20;
-        var page = parseInt(req.params['page']) || 1;
-        if( isNaN(page) || page < 1) page = 1;
-        log.debug('>>req.body:'+ JSON.stringify(req.body));
-        log.debug('>> page:'+ page);
 
-        var name = req.body.name || "";
-        var sku = req.body.sku;
-        var deleted = req.body.deleted;
-
-        var conditions = {};
-        if(name && name.length !== 0) {
-            name = '%'+name+'%';
-            conditions.name = req.db.tools.like(name);
-        }
-        if(sku && sku.length !== 0) {
-            sku = '%'+sku+'%';
-            conditions.variant = {sku : req.db.tools.like(sku)};
-        }
-
-        if(deleted === undefined || deleted === false) conditions.deleted_at = null;
-        log.debug('>>conditions:'+ JSON.stringify(conditions));
-        log.debug(conditions);
-        Product.find(conditions).order('-id').limit(perPages).offset((page -1)*perPages).run(function(err, products) {
-            if (err) {
-                log.debug(">>error:"+ err);
-                return next(err);
-            }
-            log.debug('>>products:'+ JSON.stringify(products));
-//            var listUsers = [];
-//            async.eachSeries(users, function(user, callback){
-//                Role.get(user.role_id, function(err, role){
-//                    user.role = role;
-//                    listUsers.push(user);
-//                    callback();
-//                });
-//            }, function(err){
-//                if(err) return next(err);
-//                User.count(conditions, function(err, count){
-//                    console.log('>> users.index count:'+ count);
-//                    res.json({
-//                        users: listUsers,
-//                        count: count,
-//                        page: page
-//                    })
-//                });
-//
-//            });
-        });
-    },
     //Admin index
     index: function(req, res, next) {
         //console.log(req);
@@ -220,7 +166,7 @@ module.exports = {
             where += ' and p.deleted_at '+ conditions.deleted_at;
         }
 
-        var sql = 'SELECT p.id, p.name, p.deleted_at, v.id as variant_id, v.sku, v.price, v.cost_price, v.cost_currency FROM products p, variants v '+
+        var sql = 'SELECT p.id, p.name, p.deleted_at, p.available_on, v.id as variant_id, v.sku, v.price, v.cost_price, v.cost_currency FROM products p, variants v '+
             ' WHERE p.id = v.product_id and v.is_master=true '+ where +
             ' ORDER BY v.sku ';
         //console.log('>> query:'+ sql);
@@ -468,21 +414,34 @@ module.exports = {
         });
     },
 
-    // Public
+    // Public search
     listProducts: function(req, res, next){
+        var Query = req.db.driver.query;
         log.debug('>>listProducts');
         log.debug( req.body);
+        var name = req.body.name || '';
+        try {
+            name = Query.escape('%' + name + '%').toLowerCase();
+        } catch(err){
+            log.error(err);
+        }
+        var q = ' SELECT p.id, p.name, va.price, va.file_path, va.alt,p.available_on \n'+
+            ' FROM products p  \n'+
+            ' 	LEFT JOIN  (SELECT v.*, a.attachment_file_path AS file_path, a.alt \n'+
+            ' 				FROM variants v LEFT JOIN assets a ON v.id = a.variant_id  \n'+
+            ' 				WHERE a.id IN (SELECT min(a.id) FROM variants v LEFT JOIN assets a ON v.id = a.variant_id GROUP BY v.product_id) \n'+
+        ' 				ORDER BY v.product_id) va  ON p.id = va.product_id \n'+
+        ' WHERE p.deleted_at IS NULL AND (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
+        '   AND p.available_on <= NOW() AND va.price IS NOT NULL \n'+
+        '   AND (LOWER(p.name) LIKE ? OR LOWER(p.description) LIKE ?) \n'+
+        ' ORDER BY p.available_on DESC;';
+        log.debug(q);
 
-        var Query = req.db.driver;
-        Query.execQuery('SELECT p.id, p.name, p.slug, va.price, va.file_path, va.alt FROM products p LEFT JOIN ' +
-        ' (SELECT v.*, a.attachment_file_path AS file_path, a.alt FROM variants v LEFT JOIN assets a ON v.id = a.variant_id ' +
-        ' WHERE a.id IN (SELECT min(a.id) FROM variants v LEFT JOIN assets a ON v.id = a.variant_id GROUP BY v.product_id) ' +
-        ' ORDER BY v.product_id) va ' +
-        ' ON p.id = va.product_id;'
-            , function(err, products){
+        req.db.driver.execQuery(q, [name, name], function(err, products){
+            if(err) return next(err);
 
-                res.json(products);
-            });
+            res.json(products);
+        });
     },
 
     viewProduct: function(req, res, next){
@@ -498,7 +457,7 @@ module.exports = {
             req.db.driver.execQuery('SELECT va.id, va.price, va.sku, va.product_id, va.position, va.deleted_at, va.is_master, va.cost_price, va.cost_currency, r.options '+
             ' FROM variants va INNER JOIN '+
             ' (SELECT o.id, o.product_id, GROUP_CONCAT(o.options) AS options '+
-            ' FROM (SELECT v.id, v.product_id, concat(t.presentation,":", o.presentation) AS options '+
+            ' FROM (SELECT v.id, v.product_id, concat(t.presentation,": ", o.presentation) AS options '+
             ' FROM variants v, variants_option_values vo, option_values o, option_types t '+
             ' WHERE v.id = vo.variants_id and vo.option_values_id = o.id and o.option_type_id = t.id) o '+
             ' GROUP BY o.id) r '+

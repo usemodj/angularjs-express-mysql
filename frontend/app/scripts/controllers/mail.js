@@ -6,9 +6,9 @@ angular
     .controller(
     'MailCtrl',
     [
-        '$scope', '$routeParams',
+        '$scope', '$stateParams',
         'AuthFactory',
-        function ($scope, $routeParams, AuthFactory) {
+        function ($scope, $stateParams, AuthFactory) {
 
             $scope.mailPassword = function (form) {
                 console.log('>>MailCtrl');
@@ -44,15 +44,6 @@ angular
                                 function (error) {
                                     var msg = error.msg;
                                     var field = error.property;
-                                    // console.log('>>
-                                    // field:
-                                    // ' +
-                                    // field);
-                                    // console.log('>>
-                                    // msg:
-                                    // ' +
-                                    // msg);
-                                    // console.log(form[field]);
                                     form[field]
                                         .$setValidity(
                                         'server',
@@ -63,11 +54,11 @@ angular
                             console.log(user);
                             htmlContent += '<a href="'
                                 + resetPasswordUrl
-                                + '?passwordToken='
+                                + '/'
                                 + encodeURIComponent(user.reset_password_token)
                                 + '">'
                                 + resetPasswordUrl
-                                + '?passwordToken='
+                                + '/'
                                 + encodeURIComponent(user.reset_password_token)
                                 + '</a>';
 
@@ -94,22 +85,6 @@ angular
                                             function (error) {
                                                 var msg = error.msg;
                                                 var field = error.property;
-                                                // if
-                                                // (field
-                                                // ===
-                                                // 'encrypted_password')
-                                                // field
-                                                // =
-                                                // 'password';
-                                                // console.log('>>
-                                                // field:
-                                                // ' +
-                                                // field);
-                                                // console.log('>>
-                                                // msg:
-                                                // ' +
-                                                // msg);
-                                                // console.log(form[field]);
                                                 form[field]
                                                     .$setValidity(
                                                     'server',
@@ -124,11 +99,11 @@ angular
             };
 
             $scope.resetPassword = function (form) {
-                console.log('>> passwordToken: ' + $routeParams.passwordToken);
+                console.log('>> passwordToken: ' + $stateParams.passwordToken);
                 AuthFactory
                     .resetPasswordByToken(
                     $scope.user.email,
-                    $routeParams.passwordToken,
+                    $stateParams.passwordToken,
                     $scope.user.password,
                     $scope.user.retype_password,
                     function (errors) {

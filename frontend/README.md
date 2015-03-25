@@ -27,3 +27,8 @@ index.html:
 
 ## ng-clip : Copy to clipboard using AngularJS
   https://github.com/asafdav/ng-clip
+  
+## angular-gettext
+http://lostechies.com/gabrielschenker/2014/02/11/angularjspart-12-multi-language-support/
+  $ bower install angular-gettext --save
+  
