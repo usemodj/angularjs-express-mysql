@@ -132,7 +132,7 @@ module.exports = {
 //        log.debug(req.files);
         var asset = JSON.parse(req.body.asset),
             file = req.files.file;
-
+          log.info(file);
 //        log.debug(file.name); // original name(ie: sunset.png)
 //        log.debug(file.path); // tmp path (ie: /tmp/1234-zyz.png)
 //        log.debug(file.size);

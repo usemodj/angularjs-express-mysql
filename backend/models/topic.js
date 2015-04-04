@@ -8,10 +8,10 @@ module.exports = function(orm, db) {
             required: true
         },
         forum_id: {
-            type: 'serial'
+            type: 'integer'
         },
         user_id: {
-            type: 'serial'
+            type: 'integer'
         },
         views: {
             type: 'integer', defaultValue: 0
@@ -20,10 +20,10 @@ module.exports = function(orm, db) {
             type: 'integer', defaultValue: 0
         },
         last_post_id: {
-            type: 'serial'
+            type: 'integer'
         },
         last_poster_id: {
-            type: 'serial'
+            type: 'integer'
         },
         locked: {
             type: 'boolean', defaultValue: 0
@@ -67,8 +67,8 @@ module.exports = function(orm, db) {
     });
     // creates column 'taxonomy_id' in 'taxons' table
     Topic.hasOne('forum', db.models.forums, { cascadeRemove:true });
-    //Taxon.hasMany('products', db.models.products, {}, {});
-    Topic.sync(); //create a join table 'product_taxons'
+    Topic.hasOne('user', db.models.users, { });
+    //Topic.sync(); //create a join table 'product_taxons'
 
 
 };

@@ -66,7 +66,7 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                             return cb();
                         },
                         function(err) {
-                            //console.log(err);
+                            console.log(err);
                             return cb(err.data);
                         });
                 },
@@ -75,9 +75,9 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                     var cb = callback || angular.noop;
                     UserFactory.save(userinfo,
                         function(user) {
-                            $rootScope.currentUser = user;
-                            $cookieStore.put('user', user);
-                            changeUser(user);
+                            //$rootScope.currentUser = user;
+                            //$cookieStore.put('user', user);
+                            //changeUser(user);
                             return cb(null);
                         },
                         function(err) {
@@ -167,7 +167,7 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                         return cb(err.data);
                     });
                 },
-                
+
                 resetPasswordByToken: function(email, resetPasswordToken, password, retypePassword, callback){
                 	var cb = callback || angular.noop;
                 	MailFactory.update({

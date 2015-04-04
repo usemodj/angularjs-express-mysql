@@ -77,8 +77,8 @@ module.exports = function(orm, db) {
 
     });
     // creates column 'taxonomy_id' in 'taxons' table
-    Asset.hasOne('variant', db.models.variants, { reverse:'assets' });
+    Asset.hasOne('viewable', db.models.variants, { reverse:'assets' });
     //Taxon.hasMany('products', db.models.products, {}, {});
-    Asset.sync(); //create a join table 'product_taxons'
+    //Asset.sync(); //create a join table 'product_taxons'
 
 };

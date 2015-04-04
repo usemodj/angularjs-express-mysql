@@ -27,6 +27,15 @@ angular.module('frontendApp')
             });
             $state.go('forums.topics.list', {forum_id: item.forum_id}, {reload: true});
         };
+
+        $scope.locked = function(item, isLocked){
+          item.locked = isLocked;
+          topics.setLocked(item, function(err, data){
+
+          });
+          $state.go('forums.topics.list', {forum_id: item.forum_id}, {reload: true});
+        };
+
         $scope.delete = function(item){
             topics.remove(item);
             $state.go('forums.topics.list', {forum_id: item.forum_id}, {reload: true});
@@ -41,6 +50,7 @@ angular.module('frontendApp')
                 //console.log('>> data:'+ JSON.stringify(data));
                 if(!err && err === null) {
                     $scope.data.forums = data.forums;
+                    data.child_forums.shift();
                     $scope.data.child_forums = data.child_forums;
                     $scope.data.sticky_topics = data.sticky_topics;
                     $scope.data.topics = data.topics;
@@ -69,19 +79,29 @@ angular.module('frontendApp')
 
 
     }])
-    .controller('ViewTopicCtrl', ['$scope', '$state', '$stateParams', '$modal', 'topics', function ($scope,$state, $stateParams, $modal, topics) {
+    .controller('ViewTopicCtrl', ['$scope', '$state', '$stateParams', '$modal', 'topics', '$rootScope', function ($scope,$state, $stateParams, $modal, topics, $rootScope) {
         $scope.data = {};
 
         $scope.viewTopic = function(form){
+            console.log($rootScope.currentUser);
+            //console.log(routingConfig);
             topics.get({
                 forum_id: $stateParams.forum_id,
                 id: $stateParams.id
             }, function(err, data){
-                //console.log('>> data:'+ JSON.stringify(data));
+                //console.log(data);
                 if(err) {
                     $scope.error = err;
                 } else {
                     $scope.data = data;
+                }
+                var topic = data.topic;
+                if(topic.locked){
+                  if(!$rootScope.currentUser || ($rootScope.currentUser.id != topic.user_id
+                    && $rootScope.currentUser.role.title != 'admin')) {
+                    $scope.error = 'Locked Page!';
+                    $state.go('forums.topics.list', {forum_id: $stateParams.forum_id});
+                  }
                 }
             });
         };
@@ -116,7 +136,7 @@ angular.module('frontendApp')
         };
         $scope.editPost = function(post){
             $scope.data.post = post;
-            console.log(">>post:");console.log($scope.data.post.name);
+            console.log(">>post:");console.log($scope.data.post);
             var modalInstance = $modal.open({
                 templateUrl: 'views/partials/forums/topics/topics.edit.html',
                 controller: 'EditTopicCtrl',
@@ -142,12 +162,14 @@ angular.module('frontendApp')
     }])
     .controller('EditTopicCtrl', ['$scope', '$state', '$modalInstance', 'post', function ($scope,$state, $modalInstance, post) {
         $scope.data = {};
+        var origin = angular.copy(post);
         $scope.data.post = post;
-
         $scope.save = function(){
             $modalInstance.close($scope.data.post);
         };
         $scope.cancel = function(){
+            $scope.data.post.name = origin.name;
+            $scope.data.post.content = origin.content;
             $modalInstance.dismiss('cancel');
         };
 

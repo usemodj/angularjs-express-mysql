@@ -26,7 +26,7 @@ module.exports = function(orm, db) {
             time: true
         },
         product_id: {
-            type: 'serial'
+            type: 'integer'
         },
         price: {
             type: 'number'
@@ -44,7 +44,7 @@ module.exports = function(orm, db) {
             type: 'boolean'
         },
         tax_category_id: {
-            type: 'serial'
+            type: 'integer'
         },
         updated_at: {
             type: 'date',
@@ -81,5 +81,5 @@ module.exports = function(orm, db) {
     // User.hasOne('customer', db.models.customers, { required: true, reverse:'users', autoFetch: true });
     Variant.hasOne('product', db.models.products, { reverse: 'variants'});
     Variant.hasMany('option_values', db.models.option_values, {}, {key:true});
-    Variant.sync();
+    //Variant.sync();
 };

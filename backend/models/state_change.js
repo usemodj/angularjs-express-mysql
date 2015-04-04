@@ -12,10 +12,10 @@ module.exports = function(orm, db) {
 
         },
         order_id: {
-            type: 'serial'
+            type: 'integer'
         },
         user_id: {
-            type: 'serial'
+            type: 'integer'
         },
         created_at: {
             type: 'date',
@@ -55,5 +55,5 @@ module.exports = function(orm, db) {
     // User.hasOne('customer', db.models.customers, { required: true, reverse:'users', autoFetch: true });
     StateChange.hasOne('order', db.models.orders, { reverse: 'stateChanges'});
     //StateChange.hasMany('users', db.models.users, {}, {key:true});
-    StateChange.sync();
+    //StateChange.sync();
 };

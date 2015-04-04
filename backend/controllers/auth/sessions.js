@@ -7,14 +7,14 @@ module.exports = {
 
         passport.authenticate('local', function(err, user, info) {
             var error = err || info;
-            if (error) return res.json(400, error);
+            if (error) return res.status(400).json(error);
             // Update login info
             //console.log('>> login:' + JSON.stringify(user));
             //console.log('>> login user.serialize:' + JSON.stringify(user.serialize()));
             //console.log('>> req.ip: ' + req.ip);
 
             if(user.active !== true){
-                return res.json(400, {message: 'Email is Inactive!'});
+                return res.status(400).json({message: 'Email is Inactive!'});
 //                var data = {
 //                        email: {
 //                        type: 'Email is Inactive!'

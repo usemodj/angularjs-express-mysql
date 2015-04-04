@@ -187,7 +187,8 @@ module.exports = {
             User.create({
                 email: email,
                 encrypted_password: password,
-                password_salt: '',
+                password_salt: User.makeSalt(),
+                active: true,
                 current_sign_in_ip: req.ip,
                 current_sign_in_at: new Date(),
                 role_id: role.id
@@ -200,10 +201,10 @@ module.exports = {
                 // Password insert
                 //var password_salt = user.makeSalt();
                 //var encrypted_password = user.encryptPassword2(password, password_salt);
-                user.password_salt = user.makeSalt();
+                //user.password_salt = user.makeSalt();
                 //var encrypted_password = user.encryptPassword(password);
                 user.save({
-                    password_salt: user.password_salt,
+                    //password_salt: user.password_salt,
                     encrypted_password: user.encryptPassword(password)
                 }, function(err) {
                     if (err) {

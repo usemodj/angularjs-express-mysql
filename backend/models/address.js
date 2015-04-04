@@ -44,4 +44,5 @@ module.exports = function(orm, db) {
     });
     // creates column 'customer_id' in 'addresses' table
     //Address.hasOne('customer', db.models.customers, {reverse: 'addresses',autoFetch: true});
+    Address.sync();
 };

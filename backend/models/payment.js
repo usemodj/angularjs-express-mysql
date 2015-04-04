@@ -4,10 +4,10 @@ module.exports = function(orm, db) {
             type: 'number'
         },
         order_id: {
-            type: 'serial'
+            type: 'integer'
         },
         payment_method_id: {
-            type: 'serial'
+            type: 'integer'
         },
         state: {
             type: 'text'
@@ -58,5 +58,5 @@ module.exports = function(orm, db) {
     // creates column 'order_id' in 'payments' table
     Payment.hasOne('order', db.models.orders, {reverse: 'payments'});
     Payment.hasOne('payment_method', db.models.payment_methods);
-    Payment.sync();
+    //Payment.sync();
 };

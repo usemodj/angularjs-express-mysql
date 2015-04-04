@@ -117,7 +117,9 @@ module.exports = {
 
             Topic.create({forum_id: body.forum_id,
                 name: body.name,
-                user_id: user.id
+                user_id: user.id,
+                locked: body.locked,
+                sticky: body.sticky
             }, function (err, topic) {
                 if (err) return next(err);
                 //log.debug(JSON.stringify(topic));
@@ -136,16 +138,16 @@ module.exports = {
                     }
                     topic.save({last_post_id: post.id,
                         last_poster_id: post.user_id}, function(err){});
-                    Forum.get(post.forum_id, function(err, forum){
+                    Forum.get(topic.forum_id, function(err, forum){
                        forum.save({topic_count: forum.topic_count + 1}, function(err){});
                     });
-                    res.json(topic);
+                    res.status(200).json(topic);
                 });
             });
         });
     },
     deleteTopic: function(req, res, next){
-        //var Forum = req.models.forums;
+        var Forum = req.models.forums;
         var Topic = req.models.topics;
         //var Post = req.models.posts;
         var topic_id = req.params.id;
@@ -153,10 +155,27 @@ module.exports = {
 
         Topic.get(topic_id, function(err, topic){
             if(err) return next(err);
-            req.db.driver.execQuery('DELETE FROM posts WHERE topic_id = ? ', [topic.id], function(err) {
+            req.db.driver.execQuery('DELETE FROM posts WHERE topic_id = ? ', [topic.id], function(err, posts) {
                 if(!err) {
+                    log.info('>> Deleted posts count: '); log.info(posts);
                     topic.remove(function (err) {
-                        return res.status(200);
+                        if(err) {
+                            log.error(err);
+                            return res.status(500);
+                        }
+                        Forum.get(topic.forum_id, function(err, forum){
+                            forum.topic_count -= 1;
+                            forum.post_count -= posts.affectedRows - 1;
+                            log.info('>> forum topics: '+ forum.topic_count + ' , posts: '+ forum.post_count);
+                            forum.save(function(err){
+                                if(err) {
+                                    log.error(err);
+                                    return res.status(500);
+                                }
+                                return res.status(200);
+                            });
+                        });
+
                     });
                 }
             });
@@ -231,7 +250,7 @@ module.exports = {
                                 last_post_id: post.id,
                                 last_poster_id: post.user_id,
                                 last_post_time: new Date(),
-                                posts: forum.posts + 1
+                                post_count: forum.post_count + 1
                             }, function(err){});
                         });
                     });
@@ -268,8 +287,8 @@ module.exports = {
                        }, function(err){ });
                    });
                    Forum.get(post.forum_id, function(err, forum){
-                       var posts = forum.posts - 1;
-                       forum.save({posts:((posts < 0)? 0: posts)}, function(err){});
+                       var count = forum.post_count - 1;
+                       forum.save({post_count:((count < 0)? 0: count)}, function(err){});
                    })
                    return res.status(200);
                });
@@ -306,6 +325,17 @@ module.exports = {
                if(err) return  next(err);
                return res.status(200);
            });
+        });
+    },
+    setLocked: function(req, res, next){
+        var Topic = req.models.topics;
+        var body = req.body;
+
+        Topic.get(body.id, function(err, topic){
+            topic.save({locked: body.locked}, function(err){
+                if(err) return  next(err);
+                return res.status(200);
+            });
         });
     },
 

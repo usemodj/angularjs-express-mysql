@@ -63,8 +63,10 @@ function setup(db, cb) {
     require('./topic')(orm, db);
     require('./post')(orm, db);
 
-    db.sync(); //create tables
-
+    db.sync(function(err){
+        if(err) console.log(err);
+        else console.log('Tables created!')
+    }); //create tables
     return cb(null, db);
 }
 
@@ -76,6 +78,7 @@ module.exports = function(cb) {
 
     orm.connect(settings.database, function(err, db) {
         if (err) return cb(err);
+        db.use(transaction);
 
         connection = db;
         db.settings.set('instance.returnAllErrors', true);
@@ -83,7 +86,6 @@ module.exports = function(cb) {
         db.settings.set("connection.pool", true);
         db.settings.set("connection.debug", true);
 
-        db.use(transaction);
         setup(db, cb);
     });
 };

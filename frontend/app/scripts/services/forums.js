@@ -40,7 +40,7 @@ angular.module('frontendApp')
         },
         searchForums: function(conditions, callback){
             var cb = callback || angular.noop;
-            //console.log(conditions);
+            console.log(conditions);
             $http.post('/admin/forums/search', conditions)
                 .success(function(data, status, headers, config){
                     console.log('>> status:'+ status);

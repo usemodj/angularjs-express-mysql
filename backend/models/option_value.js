@@ -13,7 +13,7 @@ module.exports = function(orm, db) {
             defaultValue: 0
         },
         option_type_id: {
-            type: 'serial'
+            type: 'integer'
         },
         created_at: {
             type: 'date',
@@ -55,5 +55,5 @@ module.exports = function(orm, db) {
     // User.hasOne('customer', db.models.customers, { required: true, reverse:'users', autoFetch: true });
     //Variant.hasOne('product', db.models.products, { reverse: 'variants', autoFetch:false, autoFetchLimit:21 });
     OptionValue.hasOne('option_type', db.models.option_types, { reverse: 'values'});
-    OptionValue.sync();
+    //OptionValue.sync();
 };

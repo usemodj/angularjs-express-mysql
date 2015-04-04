@@ -13,13 +13,13 @@ module.exports = function(orm, db) {
             type: 'date', time: true
         },
         order_id: {
-            type: 'serial'
+            type: 'integer'
         },
         address_id: {
-            type: 'serial'
+            type: 'integer'
         },
         shipping_method_id: {
-            type: 'serial'
+            type: 'integer'
         },
         state: {
             type: 'text'
@@ -63,5 +63,5 @@ module.exports = function(orm, db) {
     Shipment.hasOne('order', db.models.orders, {reverse: 'shipments'});
     Shipment.hasOne('shipping_method', db.models.shipping_methods);
     //Shipment.hasOne('address', db.models.addresses);
-    Shipment.sync();
+    //Shipment.sync();
 };

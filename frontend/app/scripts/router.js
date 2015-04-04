@@ -1,6 +1,6 @@
 angular.module('frontendApp.router', ['ui.router'])
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
-    function ($stateProvider,   $urlRouterProvider, $httpProvider) {
+    function ($stateProvider,   $urlRouterProvider) {
         var access = routingConfig.accessLevels;
 
         // Public controllers
@@ -62,8 +62,8 @@ angular.module('frontendApp.router', ['ui.router'])
                 }
             })
             .state('user.home', {
-                url:'/profile',
-                //templateUrl: '/views/main.html'
+                url:'/profile/',
+                templateUrl: '/views/partials/profile.html'
             })
             .state('user.password', {
                 url: '/password/',
@@ -75,7 +75,7 @@ angular.module('frontendApp.router', ['ui.router'])
         $stateProvider
             .state('products', {
                 abstract: true,
-                url: '/products/',
+                //url: '/products',
                 // Example of loading a template from a file. This is also a top level state,
                 // so this template file will be loaded and then inserted into the ui-view
                 // within index.html.
@@ -86,12 +86,12 @@ angular.module('frontendApp.router', ['ui.router'])
                 }
             })
             .state('products.list', {
-                url: '',
+                url: '/products',
                 templateUrl: 'views/partials/products/products.list.html',
                 controller: 'ProductCtrl'
             })
             .state('products.view', {
-                url: ':id/',
+                url: '/products/:id/',
                 templateUrl: 'views/partials/products/products.view.html',
                 controller: 'ViewProductCtrl'
             })
@@ -116,7 +116,7 @@ angular.module('frontendApp.router', ['ui.router'])
                 controller: 'OrderCtrl'
             })
             .state('orders.view', {
-                url: ':id',
+                url: ':id/',
                 templateUrl: 'views/partials/orders/orders.view.html',
                 controller: 'ViewOrderCtrl'
             })
@@ -188,11 +188,11 @@ angular.module('frontendApp.router', ['ui.router'])
             })
             .state('forums.topics', {
                 abstract: true,
-                url: '',
+                //url: '',
                 template: '<ui-view/>'
             })
             .state('forums.topics.list', {
-                url: ':forum_id/topics/',
+                url: '/:forum_id/topics',
                 templateUrl: 'views/partials/forums/topics/topics.list.html',
                 controller: 'TopicCtrl'
             })
@@ -307,7 +307,7 @@ angular.module('frontendApp.router', ['ui.router'])
                 controller: 'AdminOptionTypeCtrl'
             })
             .state('admin.products.option_types.edit', {
-                url: ':id/',
+                url: ':id',
                 templateUrl: 'views/partials/admin/option_types/option_types.edit.html',
                 controller: 'EditOptionTypeCtrl',
                 resolve: {
@@ -323,12 +323,12 @@ angular.module('frontendApp.router', ['ui.router'])
                 //templateUrl: 'views/partials/admin/products/layout.html'
             })
             .state('admin.products.taxonomies.list', {
-                url: '',
+                //url: '',
                 templateUrl: 'views/partials/admin/taxonomies/taxonomies.list.html',
                 controller: 'AdminTaxonomyCtrl'
             })
             .state('admin.products.taxonomies.edit', {
-                url: ':id/',
+                url: ':id',
                 templateUrl: 'views/partials/admin/taxonomies/taxonomies.edit.html',
                 controller: 'EditTaxonomyCtrl'
             })
@@ -450,7 +450,7 @@ angular.module('frontendApp.router', ['ui.router'])
                 templateUrl: 'views/partials/admin/forums/layout.html'
             })
             .state('admin.forums.list', {
-                url: '',
+               url: '',
                 templateUrl: 'views/partials/admin/forums/forums.list.html',
                 controller: 'AdminForumCtrl'
             })

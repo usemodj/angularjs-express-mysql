@@ -14,13 +14,13 @@ module.exports = function(orm, db) {
             type: 'boolean', defaultValue: false
         },
         user_id: {
-            type: 'serial'
+            type: 'integer'
         },
         forum_id: {
-            type: 'serial'
+            type: 'integer'
         },
         topic_id: {
-            type: 'serial'
+            type: 'integer'
         },
         created_at: {
             type: 'date',
@@ -60,6 +60,6 @@ module.exports = function(orm, db) {
     //Post.hasOne('topic', db.models.topics, { reverse:'posts', cascadeRemove:true });
     Post.hasOne('topic', db.models.topics, { cascadeRemove:true });
     //Taxon.hasMany('products', db.models.products, {}, {});
-    Post.sync(); //create a join table 'product_taxons'
+    //Post.sync(); //create a join table 'product_taxons'
 
 };

@@ -25,7 +25,7 @@ module.exports = function(orm, db) {
             type: 'integer'
         },
 
-        posts: {
+        post_count: {
             type: 'integer',defaultValue: 0,required: true
         },
         topic_count: {
@@ -35,10 +35,10 @@ module.exports = function(orm, db) {
             type: 'boolean'
         },
         last_topic_id: {
-            type: 'serial'
+            type: 'integer'
         },
         last_poster_id: {
-            type: 'serial'
+            type: 'integer'
         },
         last_post_time: {
             type: 'date', time: true
@@ -81,10 +81,14 @@ module.exports = function(orm, db) {
         }
 
     });
+
     // creates column 'taxonomy_id' in 'taxons' table
     //Forum.hasOne('taxonomy', db.models.taxonomies, { reverse:'taxons', cascadeRemove:true });
     //Taxon.hasMany('products', db.models.products, {}, {});
-    Forum.sync(); //create a join table 'product_taxons'
+    //Forum.sync(function(err){
+    //    if(err) log.error(err);
+    //    else log.info('Forum table created!');
+    //}); //create a join table 'product_taxons'
 
     Forum.insertNode2 = function(node, callback){
         var sql = 'LOCK TABLES forums WRITE;\n'+
@@ -132,7 +136,7 @@ module.exports = function(orm, db) {
                         });
                         return callback(null, forum);
                     });
-            });
+                });
             });
         });
     };
@@ -172,16 +176,23 @@ module.exports = function(orm, db) {
     };
 
     Forum.createRoot = function(callback){
-        db.driver.execQuery('INSERT INTO forums (name, description, lft, rgt, created_at, updated_at) VALUES (?,?,?,?, now(), now());',
-            ['Root', 'Root node', 1, 2], function(err, forum){
-
-                if(err){
-                    log.warn(err);
+        Forum.count(function(err, number){
+            if(err || number) return callback('Root node does not created!', null);
+            Forum.create({
+                name: 'Root',
+                description: 'Root Node',
+                lft: 1,
+                rgt: 2,
+                created_at: new Date(),
+                updated_at: new Date()
+            }, function(err, item){
+                if(err) {
+                    log.error(err);
                     return callback(err, null);
                 }
-                return callback(null, forum);
+                return callback(null, item);
             });
-
+        });
     };
 
     Forum.getRoot = function(callback){

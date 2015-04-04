@@ -2,10 +2,10 @@ module.exports = function(orm, db) {
     var LineItem = db.define('line_items', {
 
         variant_id: {
-            type: 'serial'
+            type: 'integer'
         },
         order_id: {
-            type: 'serial'
+            type: 'integer'
         },
         quantity: {
             type: 'integer'
@@ -58,5 +58,5 @@ module.exports = function(orm, db) {
 //    Product.hasMany('option_types', db.models.option_types, {}, { key:true});
 //    Product.hasMany('taxons', db.models.taxons,{}, { key:true});
     LineItem.hasOne('order', db.models.orders, {reverse: 'line_items'});
-    LineItem.sync(); //create a join table 'product_option_types'
+    //LineItem.sync(); //create a join table 'product_option_types'
 };

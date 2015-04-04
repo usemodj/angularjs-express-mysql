@@ -1,3 +1,6 @@
+var log = require('log4js').getLogger("roles model");
+var userRoles = require('../../frontend/app/scripts/common/routingConfig').userRoles;
+
 module.exports = function(orm, db) {
     var Role = db.define('roles', {
         title: {
@@ -19,4 +22,19 @@ module.exports = function(orm, db) {
         }
     });
 
+    Role.loadRoles = function(){
+        Role.count(function(err, number){
+            if(err || number) return;
+
+            for(var title in userRoles) {
+                log.info('>> title: '+ title + ', userRoles[title][bit_mask]: '+ userRoles[title]['bit_mask'])
+                Role.create([{
+                    title: title,
+                    bit_mask: userRoles[title]['bit_mask']
+                }], function(err, item){
+                    if(err) log.error(err);
+                });
+            }
+        });
+    }
 };

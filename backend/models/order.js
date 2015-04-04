@@ -14,17 +14,17 @@ module.exports = function(orm, db) {
             type: 'text'
         },
         user_id: {
-            type: 'serial'
+            type: 'integer'
         },
         completed_at: {
             type: 'date',
             time: true
         },
         bill_address_id: {
-            type: 'serial'
+            type: 'integer'
         },
         ship_address_id: {
-            type: 'serial'
+            type: 'integer'
         },
         payment_total: {
             type: 'number'
@@ -49,7 +49,7 @@ module.exports = function(orm, db) {
             type: 'text'
         },
         created_by_id: {
-            type: 'serial'
+            type: 'integer'
         },
         shipment_total: {
             type: 'number'
@@ -58,7 +58,7 @@ module.exports = function(orm, db) {
             type: 'integer'
         },
         approver_id: {
-            type: 'serial'
+            type: 'integer'
         },
         approved_at: {
             type: 'date',
@@ -127,5 +127,5 @@ module.exports = function(orm, db) {
     Order.hasOne("bill_address", db.models.addresses, {cascadeRemove: true});
     Order.hasOne("ship_address", db.models.addresses, {cascadeRemove: true});
 
-    Order.sync(); //create a join table 'product_option_types'
+    //Order.sync(); //create a join table 'product_option_types'
 };

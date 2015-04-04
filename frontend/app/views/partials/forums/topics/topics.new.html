@@ -11,8 +11,19 @@
             <label>Message:</label>
             <textarea  class="form-control" rows="8" ng-model="newTopic.content" markdown-editor></textarea>
         </div>
+
+        <div class="form-group">
+          <label><i class="fa fa-unlock-alt"></i> Locked:</label>
+          <input type="checkbox" ng-model="newTopic.locked"> {{newTopic.locked}}
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa fa-flag"></i> Sticky:</label>
+          <input type="checkbox" ng-model="newTopic.sticky"> {{newTopic.sticky}}
+        </div>
+
         <div class="form-group has-error" ng-show="error">
-            <p class="help-block">{{ error }}</p>
+          <p class="help-block">{{ error }}</p>
         </div>
         <div class="form-group has-success" ng-show="success">
             <p class="help-block">{{ message }}</p>

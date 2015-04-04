@@ -69,5 +69,5 @@ module.exports = function(orm, db) {
     // User.hasOne('customer', db.models.customers, { required: true, reverse:'users', autoFetch: true });
     Product.hasMany('option_types', db.models.option_types, {}, { key:true});
     Product.hasMany('taxons', db.models.taxons,{}, { key:true});
-    Product.sync(); //create a join table 'product_option_types'
+    //Product.sync(); //create a join table 'product_option_types'
 };

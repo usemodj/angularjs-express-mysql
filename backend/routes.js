@@ -599,6 +599,12 @@ var routes = [
         middleware: [TopicCtrl.setSticky],
         accessLevel: accessLevels.admin
     },
+    {
+        path: '/forums/topics/locked',
+        httpMethod: 'POST',
+        middleware: [TopicCtrl.setLocked],
+        accessLevel: accessLevels.user
+    },
 
     // All other get requests should be handled by AngularJS's client-side routing system
     {

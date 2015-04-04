@@ -15,7 +15,7 @@ module.exports = function(orm, db) {
             type: 'text'
         },
         taxonomy_id: {
-            type: 'serial'
+            type: 'integer'
         },
         parent_id: {
             type: 'integer'
@@ -95,7 +95,7 @@ module.exports = function(orm, db) {
     // creates column 'taxonomy_id' in 'taxons' table
     Taxon.hasOne('taxonomy', db.models.taxonomies, { reverse:'taxons', cascadeRemove:true });
     //Taxon.hasMany('products', db.models.products, {}, {});
-    Taxon.sync(); //create a join table 'product_taxons'
+    //Taxon.sync(); //create a join table 'product_taxons'
 
     /*
      ref. http://www.sitepoint.com/hierarchical-data-database-2/

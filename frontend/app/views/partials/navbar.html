@@ -1,4 +1,4 @@
-<div role="navigation" class="navbar navbar-default" ng-controller="NavbarCtrl">
+<div role="navigation" style="z-index:3000" class="navbar navbar-default" ng-controller="NavbarCtrl">
 <div class="container">
     <div class="navbar-header">
         <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle">
@@ -20,13 +20,15 @@
             <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.signup" translate>Signup</a>
             </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right" access-level="accessLevels.user">
+        <ul style="z-index:100" class="nav navbar-nav navbar-right" access-level="accessLevels.user">
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">Welcome, {{ user.email }} <b class="caret"></b></a>
+                <a data-toggle="dropdown">Welcome, {{ user.email }} <b class="caret"></b></a>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
-                    <li active-nav><a role="menuitem" ui-sref="user.password"><span class="glyphicon glyphicon-ok form-control-feedback"></span> Change Password</a></li>
-                    <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.users.list"><span class="glyphicon glyphicon-user form-control-feedback"></span> Users</a> </li>
-                    <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.forums.list"><span class="glyphicon glyphicon-pencil"></span> Forums</a> </li>
+                    <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.orders.list"><span class="glyphicon glyphicon-shopping-cart"></span> Manage Orders</a> </li>
+                    <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.products.list"><span class="glyphicon glyphicon-th-large"></span> Manage Products</a> </li>
+                    <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.forums.list"><i class="fa fa-comment"></i> Manage Forums</a> </li>
+                    <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.users.list"><span class="glyphicon glyphicon-user"></span> Manage Users</a> </li>
+                    <li active-nav><a role="menuitem" ui-sref="user.password"><i class="fa fa-key"></i> Change Password</a></li>
                     <li role="presentation"><a role="menuitem" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                 </ul>
             </li>

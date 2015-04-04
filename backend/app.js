@@ -29,8 +29,11 @@ app.use(function(req, res, next) {
         //database
         req.models = db.models;
         req.db = db;
+
         //passport-local strategy
         require('./config/passport')(db);
+        // load roles data into database
+        req.models.roles.loadRoles();
 
         return next();
     });
@@ -48,13 +51,14 @@ app.use(favicon());
 // app.use(logger('dev'));
 app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
 
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride());
-app.use(cookieParser());
 app.use(multipart({
     uploadDir: settings.upload_path
 }));
+
 app.use(session({
     secret: 'your secret here',
     key: 'sid',
@@ -65,6 +69,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
 // app.use(modRewrite([
 //                 '!\\.html|\\.js|\\.css|\\woff|\\ttf|\\swf$ /index.html [L]'
 //               ]));

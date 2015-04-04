@@ -39,27 +39,21 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Topics</th>
-                        <th>Posts</th>
-                        <th>Locked</th>
-                        <th>Updated at</th>
+                        <th>Forum</th>
+                        <th></th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="item in data.forums">
                         <td>{{item.id}}</td>
-                        <td><a ui-sref="forums.topics.list({forum_id: item.id})" >{{"&nbsp;&nbsp;&nbsp;".repeat(item.level)}}{{item.name}}</a></td>
-                        <td>{{item.description}}</td>
-                        <td>{{item.topic_count}}</td>
-                        <td>{{item.posts}}</td>
-                        <td>{{item.locked}}</td>
-                        <td>{{item.updated_at}}</td>
+                        <td><a ui-sref="forums.topics.list({forum_id: item.id})" >{{"&nbsp;&nbsp;&nbsp;".repeat(item.level)}}{{item.name}}</a>
+                          <br/><small>{{item.description}}</small></td>
+                        <td>Topics: {{item.topic_count}}, Posts: {{item.post_count}}<br/>
+                          <i ng-if="item.locked" class="fa fa-unlock-alt"></i> Updated at: {{item.updated_at}}</td>
                         <td class="text-center">
-                            <a ui-sref="admin.forums.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
-                            <a ui-sref="admin.forums.new({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="New"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a ui-sref="admin.forums.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Edit Forum"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a ui-sref="admin.forums.new({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="New Child Forum"><span class="glyphicon glyphicon-pencil"></span></a>
                             <a ng-hide="item.lft == 1 || item.parent_id == null" ng-confirm-click="Are you sure?" ng-click="deleteForum(item)"  class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Delete"><span class="glyphicon glyphicon-remove"></span></a>
                         </td>
                     </tr>

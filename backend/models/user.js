@@ -9,7 +9,7 @@ module.exports = function(orm, db) {
             unique: true
         },
         role_id: {
-            type: 'serial',
+            type: 'integer',
             required: true
         },
         active: {
@@ -94,14 +94,9 @@ module.exports = function(orm, db) {
                 if (!password || !this.password_salt) return '';
                 var salt = new Buffer(this.password_salt, 'base64');
                 return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('hex');
-            },
+            }
             /*
-            encryptPassword2: function(password, password_salt) {
-                if (!password || !password_salt) return '';
-                var salt = new Buffer(password_salt, 'base64');
-                return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('hex');
-            },
-            randomToken: function() {
+            , randomToken: function() {
                 return Math.round((new Date().valueOf() * Math.random())) + '';
             }
             */
@@ -137,6 +132,10 @@ module.exports = function(orm, db) {
     // User.hasOne('customer', db.models.customers, { required: true, reverse:'users', autoFetch: true });
     User.hasOne('role', db.models.roles, { });
 
+    User.makeSalt = function() {
+        return crypto.randomBytes(16).toString('hex');
+    };
+
     User.findOne = function(user, callback) {
         //console.log('>> findOne user:' + JSON.stringify(user));
         // Model.find([ conditions ] [, options ] [, limit ] [, order ] [, cb ])
@@ -147,8 +146,10 @@ module.exports = function(orm, db) {
             if (err) {
                 callback(err);
             } else {
-                if (person.encrypted_password == person.encryptPassword(user.password)) {
-                //if (person.encrypted_password == person.encryptPassword2(user.password, person.password_salt)) {
+                console.log('>> person.encrypted_password: '+ person.encrypted_password);
+                console.log('>> person.encryptPassword(user.password): '+ person.encryptPassword(user.password));
+                //if (person.encrypted_password === person.encryptPassword(user.password)) {
+                if (person.authenticate(user.password)) {
                     callback(null, person);
                 } else {
                     var errors = [{

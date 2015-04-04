@@ -6,7 +6,8 @@ $ npm install
 ```
 
 ## Install Frontend AngularJS module
-
+- Install bower:
+ $ npm install -g bower
 ```
 $ cd ../frontend
 $ npm install 
@@ -52,6 +53,9 @@ module.exports = app;
 ```
 
 ---------------------
+On Windows:
+ - Install grunt-cli instead of grunt
+ $ npm install -g grunt-cli
 
 ## Grunt test
 

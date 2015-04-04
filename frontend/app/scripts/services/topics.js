@@ -122,5 +122,19 @@ angular.module('frontendApp')
                         return cb(status, data);
                     });
             },
+            setLocked: function (conditions, callback) {
+              var cb = callback || angular.noop;
+              //console.log(conditions);
+              $http.post('/forums/topics/locked', conditions)
+                .success(function (data, status, headers, config) {
+                  console.log('>> status:' + status);
+                  return cb(null, data);
+                }).error(function (data, status, headers, config) {
+                  console.log('>> error data:' + data);
+                  // called asynchronously if an error occurs
+                  // or server returns response with an error status.
+                  return cb(status, data);
+                });
+            },
         };
     }]);
