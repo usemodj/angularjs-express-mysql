@@ -56,7 +56,8 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
 
                 logout: function(callback) {
                     var cb = callback || angular.noop;
-                    SessionFactory.delete(function(res) {
+                    SessionFactory.remove(function(res) {
+                            console.log(res);
                             $rootScope.currentUser = null;
                             $cookieStore.remove('user');
                             changeUser({

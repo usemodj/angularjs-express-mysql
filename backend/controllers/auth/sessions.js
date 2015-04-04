@@ -69,7 +69,7 @@ module.exports = {
             req.logout();
             res.status(200).end();
         } else {
-            res,status(400).send('Not logged in');
+            res.status(400).send('Not logged in');
         }
     }
 

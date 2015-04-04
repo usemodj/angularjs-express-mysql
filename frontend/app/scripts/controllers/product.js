@@ -24,7 +24,7 @@ angular.module('frontendApp')
         $scope.data.product = data.product;
         $scope.data.variants = data.variants;
         $scope.data.assets = data.assets;
-        $scope.product.shipment_cost = data.product.shipment_cost;
+
         if(data.assets) $scope.mainImage = '/uploads/images/'+ data.assets[0].file_path;
         if(data.variants) {
             $scope.product.variant = data.variants[0];

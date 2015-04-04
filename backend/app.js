@@ -10,7 +10,7 @@ var passport = require('passport');
 var errorHandler = require('errorhandler');
 var fs = require('fs');
 var SessionStore = require('express-mysql-session');
-var modRewrite = require('connect-modrewrite');
+//var modRewrite = require('connect-modrewrite');
 var multipart = require('connect-multiparty');
 
 var settings = require('./config/settings');
@@ -51,9 +51,9 @@ app.use(favicon());
 // app.use(logger('dev'));
 app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
 
-app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 app.use(methodOverride());
 app.use(multipart({
     uploadDir: settings.upload_path
@@ -74,6 +74,7 @@ app.use(passport.session());
 //                 '!\\.html|\\.js|\\.css|\\woff|\\ttf|\\swf$ /index.html [L]'
 //               ]));
 // app.use(express.static(path.join(__dirname, '../frontend/app')));
+
 if (app.get('env') === 'development') {
     app.use(express.static(path.join(__dirname, '../frontend/app/')));
     app.use(errorHandler({
@@ -84,7 +85,7 @@ if (app.get('env') === 'development') {
     // production
     app.use(express.static(path.join(__dirname, '../frontend/dist/')));
     app.use(errorHandler());
-};
+}
 
 //Bootstrap controllers
 //var routesPath = path.join(__dirname, './routes/');

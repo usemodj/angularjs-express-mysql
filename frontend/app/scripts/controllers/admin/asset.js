@@ -153,17 +153,21 @@ angular.module('frontendApp')
                 $scope.data.assets = data.assets;
                 $scope.copy = [];
 
-                for(var i = 0; i < data.assets.length; i++){
-                    $scope.copy.push($location.protocol()+'://'+ $location.host()+ ':' + $location.port() + '/uploads/images/'+data.assets[i].attachment_file_path);
+                if(data.assets) {
+                    for (var i = 0; i < data.assets.length; i++) {
+                        $scope.copy.push($location.protocol() + '://' + $location.host() + ':' + $location.port() + '/uploads/images/' + data.assets[i].attachment_file_path);
+                    }
                 }
-                for(var i = 0; i < data.product.variants.length; i++){
+                if(data.product && data.product.variants) {
+                    for (var i = 0; i < data.product.variants.length; i++) {
 
-                    (data.product.variants[i].is_master == true)?
-                        $scope.asset.master_variant = data.product.variants[i] :
-                        $scope.asset.variants.push( data.product.variants[i]);
+                        (data.product.variants[i].is_master == true) ?
+                            $scope.asset.master_variant = data.product.variants[i] :
+                            $scope.asset.variants.push(data.product.variants[i]);
+                    }
                 }
                 //console.log($scope.master_variant);
-            })
+            });
         };
 
         $scope.deleteAsset = function( item){

@@ -86,7 +86,7 @@ module.exports = {
         var product_id = req.params.product_id;
 
         Product.get(product_id, function(err, product){
-            log.debug(product);
+            //log.debug(product);
             var variantSql = 'SELECT va.id, va.price, va.sku, va.product_id, va.position, va.is_master, r.options ' +
                 ' FROM variants va LEFT JOIN ' +
                 ' (SELECT o.id, o.product_id, GROUP_CONCAT(o.options) AS options ' +
@@ -105,7 +105,7 @@ module.exports = {
                 '   FROM variants v, variants_option_values vo, option_values o, option_types t ' +
                 '   WHERE v.id = vo.variants_id and vo.option_values_id = o.id and o.option_type_id = t.id) o ' +
                 ' GROUP BY o.id) r  ON va.id = r.id) v ' +
-                ' ON a.variant_id = v.id ' +
+                ' ON a.viewable_id = v.id ' +
                 ' WHERE v.deleted_at IS NULL AND v.product_id = ? ' +
                 ' ORDER BY a.position, a.id;';
                 req.db.driver.execQuery(assetSql, [product_id], function(err, assets){
@@ -172,7 +172,8 @@ module.exports = {
                                     attachment_file_name: file_name,
                                     attachment_file_path: file_path,
                                     alt: file_alt,
-                                    variant_id: variant_id
+                                    viewable_id: variant_id,
+                                    viewable_type: 'variant'
                                 };
                                 Asset.create(conditions, function( err, asset){
                                    log.info('Asset created!');
@@ -310,9 +311,7 @@ module.exports = {
 
         deleteAssetFile(asset_id, req, res, next);
         res.status(200).json('Asset removed!');
-    },
-
-
+    }
 
 };
 

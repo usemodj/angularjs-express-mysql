@@ -41,7 +41,7 @@ module.exports = function(db) {
                     });
                 }
                 //console.log('>> config pass.js: ');
-                //console.log('>> password: ' + password);
+                console.log('>> user: '); console.log(JSON.stringify(user));
                 if (!user.authenticate(password)) {
                     return done(null, false, {
                         'errors': {

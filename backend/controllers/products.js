@@ -128,8 +128,8 @@ module.exports = {
     index: function(req, res, next) {
         //console.log(req);
         var Query = req.db.driver.query;
-        var Role = req.models.roles;
-        var Product = req.models.products;
+        //var Role = req.models.roles;
+        //var Product = req.models.products;
         var perPages = 10;
         var page = parseInt(req.params['page']) || 1;
         if( isNaN(page) || page < 1) page = 1;
@@ -236,7 +236,7 @@ module.exports = {
                     }, function(err){
                         var taxons_sql= 'SELECT t.* FROM products p, products_taxons pt, taxons t ' +
                             ' WHERE p.id = pt.products_id AND pt.taxons_id = t.id AND p.id = ? ' +
-                            ' ORDER BY position; '
+                            ' ORDER BY position; ';
                         req.db.driver.execQuery(taxons_sql, [product.id], function(err, data){
                             product.taxons = data;
                             //console.log('>> product:' + JSON.stringify(product));
@@ -295,7 +295,7 @@ module.exports = {
             available_on: productData.available_on,
             slug: productData.slug,
             meta_description: productData.meta_description,
-            meta_keywords: productData.meta_keywords,
+            meta_keywords: productData.meta_keywords
         };
         log.debug(productData);
 
@@ -361,7 +361,7 @@ module.exports = {
                available_on: productData.available_on,
                slug: productData.slug,
                meta_description: productData.meta_description,
-               meta_keywords: productData.meta_keywords,
+               meta_keywords: productData.meta_keywords
 
            };
            product.save(productData, function(err){
@@ -417,8 +417,8 @@ module.exports = {
     // Public search
     listProducts: function(req, res, next){
         var Query = req.db.driver.query;
-        log.debug('>>listProducts');
-        log.debug( req.body);
+        //log.debug('>>listProducts');
+        //log.debug( req.body);
         var name = req.body.name || '';
         try {
             name = Query.escape('%' + name + '%').toLowerCase();
@@ -428,8 +428,8 @@ module.exports = {
         var q = ' SELECT p.id, p.name, va.price, va.file_path, va.alt,p.available_on \n'+
             ' FROM products p  \n'+
             ' 	LEFT JOIN  (SELECT v.*, a.attachment_file_path AS file_path, a.alt \n'+
-            ' 				FROM variants v LEFT JOIN assets a ON v.id = a.variant_id  \n'+
-            ' 				WHERE a.id IN (SELECT min(a.id) FROM variants v LEFT JOIN assets a ON v.id = a.variant_id GROUP BY v.product_id) \n'+
+            ' 				FROM variants v LEFT JOIN assets a ON v.id = a.viewable_id  \n'+
+            ' 				WHERE a.id IN (SELECT min(a.id) FROM variants v LEFT JOIN assets a ON v.id = a.viewable_id GROUP BY v.product_id) \n'+
         ' 				ORDER BY v.product_id) va  ON p.id = va.product_id \n'+
         ' WHERE p.deleted_at IS NULL AND (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
         '   AND p.available_on <= NOW() AND va.price IS NOT NULL \n'+
@@ -446,8 +446,8 @@ module.exports = {
 
     viewProduct: function(req, res, next){
         var Product = req.models.products;
-        var Variant = req.models.variants;
-        var Asset = req.models.assets;
+        //var Variant = req.models.variants;
+        //var Asset = req.models.assets;
 
         var product_id = req.params.id;
 
@@ -465,8 +465,8 @@ module.exports = {
             ' WHERE va.product_id = ? AND va.deleted_at IS NULL AND va.is_master = false ORDER BY position, id;',[product_id],
             function(err, variants){
                 if(err) return next(err);
-                req.db.driver.execQuery('SELECT a.id, a.attachment_file_path AS file_path, a.alt, a.variant_id '+
-                ' FROM assets a INNER JOIN variants v ON a.variant_id = v.id '+
+                req.db.driver.execQuery('SELECT a.id, a.attachment_file_path AS file_path, a.alt, a.viewable_id '+
+                ' FROM assets a INNER JOIN variants v ON a.viewable_id = v.id '+
                 ' WHERE v.deleted_at IS NULL AND v.product_id = ? '+
                 ' ORDER BY a.position, a.id;',[product_id],
                 function(err, assets){

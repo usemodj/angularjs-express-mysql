@@ -22,7 +22,7 @@ module.exports = {
             delete optionType.optionValues;
             OptionValue.find({option_type_id: optionType.id}).order('position').run(function(err, optionValues){
                 optionType['optionValues'] = optionValues;
-                res.json(optionType);
+                res.status(200).json(optionType);
             });
         });
 

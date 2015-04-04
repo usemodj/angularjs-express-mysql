@@ -179,14 +179,14 @@ module.exports = {
         var Role = req.models.roles;
         var email = req.body.email;
         var password = req.body.password;
-        var retype_password = req.body.retype_password;
+        //var retype_password = req.body.retype_password;
 
         Role.one({title: req.body.role.title}, function(err, role){
             //console.log('>>create user role:'+ JSON.stringify(role));
 
             User.create({
                 email: email,
-                encrypted_password: password,
+                //encrypted_password: password,
                 password_salt: User.makeSalt(),
                 active: true,
                 current_sign_in_ip: req.ip,
@@ -198,15 +198,8 @@ module.exports = {
                     console.log(err);
                     return res.json(400, err);
                 }
-                // Password insert
-                //var password_salt = user.makeSalt();
-                //var encrypted_password = user.encryptPassword2(password, password_salt);
-                //user.password_salt = user.makeSalt();
-                //var encrypted_password = user.encryptPassword(password);
-                user.save({
-                    //password_salt: user.password_salt,
-                    encrypted_password: user.encryptPassword(password)
-                }, function(err) {
+                user.encrypted_password = user.encryptPassword(password);
+                user.save( function(err) {
                     if (err) {
                         user.remove(function(err) {
                             console.log("removed!");

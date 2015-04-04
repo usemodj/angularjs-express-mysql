@@ -60,9 +60,9 @@ module.exports = function(orm, db) {
         }
 
     }, {
-        //cache: false,
+        cache: false,
         autoFetch: true,
-        autoFetchLimit: 2,
+        autoFetchLimit: 1,
         methods: {
             serialize: function() {
                 return {
@@ -76,6 +76,9 @@ module.exports = function(orm, db) {
              */
 
             authenticate: function(plainText) {
+                console.log('>> plainText: '+ plainText);
+                console.log('>> this.encrypted_password: '+ this.encrypted_password);
+                console.log('>> this.encryptPassword(plainText): '+ this.encryptPassword(plainText));
                 return this.encryptPassword(plainText) === this.encrypted_password;
             },
 
@@ -92,9 +95,10 @@ module.exports = function(orm, db) {
              */
             encryptPassword: function(password) {
                 if (!password || !this.password_salt) return '';
-                var salt = new Buffer(this.password_salt, 'base64');
+                var salt = new Buffer(this.password_salt, 'hex');
                 return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('hex');
             }
+
             /*
             , randomToken: function() {
                 return Math.round((new Date().valueOf() * Math.random())) + '';
@@ -146,6 +150,7 @@ module.exports = function(orm, db) {
             if (err) {
                 callback(err);
             } else {
+                console.log('>> user.password: '+ user.password);
                 console.log('>> person.encrypted_password: '+ person.encrypted_password);
                 console.log('>> person.encryptPassword(user.password): '+ person.encryptPassword(user.password));
                 //if (person.encrypted_password === person.encryptPassword(user.password)) {

@@ -88,14 +88,14 @@ angular.module('frontendApp',
                 $rootScope.error = "Seems like you tried accessing a route you don't have access to...";
                 event.preventDefault();
                 //console.log('>>fromState.url: %s', fromState.url);
-                //if(fromState.url === '^') {
+                if(fromState.url === '^') {
                     if(AuthFactory.isLoggedIn()) {
                         $state.go('user.home');
                     } else {
                         $rootScope.error = null;
                         $state.go('anon.login');
                     }
-                //}
+                }
             }
         });
 
