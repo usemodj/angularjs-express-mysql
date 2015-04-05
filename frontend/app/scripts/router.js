@@ -188,11 +188,11 @@ angular.module('frontendApp.router', ['ui.router'])
             })
             .state('forums.topics', {
                 abstract: true,
-                //url: '',
+                url: '',
                 template: '<ui-view/>'
             })
             .state('forums.topics.list', {
-                url: '/:forum_id/topics',
+                url: ':forum_id/topics',
                 templateUrl: 'views/partials/forums/topics/topics.list.html',
                 controller: 'TopicCtrl'
             })

@@ -48,7 +48,7 @@ log4js.configure(
                     {
                         "type": "console"
                     }
-                ],
+                ]
                 //replaceConsole: true
             }
         ]

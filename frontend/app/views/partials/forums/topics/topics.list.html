@@ -32,6 +32,7 @@
         <br/>
         <div class="row">
             <div class="col-md-10">
+              <div class="text-left">
                 <a ui-sref="forums.list">Forums List</a> &gt;
                 <ul style="display: inline-block;" class="list-inline pills" ng-repeat="item in data.forums">
                     <li ng-if="!$last"><a ui-sref="forums.topics.list({forum_id: item.id})">{{item.name}}</a> &gt;</li>
@@ -42,7 +43,7 @@
                         </ul>
                     </li>
                 </ul>
-
+              </div>
               <div class="col-md-10 text-right"><a class=" btn btn-default" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})">New Topic</a></div>
 
 
