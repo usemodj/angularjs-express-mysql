@@ -418,7 +418,7 @@ module.exports = {
     listProducts: function(req, res, next){
         var Query = req.db.driver.query;
         //log.debug('>>listProducts');
-        //log.debug( req.body);
+        log.debug( req.body);
         var name = req.body.name || '';
         try {
             name = Query.escape('%' + name + '%').toLowerCase();

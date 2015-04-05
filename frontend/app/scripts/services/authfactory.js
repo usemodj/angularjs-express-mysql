@@ -1,9 +1,9 @@
 'use strict';
 
 var services = angular.module('frontendApp');
-services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','SessionFactory', 'UserFactory',
+services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieStore','SessionFactory', 'UserFactory',
                              'MailFactory',
-        function($location, $rootScope, $cookieStore, SessionFactory, UserFactory, MailFactory) {
+        function($cookies, $location, $rootScope, $cookieStore, SessionFactory, UserFactory, MailFactory) {
             var accessLevels = routingConfig.accessLevels,
                 userRoles = routingConfig.userRoles,
                 currentUser = $cookieStore.get('user') || {email:'', role: userRoles.public};
@@ -55,8 +55,10 @@ services.factory('AuthFactory', ['$location', '$rootScope','$cookieStore','Sessi
                 },
 
                 logout: function(callback) {
+                    console.log('>>$cookies[XSRF-TOKEN]: '); console.log($cookies['XSRF-TOKEN']);
+    
                     var cb = callback || angular.noop;
-                    SessionFactory.remove(function(res) {
+                    SessionFactory.remove( function(res) {
                             console.log(res);
                             $rootScope.currentUser = null;
                             $cookieStore.remove('user');

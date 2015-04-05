@@ -6,6 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
+var csrf = require('csurf');
 var passport = require('passport');
 var errorHandler = require('errorhandler');
 var fs = require('fs');
@@ -51,24 +52,44 @@ app.use(favicon());
 // app.use(logger('dev'));
 app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
 
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
 app.use(methodOverride());
 app.use(multipart({
     uploadDir: settings.upload_path
 }));
-
 app.use(session({
     secret: 'your secret here',
     key: 'sid',
-    cookie: {
-        maxAge: 3600000 * 24 * 7
-    },
+    // cookie: {
+    //     maxAge: 3600000 * 24 * 7
+    // },
     store: new SessionStore(settings.database)
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(csrf({cookie: true}))
+// error handler
+app.use(function (err, req, res, next) {
+    if (err.code !== 'EBADCSRFTOKEN') return next(err)
+     // handle CSRF token errors here
+    res.status(403)
+    res.send('session has expired or form tampered with')
+})
+
+app.use(function (req, res, next) {
+  res.cookie('XSRF-TOKEN', req.csrfToken())
+  next()
+})
+//app.use(function(req, res, next) {
+//    res.setHeader("Access-Control-Allow-Origin", '*');
+//    res.setHeader("Access-Control-Allow-Credentials","true");
+//    res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
+//    res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-xsrf-token, X-Requested-With, Accept, Expires, Last-Modified, Cache-Control");
+//    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//    next();
+//});
 
 // app.use(modRewrite([
 //                 '!\\.html|\\.js|\\.css|\\woff|\\ttf|\\swf$ /index.html [L]'
@@ -102,15 +123,6 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.send('Error ' + err.stacktrace);
-    });
-}
 
 // production error handler
 // no stacktraces leaked to user

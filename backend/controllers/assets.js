@@ -128,7 +128,7 @@ module.exports = {
         var imageWidth = 340,
             imageHeight = 340;
 
-//        log.debug(req.body);
+        log.debug(req.body);
 //        log.debug(req.files);
         var asset = JSON.parse(req.body.asset),
             file = req.files.file;
@@ -151,15 +151,18 @@ module.exports = {
         mkdirp(uploadPath, function(err){
             if(err) return next(err);
             var readStream = fs.createReadStream(file.path);
-            gm(readStream, 'img.jpg')
-                .options({imageMagick: true})
-                .resize(imageWidth, imageHeight)
-                .write(destPath, function(err){
-                    if(err) log.error('Image resizing failed!');
-                    else log.info('Image resizing done!');
+            var imageMagic = (asset.resize)? gm(readStream, 'img.jpg').options({imageMagick: true}).resize(imageWidth, imageHeight)
+                : gm(readStream, 'img.jpg').options({imageMagick: true});
+                //.
+             imageMagic.write(destPath, function(err){
                     rimraf(file.path, function(err){
                         if(!err) log.info('Temp image removed!');
                     });
+                    if(err) {
+                        log.error( err);
+                        return res.status(400).json(JSON.stringify(err));
+                    }
+                    //else log.info('Image resizing done!');
                     gm(destPath).options({imageMagick: true})
                         .identify(function(err, data){
                             if(!err) {
@@ -177,7 +180,7 @@ module.exports = {
                                 };
                                 Asset.create(conditions, function( err, asset){
                                    log.info('Asset created!');
-                                   res.json(asset);
+                                   res.status(200).json(asset);
                                 });
                             }
                         });

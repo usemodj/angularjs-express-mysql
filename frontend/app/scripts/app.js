@@ -1,12 +1,16 @@
 'use strict';
 
-angular.module('frontendApp', 
+angular.module('frontendApp',
 	['ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.bootstrap','ui.select2','ui.sortable','ui.tree',
      'frontendApp.router', 'angularFileUpload', 'gettext', 'ngClipboard','markdown'])
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', '$logProvider','ngClipProvider',
         function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $logProvider, ngClipProvider) {
             $logProvider.debugEnabled = true;
             ngClipProvider.setPath("bower_components/zeroclipboard/dist/ZeroClipboard.swf");
+
+            // For Access-Control-Allow-Origin and Set-Cookie header
+            // $httpProvider.defaults.useXDomain = true;
+            // $httpProvider.defaults.withCredentials = true;
 
             // FIX for trailing slashes. Gracefully "borrowed" from https://github.com/angular-ui/ui-router/issues/50
             $urlRouterProvider.rule(function($injector, $location) {
@@ -69,16 +73,21 @@ angular.module('frontendApp',
                     return promise.then(success, error);
                 }
             }];
-            $httpProvider.interceptors.push(interceptor);
+            //$httpProvider.interceptors.push(interceptor);
         }
     ])
-    .run(['$rootScope', '$state','$stateParams', 'AuthFactory','gettextCatalog', function ($rootScope, $state, $stateParams, AuthFactory,gettextCatalog) {
+    .run(['$rootScope', '$state','$stateParams', 'AuthFactory','gettextCatalog', '$http','$cookies',
+        function ($rootScope, $state, $stateParams, AuthFactory,gettextCatalog, $http, $cookies) {
         // It's very handy to add references to $state and $stateParams to the $rootScope
         // so that you can access them from any scope within your applications.For example,
         // <li ng-class="{ active: $state.includes('contacts.list') }"> will set the <li>
         // to active whenever 'contacts.list' or one of its decendents is active.
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
+
+        //$http.defaults.headers.post['x-csrf-token'] = $cookies._csrf;
+        $http.defaults.headers.post['X-XSRF-TOKEN'] = $cookies['XSRF-TOKEN'];
+        //$http.defaults.headers.post['_csrf'] = $cookies._csrf;
 
         gettextCatalog.currentLanguage = 'ko';
         gettextCatalog.debug = true;

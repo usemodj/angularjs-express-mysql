@@ -75,7 +75,7 @@ angular.module('frontendApp.router', ['ui.router'])
         $stateProvider
             .state('products', {
                 abstract: true,
-                //url: '/products',
+                url: '/products/',
                 // Example of loading a template from a file. This is also a top level state,
                 // so this template file will be loaded and then inserted into the ui-view
                 // within index.html.
@@ -86,12 +86,12 @@ angular.module('frontendApp.router', ['ui.router'])
                 }
             })
             .state('products.list', {
-                url: '/products',
+                url: '',
                 templateUrl: 'views/partials/products/products.list.html',
                 controller: 'ProductCtrl'
             })
             .state('products.view', {
-                url: '/products/:id/',
+                url: ':id',
                 templateUrl: 'views/partials/products/products.view.html',
                 controller: 'ViewProductCtrl'
             })

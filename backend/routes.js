@@ -615,18 +615,19 @@ var routes = [
             if(req.user) {
                 role = req.user.role;
                 email = req.user.email;
+            
+                res.cookie('user', JSON.stringify({
+                    'email': email,
+                    'role': role
+                }));
             }
-            res.cookie('user', JSON.stringify({
-                'email': email,
-                'role': role
-            }));
             res.render('index');
         }]
     }
 ];
 
 module.exports = function(app) {
-
+    
     _.each(routes, function(route) {
         route.middleware.unshift(ensureAuthorized);
         var args = _.flatten([route.path, route.middleware]);
