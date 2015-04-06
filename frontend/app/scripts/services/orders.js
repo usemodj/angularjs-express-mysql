@@ -51,7 +51,7 @@ angular.module('frontendApp')
                     console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb( data);
                 });
         },
 
@@ -65,7 +65,7 @@ angular.module('frontendApp')
                     console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb(data);
                 });
         },
 
@@ -79,7 +79,7 @@ angular.module('frontendApp')
                     console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb(data);
                 });
         },
 
@@ -93,7 +93,7 @@ angular.module('frontendApp')
                     console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb(data);
                 });
         },
 
@@ -108,7 +108,7 @@ angular.module('frontendApp')
                     console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb(data);
                 });
         },
 
@@ -122,7 +122,7 @@ angular.module('frontendApp')
                     console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb( data);
                 });
         },
 
@@ -136,8 +136,22 @@ angular.module('frontendApp')
                     console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb( data);
                 });
+        },
+        confirmOrder: function(conditions, callback){
+          var cb = callback || angular.noop;
+          //console.log(conditions);
+          $http.post('/orders/confirm', conditions)
+            .success(function(data, status, headers, config){
+              console.log('>> status:'+ status);
+              return cb(null, data);
+            }).error(function(data, status, headers, config) {
+              console.log('>> error data:'+ data);
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              return cb( data);
+            });
         },
 
         getOrders: function(data, callback){
@@ -150,13 +164,13 @@ angular.module('frontendApp')
                     console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb( data);
                 });
         },
 
         searchOrders: function(conditions, callback){
             var cb = callback || angular.noop;
-            console.log(conditions);
+            //console.log(conditions);
             $http.post('/admin/orders/search', conditions)
                 .success(function(data, status, headers, config){
                     console.log('>> status:'+ status);
@@ -165,9 +179,9 @@ angular.module('frontendApp')
                     console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb( data);
                 });
-        },
+        }
 
     };
   }]);

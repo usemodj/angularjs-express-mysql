@@ -9,17 +9,14 @@ angular.module('frontendApp')
         shipments.getByOrderId({order_id: order.id}, function(err, shipment){
             $scope.shipment = shipment;
             //console.log(shipment);
-
         });
     });
 
     $scope.saveShipment = function(){
-        orders.saveShipment($scope.shipment, function(err, data){
-            if(!err) {
-                $state.go('orders.payment');
-            } else {
-                console.log(err);
-            }
+        orders.saveShipment($scope.shipment, function(err, order){
+            if(err) $scope.error = err;
+            else $state.go('orders.payment', {id: order.id});
+
         });
     }
 

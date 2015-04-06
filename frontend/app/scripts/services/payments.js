@@ -16,7 +16,7 @@ angular.module('frontendApp')
                     console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb(data);
                 });
         }
     };

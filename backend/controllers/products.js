@@ -240,7 +240,7 @@ module.exports = {
                         req.db.driver.execQuery(taxons_sql, [product.id], function(err, data){
                             product.taxons = data;
                             //console.log('>> product:' + JSON.stringify(product));
-                            res.json( product);
+                            res.status(200).json( product);
                         })
 
                     });
@@ -339,8 +339,8 @@ module.exports = {
        var Taxon = req.models.taxons;
        var OptionType = req.models.option_types;
        var Variant = req.models.variants;
-        log.debug('>>req.body:');
-        log.debug(req.body);
+       // log.debug('>>req.body:');
+       // log.debug(req.body);
        //console.log(req.models.products);
        var productData = req.body;
        var taxon_ids = productData.taxon_ids || [];
@@ -348,10 +348,10 @@ module.exports = {
        var variant_id = productData.variant.id;
 
        Product.get(productData.id, function(err, product){
-          if(err) return res.json(500, err);
+          if(err) return res.status(500).json(err);
            productData['option_types'] = [];
            productData['taxons'] = [];
-           log.debug(productData);
+           //log.debug(productData);
 
            delete product.option_types;
            delete product.taxons;

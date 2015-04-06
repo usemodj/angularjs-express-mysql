@@ -16,9 +16,11 @@
         </div>
         <div class="row">
             <div class="text-center">
-                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary" >
-                    <span class="glyphicon glyphicon-send"></span> Save and Continue </button>
-
+              <div class="form-group has-error" ng-show="error">
+                <p class="help-block">{{ error }}</p>
+              </div>
+              <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary" >
+                  <span class="glyphicon glyphicon-send"></span> Save and Continue </button>
             </div>
         </div>
     </form>

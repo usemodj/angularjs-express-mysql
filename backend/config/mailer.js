@@ -6,14 +6,24 @@ module.exports = function(cb) {
     if (transport) return cb(transport);
 
     // Create a SMTP transport object
+    //transport = nodemailer.createTransport(smtpPool({
+    //    service: 'Gmail', // use well known service.
+    //    // If you are using @gmail.com address, then you don't
+    //    // even have to define the service name
+    //    auth: {
+    //        user: "id@gmail.com",
+    //        pass: "password"
+    //    }
+    //}));
     transport = nodemailer.createTransport(smtpPool({
-        service: 'Gmail', // use well known service.
-        // If you are using @gmail.com address, then you don't
-        // even have to define the service name
+        host: 'localhost',
+        port: 25,
         auth: {
-            user: "nodesoft.blog@gmail.com",
-            pass: "node3208"
-        }
+            user: "postmaster@thinkrbot.com",
+            pass: "postmaster"
+        },
+        maxConnection: 5,
+        maxMessages: 10
     }));
 
     //console.log('SMTP Configured');

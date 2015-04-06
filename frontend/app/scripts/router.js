@@ -121,22 +121,22 @@ angular.module('frontendApp.router', ['ui.router'])
                 controller: 'ViewOrderCtrl'
             })
             .state('orders.address', {
-                url: 'address/',
+                url: ':id/address/',
                 templateUrl: 'views/partials/orders/orders.address.html',
                 controller: 'AddressCtrl'
             })
             .state('orders.delivery', {
-                url: 'delivery/',
+                url: ':id/delivery/',
                 templateUrl: 'views/partials/orders/orders.delivery.html',
                 controller: 'DeliveryCtrl'
             })
             .state('orders.payment', {
-                url: 'payment/',
+                url: ':id/payment/',
                 templateUrl: 'views/partials/orders/orders.payment.html',
                 controller: 'PaymentCtrl'
             })
             .state('orders.complete', {
-                url: 'complete/',
+                url: ':id/complete/',
                 templateUrl: 'views/partials/orders/orders.complete.html',
                 controller: 'CompleteCtrl'
             })

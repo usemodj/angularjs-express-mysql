@@ -14,11 +14,8 @@ angular.module('frontendApp')
 
     $scope.savePayment = function(){
         orders.savePayment($scope.payment, function(err, order){
-            if(!err){
-                $state.go('orders.view', {id: order.id});
-            } else {
-                console.log(err);
-            }
+            if(err) $scope.error = err;
+            else $state.go('orders.view', {id: order.id});
         });
     };
 

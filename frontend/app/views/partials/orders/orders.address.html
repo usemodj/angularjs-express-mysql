@@ -4,31 +4,31 @@
 
         <div class="row">
             <div class="col-md-5 col-push-1">
-                <h3>Billing Address:</h3>
+                <h3>Billing Address :</h3>
                 <p>&nbsp;</p>
                 <div class="form-group">
-                    <label>Name*:</label>
+                    <label>Name *:</label>
                     <input class="form-control" ng-model="order.bill_address.name" required>
                 </div>
                 <div class="form-group">
-                    <label>Zipcode*:</label>
+                    <label>Zipcode *:</label>
                     <input class="form-control" ng-model="order.bill_address.zipcode" required>
                 </div>
                 <div class="form-group">
-                    <label>Address1*:</label>
+                    <label>Address1 *:</label>
                     <input class="form-control" ng-model="order.bill_address.address1" required>
                 </div>
                 <div class="form-group">
-                    <label>Address2:</label>
+                    <label>Address2 :</label>
                     <input class="form-control" ng-model="order.bill_address.address2" >
                 </div>
                 <div class="form-group">
-                    <label>Phone*:</label>
-                    <input class="form-control" ng-model="order.bill_address.phone" required>
+                  <label>Mobile *:</label>
+                  <input class="form-control" ng-model="order.bill_address.mobile" required>
                 </div>
                 <div class="form-group">
-                    <label>Mobile:</label>
-                    <input class="form-control" ng-model="order.bill_address.mobile" required>
+                    <label>Phone :</label>
+                    <input class="form-control" ng-model="order.bill_address.phone" >
                 </div>
             </div>
             <div class="col-md-5 col-pull-1">
@@ -36,38 +36,40 @@
                 <input type="checkbox" ng-model="order.use_bill_address" ng-change="useBillingAddress()"> Use Billing Address
                 <div>
                     <div class="form-group">
-                        <label>Name*:</label>
+                        <label>Name *:</label>
                         <input class="form-control" ng-model="order.ship_address.name" required>
                     </div>
                     <div class="form-group">
-                        <label>Zipcode*:</label>
+                        <label>Zipcode *:</label>
                         <input class="form-control" ng-model="order.ship_address.zipcode" required>
                     </div>
                     <div class="form-group">
-                        <label>Address1*:</label>
+                        <label>Address1 *:</label>
                         <input class="form-control" ng-model="order.ship_address.address1" required>
                     </div>
                     <div class="form-group">
                         <label>Address2:</label>
                         <input class="form-control" ng-model="order.ship_address.address2" >
                     </div>
+                  <div class="form-group">
+                    <label>Mobile *:</label>
+                    <input class="form-control" ng-model="order.ship_address.mobile" required>
+                  </div>
                     <div class="form-group">
-                        <label>Phone*:</label>
-                        <input class="form-control" ng-model="order.ship_address.phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Mobile:</label>
-                        <input class="form-control" ng-model="order.ship_address.mobile" required>
+                        <label>Phone :</label>
+                        <input class="form-control" ng-model="order.ship_address.phone" >
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="text-center">
-                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary" >
-                    <span class="glyphicon glyphicon-send"></span> Save and Continue </button>
-
-            </div>
+              <div class="form-group has-error" ng-show="error">
+                <p class="help-block">{{ error }}</p>
+              </div>
+              <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary" >
+                  <span class="glyphicon glyphicon-send"></span> Save and Continue </button>
+          </div>
         </div>
     </form>
 </div>

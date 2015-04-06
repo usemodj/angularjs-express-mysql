@@ -10,12 +10,10 @@ module.exports = {
     },
 
     optionType: function(req, res, next){
-        console.log('>> req.params.id:'+ req.params.id);
-
+        //console.log('>> req.params.id:'+ req.params.id);
         var id = req.params.id;
         var OptionType = req.models.option_types;
         var OptionValue = req.models.option_values;
-
         OptionType.get(id, function(err, optionType){
             if(err) return next(err);
             //console.log(optionType.getOptionValues().order('position'));

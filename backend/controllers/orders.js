@@ -32,14 +32,14 @@ var getOrderItems = function(order_id, req, res, callback){
                 ' INNER JOIN \n'+
                 ' (SELECT a2.*, p.id AS product_id FROM \n'+
                 ' (SELECT a1.* FROM \n'+
-                ' (SELECT a.variant_id, min(a.id) as min_id \n'+
-                ' FROM assets a, variants v WHERE a.variant_id = v.id \n'+
+                ' (SELECT a.viewable_id, min(a.id) as min_id \n'+
+                ' FROM assets a, variants v WHERE a.viewable_id = v.id \n'+
                 ' GROUP BY v.product_id \n'+
                 ' ) a \n'+
-                ' INNER JOIN assets a1 ON a1.variant_id = a.variant_id AND a1.id = a.min_id \n'+
+                ' INNER JOIN assets a1 ON a1.viewable_id = a.viewable_id AND a1.id = a.min_id \n'+
                 ' ) a2 \n'+
                 ' INNER JOIN variants v \n'+
-                ' ON v.id = a2.variant_id \n'+
+                ' ON v.id = a2.viewable_id \n'+
                 ' INNER JOIN products p \n'+
                 ' ON p.id = v.product_id \n'+
                 ' ) a3 \n'+
@@ -55,13 +55,14 @@ var getOrderItems = function(order_id, req, res, callback){
     });
 };
 
-var sendConfirmationMail = function(order, transport){
+var sendConfirmationMail = function(order, transport, callback){
     var html = '<ul>';
     _.each(order.line_items, function(item){
         //log.debug('>>line_item:' + JSON.stringify(item));
-        html += '<li>'+ item.name + ': '+ item.price + ' x '+ item.quantity+'('+item.options+')' + '</li>'
+        html += '<li>'+ item.name + ': '+ item.price + ' x '+ item.quantity+'('+item.options+') </li>'
     });
-    html += '<p>Total: '+ order.item_total + ' + ' + order.shipment_total + '(Shipment)</p>';
+    html += '<p>Total: '+ order.item_total + ' + ' + order.shipment_total + '(Shipment) = <b>';
+    html += (order.item_total + order.shipment_total) +'</b></p>';
 
     //var transport = req.transport;
     var message = {};
@@ -69,17 +70,16 @@ var sendConfirmationMail = function(order, transport){
     message.subject = 'Order Confirmation Mail';
     message.html = html;
 
-    transport.sendMail(message, function (error) {
-        if (error) {
-            console.log('Error occured');
-            console.log(error.message);
-            return next(error);
+    transport.sendMail(message, function (err) {
+        if (err) {
+            log.error(err.message);
+            return callback(err);
         }
-        console.log('Message sent successfully!');
-        console.log(message);
+        log.info('Confirm Mail sent successfully!');
+        //log.debug(message);
         // if you don't want to use this transport object anymore, uncomment following line
         //transport.close(); // close the connection pool
-        return 'Message sent successfully!';
+        return callback(null, message);
     });
 };
 
@@ -287,14 +287,14 @@ module.exports = {
                     ' INNER JOIN \n'+
                     ' (SELECT a2.*, p.id AS product_id FROM \n'+
                     ' (SELECT a1.* FROM \n'+
-                    ' (SELECT a.variant_id, min(a.id) as min_id \n'+
-                    ' FROM assets a, variants v WHERE a.variant_id = v.id \n'+
+                    ' (SELECT a.viewable_id, min(a.id) as min_id \n'+
+                    ' FROM assets a, variants v WHERE a.viewable_id = v.id \n'+
                     ' GROUP BY v.product_id \n'+
                     ' ) a \n'+
-                    ' INNER JOIN assets a1 ON a1.variant_id = a.variant_id AND a1.id = a.min_id \n'+
+                    ' INNER JOIN assets a1 ON a1.viewable_id = a.viewable_id AND a1.id = a.min_id \n'+
                     ' ) a2 \n'+
                     ' INNER JOIN variants v \n'+
-                    ' ON v.id = a2.variant_id \n'+
+                    ' ON v.id = a2.viewable_id \n'+
                     ' INNER JOIN products p \n'+
                     ' ON p.id = v.product_id \n'+
                     ' ) a3 \n'+
@@ -398,7 +398,7 @@ module.exports = {
                                 order_id: order.id,
                                 user_id: user.id
                             }, function(err){
-                                res.json(order1);
+                                res.status(200).json(order1);
                             });
 
                         } else {
@@ -406,7 +406,7 @@ module.exports = {
                             change.next_state = 'address';
                             change.previous_state = 'cart';
                             change.save(function(err){
-                                res.json(order1);
+                                res.status(200).json(order1);
                             });
 
                         }
@@ -430,57 +430,97 @@ module.exports = {
         log.debug(body);
         User.one({email: user.email}, function(err, user) {
             if (err || user == null) {
-                log.err('Login required!');
+                log.error('Login required!');
                 return next(new Error('Login required!'));
             }
             Order.one({user_id: user.id, completed_at: null}, function (err, order) {
                 if (err || order == null) return next(err);
 
                 req.db.driver.execQuery('DELETE FROM addresses WHERE id IN (?,?);',[order.bill_address_id,order.ship_address_id],function(err){
-
-                    Address.create(body.bill_address, function (err, billAddr) {
-                        order.setBill_address(billAddr, function(err){});
-                    });
-
-                    Address.create(body.ship_address, function (err, shipAddr) {
-                        order.setShip_address(shipAddr, function(err){});
-                    });
-
-                    ShippingMethod.find({deleted_at: null}).order('position').order('id').limit(1).run(function(err, data){
-                        Shipment.create({number: Shipment.makeNumber(), cost: data[0].amount, order_id: order.id, shipping_method_id: data[0].id}, function(err, shipment){
-                            order.shipment_total = shipment.cost;
-                            order.total = order.item_total + order.shipment_total;
-                        });
-                    });
-
-                    order.state = 'address';
-                    order.save(function (err, order1) {
-                        if(err) return next(err);
-                        log.debug('>>order saved')
-                        StateChange.one({order_id: order1.id, previous_state: 'address'}, function (err, change) {
-                            if (err || change == null) {
-                                StateChange.create({
-                                    created_at: new Date(),
-                                    name: 'order',
-                                    next_state: 'delivery',
-                                    previous_state: 'address',
-                                    order_id: order1.id,
-                                    user_id: user.id
-
-                                }, function (err, change1) {
-                                    res.json(order1);
+                    if(err) return next(err);
+                    async.waterfall([
+                        function (callback) {
+                            delete body.bill_address.id;
+                            Address.create(body.bill_address, function (err, billAddr) {
+                                if(err) return callback(err);
+                                order.setBill_address(billAddr, function(err){
+                                    if(err) return callback(err);
+                                    callback(null, order);
                                 });
-                            } else {
-
-                                change.created_at = new Date();
-                                change.next_state = 'delivery';
-                                change.previous_state = 'address';
-                                change.save(function (err, change2) {
-
-                                    res.json(order1);
+                            });
+                        },
+                        function (order, callback) {
+                            delete body.ship_address.id;
+                            Address.create(body.ship_address, function (err, shipAddr) {
+                                if(err) return callback(err);
+                                order.setShip_address(shipAddr, function(err){});
+                                callback(null, order);
+                            });
+                        },
+                        function (order, callback) {
+                            ShippingMethod.find({deleted_at: null}).order('position').order('id').limit(1).run(function(err, data){
+                                if(err || !data || data.length == 0) {
+                                    var msg = err ? err: 'Shipping Method is empty!';
+                                    return callback(msg);
+                                }
+                                Shipment.one({order_id: order.id}, function(err, shipment){
+                                    if(err || !shipment) {
+                                        Shipment.create({number: Shipment.makeNumber(), cost: data[0].amount, order_id: order.id, shipping_method_id: data[0].id}, function(err, shipment){
+                                            if(err) return callback(err);
+                                            order.shipment_total = shipment.cost;
+                                            order.total = order.item_total + order.shipment_total;
+                                            callback(null, order);
+                                        });
+                                    } else {
+                                        shipment.save({
+                                            cost: data[0].amount,
+                                            shipping_method_id: data[0].id
+                                        }, function(err, shipment){
+                                            if(err) return callback(err);
+                                            order.shipment_total = shipment.cost;
+                                            order.total = order.item_total + order.shipment_total;
+                                            callback(null, order);
+                                        });
+                                    }
+                                })
+                            });
+                        },
+                        function (order, callback) {
+                            order.state = 'address';
+                            order.save(function (err, order1) {
+                                if(err) return callback(err);
+                                log.debug('>>order saved')
+                                StateChange.one({order_id: order1.id, previous_state: 'address'}, function (err, change) {
+                                    if (err || change == null) {
+                                        StateChange.create({
+                                            created_at: new Date(),
+                                            name: 'order',
+                                            next_state: 'delivery',
+                                            previous_state: 'address',
+                                            order_id: order1.id,
+                                            user_id: user.id
+                                        }, function (err, change1) {
+                                            if(err) return callback(err);
+                                            callback(null, order1);
+                                        });
+                                    } else {
+                                        change.created_at = new Date();
+                                        change.next_state = 'delivery';
+                                        change.previous_state = 'address';
+                                        change.save(function (err, change2) {
+                                            if(err) return callback(err);
+                                            callback(null, order1);
+                                        });
+                                    }
                                 });
-                            }
-                        });
+                            });
+                        }
+                    ], function (err, results) {
+                        if(err) {
+                            log.error(err);
+                            return res.status(400).json(err);
+                        }
+                        res.status(200).json(results);
                     });
 
                 });
@@ -499,64 +539,77 @@ module.exports = {
         //log.debug(user);
         //log.debug(req.body);
         var shipment = req.body;
-
-
         User.one({email: user.email}, function(err, user) {
             if (err || user == null) {
                 log.err('Login required!');
                 return next(new Error('Login required!'));
             }
-            Shipment.one({order_id: shipment.order_id}, function (err, ship) {
-                if (err || ship == null) return next(err);
-                //log.debug(JSON.stringify(ship));
-
-                ShippingMethod.get(shipment.shipping_method.id, function(err, shippingMethod){
-                    if (err || shippingMethod == null) return next(err);
-                    //log.debug('>>shippingMethod:'+ JSON.stringify(shippingMethod));
-
-                    ship.setShipping_method(shippingMethod, function(err){
-                        ship.cost = shippingMethod.amount;
-
-                        ship.save(function (err, data) {
-                            //log.info('>>shipment:'+ JSON.stringify(data));
-
-                            Order.get(data.order_id, function (err, order) {
-
-                                order.shipment_total = data.cost;
-                                order.total = order.item_total + data.cost;
-                                order.state = 'payment';
-                                order.save(function (err, order1) {
-                                    StateChange.one({order_id: order1.id, previous_state: 'delivery'}, function (err, change) {
-                                        if (err || change == null) {
-                                            StateChange.create({
-                                                created_at: new Date(),
-                                                name: 'order',
-                                                next_state: 'payment',
-                                                previous_state: 'delivery',
-                                                order_id: order1.id,
-                                                user_id: user.id
-
-                                            }, function (err, change1) {
-                                                res.json(order1);
-                                            });
-                                        } else {
-
-                                            change.created_at = new Date();
-                                            change.next_state = 'payment';
-                                            change.previous_state = 'delivery';
-                                            change.save(function (err, change2) {
-
-                                                res.json(order1);
-                                            });
-                                        }
-                                    });
-                                });
+            async.waterfall([
+                function (callback) {
+                    Shipment.one({order_id: shipment.order_id}, function (err, ship) {
+                        if (err || ship == null) {
+                            var msg = err ? err : 'Shipment is empty!';
+                            return callback(msg);
+                        }
+                        callback(null, ship);
+                    });
+                },
+                function (ship, callback) {
+                    ShippingMethod.get(shipment.shipping_method.id, function(err, shippingMethod) {
+                        if (err || shippingMethod == null) {
+                            var msg = err ? err : 'Shipping Method is empty!';
+                            return callback(err);
+                        }
+                        ship.setShipping_method(shippingMethod, function (err) {
+                            if (err) return callback(err);
+                            ship.cost = shippingMethod.amount;
+                            ship.save(function (err, data) {
+                                if (err) return callback(err);
+                                callback(null, data);
                             });
                         });
                     });
-
-                });
-
+                },
+                function (ship, callback) {
+                    Order.get(ship.order_id, function (err, order) {
+                        if(err) return callback(err);
+                        order.shipment_total = ship.cost;
+                        order.total = order.item_total + ship.cost;
+                        order.state = 'payment';
+                        order.save(function (err, data) {
+                            if (err) return callback(err);
+                            callback(null, data);
+                        });
+                    });
+                },
+                function (order, callback) {
+                    StateChange.one({order_id: order.id, previous_state: 'delivery'}, function (err, change) {
+                        if (err || change == null) {
+                            StateChange.create({
+                                created_at: new Date(),
+                                name: 'order',
+                                next_state: 'payment',
+                                previous_state: 'delivery',
+                                order_id: order.id,
+                                user_id: user.id
+                            }, function (err) {
+                                if(err) return callback(err);
+                                callback(null, order);
+                            });
+                        } else {
+                            change.created_at = new Date();
+                            change.next_state = 'payment';
+                            change.previous_state = 'delivery';
+                            change.save(function (err) {
+                                if(err) return callback(err);
+                                callback(null, order);
+                            });
+                        }
+                    });
+                }
+            ], function(err, order) {
+                if(err) return res.status(400).json(err);
+                res.status(200).json( order); //return order
             });
         });
     },
@@ -567,53 +620,68 @@ module.exports = {
         var StateChange = req.models.state_changes;
         var User = req.models.users;
 
-        var ip = req.connection.remoteAddress;
+        //var ip = req.connection.remoteAddress;
         var user = JSON.parse(req.cookies.user);
         var body = req.body; //payment
-        log.debug(body);
+        //log.debug(body);
         User.one({email: user.email}, function(err, user) {
             if (err || user == null) {
-                log.err('Login required!');
+                log.error('Login required!');
                 return next(new Error('Login required!'));
             }
-            Order.one({user_id: user.id, completed_at: null}, function (err, order) {
-                if (err || order == null) return next(err);
+            async.waterfall([
+                function(callback) {
+                    if(!body.payment_method) return callback('Payment Method is empty!');
 
-                Payment.one({order_id: order.id}, function(err, payment){
-                    if(err || payment == null){
-                        Payment.create({
-                            amount: order.total,
-                            order_id: order.id,
-                            payment_method_id: body.payment_method.id,
-                            uncaptured_amount: order.total
-                        }, function(err){});
-                    } else {
-                        payment.save({
-                            amount: order.total,
-                            order_id: order.id,
-                            payment_method_id: body.payment_method.id,
-                            uncaptured_amount: order.total
-                        }, function(err){});
-                    }
-                });
+                    Order.one({user_id: user.id, completed_at: null}, function (err, order) {
+                        if (err || order == null) return callback(err);
 
-                order.state = 'complete';
-                order.completed_at = new Date();
-                order.save(function(err, order){
-                    if(err) return next(err);
-
-                    //log.debug(JSON.stringify(order))
+                        Payment.one({order_id: order.id}, function (err, payment) {
+                            if (err || payment == null) {
+                                Payment.create({
+                                    amount: order.total,
+                                    order_id: order.id,
+                                    payment_method_id: body.payment_method.id,
+                                    uncaptured_amount: order.total
+                                }, function (err) {
+                                    if (err) return callback(err);
+                                    callback(null, order);
+                                });
+                            } else {
+                                payment.save({
+                                    amount: order.total,
+                                    order_id: order.id,
+                                    payment_method_id: body.payment_method.id,
+                                    uncaptured_amount: order.total
+                                }, function (err) {
+                                    if (err) return callback(err);
+                                    callback(null, order);
+                                });
+                            }
+                        });
+                    });
+                },
+                function(order, callback) {
+                    order.state = 'confirm';
+                    order.save(function(err, order) {
+                        if (err) return callback(err);
+                        callback(null, order);
+                    });
+                },
+                function(order, callback) {
                     StateChange.create({
                         created_at: new Date(),
                         name: 'order',
-                        next_state: 'complete',
+                        next_state: 'confirm',
                         previous_state: 'payment',
                         order_id: order.id,
                         user_id: user.id
-
                     }, function (err) {
-
+                        if(err) return callback(err);
+                        callback(null, order);
                     });
+                },
+                function(order, callback){
                     StateChange.create({
                         created_at: new Date(),
                         name: 'payment',
@@ -621,10 +689,12 @@ module.exports = {
                         previous_state: null,
                         order_id: order.id,
                         user_id: user.id
-
                     }, function (err) {
-
+                        if(err) return callback(err);
+                        callback(null, order);
                     });
+                },
+                function(order, callback){
                     StateChange.create({
                         created_at: new Date(),
                         name: 'shipment',
@@ -632,33 +702,98 @@ module.exports = {
                         previous_state: null,
                         order_id: order.id,
                         user_id: user.id
-
                     }, function (err) {
-
+                        if(err) return callback(err);
+                        callback(null, order);
                     });
-
+                },
+                function(order, callback){
                     order.payment_state = 'balance_due';
                     order.shipment_state = 'pending';
-                    order.save(function(err){ });
-                    //TODO: Mail delivery
-                    getOrderItems(order.id, req, res,function(err, data){
-                        if(err) return next(err);
-                        //log.debug('>>getOrderItems:'+ JSON.stringify(data));
-                        sendConfirmationMail(data, req.transport);
-                        //log.debug(JSON.stringify(order))
-                        order.confirmation_delivered = true;
-                        order.save(function(err){
-                            res.json(order);
-                        });
-
+                    order.save(function(err){
+                        if(err) return callback(err);
+                        callback(null, order);
                     });
-                });
-
-
+                }
+            ], function(err, order){
+                if(err) {
+                    log.error(err);
+                    return res.status(400).json(err);
+                }
+                res.status(200).json(order);
             });
         });
     },
 
+    confirmOrder: function(req, res, next) {
+        var Order = req.models.orders;
+        var StateChange = req.models.state_changes;
+        var User = req.models.users;
+
+        //var ip = req.connection.remoteAddress;
+        var user = JSON.parse(req.cookies.user);
+        var body = req.body; //payment
+        //log.debug(body);
+        User.one({email: user.email}, function(err, user) {
+            if (err || user == null) {
+                log.err('Login required!');
+                return next(new Error('Login required!'));
+            }
+            async.waterfall([
+                function(callback) {
+                    Order.one({user_id: user.id, state: 'confirm', completed_at: null}, function (err, order) {
+                        if (err || order == null) {
+                            var msg = err ? err: 'There is no user confirm order!'
+                            return callback(msg);
+                        }
+
+                        order.state = 'complete';
+                        order.completed_at = new Date();
+                        order.save(function (err, order) {
+                            if (err) return callback(err);
+                            callback(null, order);
+                        });
+                    });
+                },
+                function(order, callback) {
+                    StateChange.create({
+                        created_at: new Date(),
+                        name: 'order',
+                        next_state: 'complete',
+                        previous_state: 'confirm',
+                        order_id: order.id,
+                        user_id: user.id
+                    }, function (err) {
+                        if(err) return callback(err);
+                        callback(null, order);
+                    });
+                },
+                function(order, callback){
+                    //TODO: Mail delivery
+                    getOrderItems(order.id, req, res,function(err, data){
+                        if(err) return callback(err);
+                        //log.debug('>>getOrderItems:'+ JSON.stringify(data));
+                        sendConfirmationMail(data, req.transport, function(err, message){
+                            if(err) return callback(err);
+                            callback(null, order);
+                        });
+                    });
+                },
+            ], function(err, order){
+                if(err) {
+                    log.error(err);
+                    return res.status(400).json(err);
+                }
+                order.confirmation_delivered = true;
+                order.save(function(err){
+                    //res.status(200).json('Confirm Order successfully!');
+                    module.exports.getOrderById(req, res, next);
+                });
+            });
+        });
+    },
+
+    // order of completed_at is null
     getOrder: function(req, res, next){
         var Order = req.models.orders;
         var User = req.models.users;
@@ -672,7 +807,7 @@ module.exports = {
             }
             Order.one({user_id: user.id, completed_at: null}, function (err, order) {
                 if (err) return next(err);
-                res.json(order);
+                res.status(200).json(order);
             });
         });
     },
@@ -723,7 +858,7 @@ module.exports = {
         var Payment = req.models.payments;
 
         var user = JSON.parse(req.cookies.user);
-        var order_id = req.params.id;
+        var order_id = req.params.id || req.body.id;
 
         User.one({email: user.email}, function(err, user) {
             if (err || user == null) {
@@ -748,21 +883,20 @@ module.exports = {
                     ' INNER JOIN \n'+
                     ' (SELECT a2.*, p.id AS product_id FROM \n'+
                     ' (SELECT a1.* FROM \n'+
-                    ' (SELECT a.variant_id, min(a.id) as min_id \n'+
-                    ' FROM assets a, variants v WHERE a.variant_id = v.id \n'+
+                    ' (SELECT a.viewable_id, min(a.id) as min_id \n'+
+                    ' FROM assets a, variants v WHERE a.viewable_id = v.id \n'+
                     ' GROUP BY v.product_id \n'+
                     ' ) a \n'+
-                    ' INNER JOIN assets a1 ON a1.variant_id = a.variant_id AND a1.id = a.min_id \n'+
+                    ' INNER JOIN assets a1 ON a1.viewable_id = a.viewable_id AND a1.id = a.min_id \n'+
                     ' ) a2 \n'+
                     ' INNER JOIN variants v \n'+
-                    ' ON v.id = a2.variant_id \n'+
+                    ' ON v.id = a2.viewable_id \n'+
                     ' INNER JOIN products p \n'+
                     ' ON p.id = v.product_id \n'+
                     ' ) a3 \n'+
                     ' ON a3.product_id = sv1.product_id;';
 
-
-                log.debug(JSON.stringify(order));
+                //log.debug(JSON.stringify(order));
                 req.db.driver.execQuery(sql, [order.id], function(err, lineItems){
                     order.line_items = lineItems;
                     Shipment.one({order_id: order.id}, function(err, ship){
@@ -783,7 +917,5 @@ module.exports = {
                 })
             });
         });
-    },
-
-
+    }
 };

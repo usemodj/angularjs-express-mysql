@@ -15,31 +15,31 @@ angular.module('frontendApp')
         };
         products.get({id: $stateParams.product_id}, function(err, product){
             $scope.data.product = product;
-            console.log($scope.data.product);
+            //console.log($scope.data.product);
         });
 
         $scope.sortableOptions = {
             change: function(e, ui) {
-                console.log("change");
+                //console.log("change");
                 //console.log(ui);
                 var entry = $scope.data.variants.map(function(item){
                     return item.id;
                 }).join(',');
                 beforeSort = entry;
-                console.log('>>beforeSort:'+beforeSort);
+                //console.log('>>beforeSort:'+beforeSort);
 
             },
             // called after a node is dropped
             stop: function(e, ui) {
-                console.log("stop");
+                //console.log("stop");
 
                 var entry = $scope.data.variants.map(function(item){
                     return item.id;
                 }).join(',');
                 sorted = entry != beforeSort;
-                console.log('>>beforeSort:'+ beforeSort);
-                console.log('>>entry:'+ entry);
-                console.log('>>sorted:'+ sorted);
+                //console.log('>>beforeSort:'+ beforeSort);
+                //console.log('>>entry:'+ entry);
+                //console.log('>>sorted:'+ sorted);
                 // IF sorted == true, updatePosition()
                 if(sorted){
                     $scope.updatePosition(entry);
@@ -68,8 +68,8 @@ angular.module('frontendApp')
 
         $scope.createVariant = function(form){
             $scope.newVariant.product_id = $stateParams.product_id;
-            console.log(form);
-            console.log($scope.newVariant);
+            //console.log(form);
+            //console.log($scope.newVariant);
             variants.save($scope.newVariant, function(err, variant){
                 if(err){
                     console.log(err);

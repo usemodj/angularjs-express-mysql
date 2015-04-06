@@ -5,25 +5,28 @@
         <div class="row">
             <div class="form-group col-xs-6 col-md-6">
 
-                <div ng-repeat="(key, optionType) in data.product.option_types">
-                    <label>{{optionType.presentation}}:</label>{{variant.options[optionType.id]}}
-                    <select style="width:100%" ui-select2  ng-model="variant.options[optionType.id]" placeholder="Pick a option value" >
-                        <option ng-repeat="option_value in optionType.option_values" value="{{option_value.id}}" ng-selected="{{variant.options[optionType.id] == option_value.id.toString()}}">{{option_value.presentation}}</option>
-                    </select>
-
-                </div>
+              <div ng-hide="data.product.option_types">
+                <label>Option Type *:</label>
+                <a class="form-control btn btn-primary" ui-sref="admin.products.edit({id: $stateParams.product_id})"> Select Option Types of the Product ...</a>
+              </div>
+              <div ng-repeat="(key, optionType) in data.product.option_types">
+                <label>Option Type *:</label> {{optionType.presentation}}
+                <select style="width:100%" ui-select2 ng-model="newVariant.option_values[optionType.id]" placeholder="Pick a option value" required>
+                  <option class="form-control" ng-repeat="option_value in optionType.option_values" value="{{option_value.id}}" ng-selected="newVariant.option_values[optionType.id] == option_value.id.toString()">{{option_value.presentation}}</option>
+                </select>
+              </div>
                 <div>
-                    <label>SKU*:</label>
+                    <label>SKU *:</label>
                     <input class="form-control" ng-model="variant.sku" placeholder="Enter sku" required>
                 </div>
                 <div>
-                    <label>Price*:</label>
+                    <label>Price *:</label>
                     <input class="form-control" type="number" min="0" name="price" ng-model="variant.price" required/>
                     <p class="error" ng-show="myform.price.$error.number">Not valid number!</p>
                 </div>
                 <div>
                     <label>Cost price:</label>
-                    <input class="form-control" type="number" min="0" name="cost_price" ng-model="variant.cost_price" required/>
+                    <input class="form-control" type="number" min="0" name="cost_price" ng-model="variant.cost_price"/>
                     <p class="error" ng-show="myform.cost_price.$error.number">Not valid number!</p>
                 </div>
             </div>
@@ -45,7 +48,7 @@
                 </div>
                 <div>
                     <label>Depth:</label>
-                    <input class="form-control" type="number" min="0" name="depth" ng-model="variant.depth" required/>
+                    <input class="form-control" type="number" min="0" name="depth" ng-model="variant.depth" />
                     <p class="error" ng-show="myform.depth.$error.number">Not valid number!</p>
                 </div>
             </div>

@@ -4,12 +4,12 @@
     <form name="myform" class="form-inline" role="form" ng-submit="createPaymentMethod(myform)">
         <div class="row">
             <div class="form-group col-xs-3 col-md-3">
-                <label>Name*:</label><br/>
+                <label>Name *:</label><br/>
                 <input class="form-control" ng-model="newPaymentMethod.name" placeholder="Enter name" required>
             </div>
             <div class="form-group col-xs-6 col-md-6">
-                <label>Description*:</label><br/>
-                <input class="form-control" ng-model="newPaymentMethod.description" placeholder="Enter description" required>
+                <label>Description *:</label><br/>
+                <textarea class="form-control" cols="40" ng-model="newPaymentMethod.description" placeholder="Enter description" required></textarea>
             </div>
             <div class="form-group col-xs-1 col-md-1">
                 <label>Active:</label><br/>

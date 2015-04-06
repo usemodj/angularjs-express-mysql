@@ -93,7 +93,8 @@ angular.module('frontendApp')
                  }
                  //console.log('>> updated product:');
                  //console.log(product);
-                });
+                $scope.message = 'Updated successfully!';
+              });
         };
 
         $scope.cancelEdit = function(){

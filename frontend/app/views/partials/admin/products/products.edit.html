@@ -109,18 +109,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-
-                        <label>Option Types:</label>{{currentProduct.option_type_ids}}
+                    <div id="option_types" class="form-group">
+                        <label>Option Types: <a class="btn btn-primary" ui-sref="admin.products.option_types.list" target="option_types">Create Option Types ...</a>
+                        </label>
                         <select style="width:100%" ui-select2 multiple ng-model="currentProduct.option_type_ids" placeholder="Pick a option type" >
-                            <option ng-repeat="option_type in option_types" value="{{option_type.id}}" ng-selected="{{currentProduct.option_type_ids.indexOf((option_type.id).toString()) > -1}}">{{option_type.presentation}}({{option_type.name}})</option>
+                            <option ng-repeat="option_type in option_types" value="{{option_type.id}}" ng-selected="currentProduct.option_type_ids.indexOf((option_type.id).toString()) > -1">{{option_type.presentation}}({{option_type.name}})</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Taxons:</label>
-                        {{currentProduct.taxon_ids}}
                         <select style="width:100%" ui-select2 multiple ng-model="currentProduct.taxon_ids" placeholder="Pick a taxon">
-                            <option ng-repeat="taxon in taxons" value="{{taxon.id}}" ng-selected="{{currentProduct.taxon_ids.indexOf((taxon.id).toString()) > -1}}"> {{taxon.permalink}}</option>
+                            <option ng-repeat="taxon in taxons" value="{{taxon.id}}" ng-selected="currentProduct.taxon_ids.indexOf((taxon.id).toString()) > -1"> {{taxon.permalink}}</option>
                         </select>
                     </div>
                     <div class="form-group">

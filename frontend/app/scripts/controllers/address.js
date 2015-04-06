@@ -5,7 +5,7 @@ angular.module('frontendApp')
     $scope.order = {};
 
     $scope.useBillingAddress = function(){
-        console.log($scope.order);
+        //console.log($scope.order);
         if($scope.order.use_bill_address){
             $scope.order.ship_address = angular.copy($scope.order.bill_address);
         } else {
@@ -14,8 +14,9 @@ angular.module('frontendApp')
     };
 
     $scope.saveAddress = function(){
-        orders.saveAddress($scope.order, function(err, data){
-            $state.go('orders.delivery');
+        orders.saveAddress($scope.order, function(err, order){
+            if(err) $scope.error = err;
+            else $state.go('orders.delivery', {id: order.id});
         });
     }
 

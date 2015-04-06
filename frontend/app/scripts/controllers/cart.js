@@ -27,8 +27,9 @@ angular.module('frontendApp')
 
     $scope.checkout = function(){
         console.log('>> checkout');
-        orders.updateAddressState(function(err, data){
-            $state.go('orders.address');
+        orders.updateAddressState(function(err, order){
+          //console.log(order);
+          $state.go('orders.address', {id: order.id});
         });
     };
 
