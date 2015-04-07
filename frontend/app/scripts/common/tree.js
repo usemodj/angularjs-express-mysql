@@ -1,5 +1,6 @@
 /*
     convert tree to flatten array
+    visitor(treeData)
  */
 var visitor = function(graph) {
     var i, l,
@@ -29,7 +30,7 @@ var visitor = function(graph) {
             node.depth = depth;
             //nodes.push(clone(node));
             nodes.push(node);
-            console.log(node);
+            //console.log(node);
             if( node.children) {
                 for (i = 0, limit = node.children.length; i < limit; i++) {
                     permalink.push(node.name);
@@ -40,7 +41,7 @@ var visitor = function(graph) {
         }
     };
 
-    console.log('graph.length:'+ graph.length);
+    //console.log('graph.length:'+ graph.length);
     for (i = 0, l = graph.length; i < l; i++) {
         var parent_id = graph[i].parent_id || null;
         var depth = 0;
@@ -52,7 +53,7 @@ var visitor = function(graph) {
 
 /*
     convert flatten array to tree
-    makeTree{ q: arrayData});
+    makeTree{ q: arrayData [,id: 'id', parent_id: 'parent_id, children: 'children]});
  */
 var makeTree = function(options) {
     var children, e, id, o, pid, temp, _i, _len, _ref;

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/frontend/app/scripts/app.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/scripts/common/tree.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/address.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/admin/product.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/admin/variant.js" charset="UTF-8" />
@@ -8,9 +10,11 @@
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/delivery.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/order.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/payment.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/taxon_tree.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/router.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/services/orders.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/services/payments.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/scripts/services/taxons.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/admin/payment_methods/payment_methods.edit.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/admin/payment_methods/payment_methods.list.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/admin/products/products.edit.html" charset="UTF-8" />
@@ -18,11 +22,14 @@
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/admin/variants/variants.edit.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/admin/variants/variants.list.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/carts/carts.list.html" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/frontend/app/views/partials/navbar.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/views/partials/include/navbar.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/views/partials/include/taxonTree.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/orders/layout.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/orders/orders.address.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/orders/orders.delivery.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/orders/orders.payment.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/orders/orders.view.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/views/partials/products/layout.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/views/partials/products/products.list.html" charset="UTF-8" />
   </component>
 </project>

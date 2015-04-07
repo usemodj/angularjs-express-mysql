@@ -1,0 +1,40 @@
+<div role="navigation" style="z-index:3000" class="navbar navbar-default navbar-fixed-top" ng-controller="NavbarCtrl">
+  <div class="container">
+      <div class="navbar-header">
+          <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" ng-href="/" name="top"><img src="images/nodesoft-logo-253x30.png" width="253" height="30" alt="nodesoft.co.kr"></a>
+      </div>
+      <div class="collapse navbar-collapse pull-right">
+          <ul class="nav navbar-nav navbar-right">
+              <li access-level="accessLevels.user" active-nav><a ui-sref="orders.list" translate>My Order</a>
+              </li>
+              <li active-nav><a ui-sref="forums.list" translate>Forums</a>
+              </li>
+              <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.login" translate>Login</a>
+              </li>
+              <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.signup" translate>Signup</a>
+              </li>
+          </ul>
+          <ul style="z-index:100" class="nav navbar-nav navbar-right" access-level="accessLevels.user">
+              <li class="dropdown">
+                  <a data-toggle="dropdown">Welcome, {{ user.email }} <b class="caret"></b></a>
+                  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
+                      <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.orders.list"><span class="glyphicon glyphicon-shopping-cart"></span> Manage Orders</a> </li>
+                      <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.products.list"><span class="glyphicon glyphicon-th-large"></span> Manage Products</a> </li>
+                      <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.forums.list"><i class="fa fa-comment"></i> Manage Forums</a> </li>
+                      <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.users.list"><span class="glyphicon glyphicon-user"></span> Manage Users</a> </li>
+                      <li active-nav><a role="menuitem" ui-sref="user.password"><i class="fa fa-key"></i> Change Password</a></li>
+                      <li role="presentation"><a role="menuitem" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                  </ul>
+              </li>
+          </ul>
+      </div>
+      <!--/.navbar-collapse -->
+  </div>
+</div>
+<!--/.navbar -->

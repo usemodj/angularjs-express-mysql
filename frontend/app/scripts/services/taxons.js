@@ -11,7 +11,7 @@ angular.module('frontendApp')
     return {
 
         index: function () { //GET
-            return resource.query();
+             return resource.query();
         },
         get: function(data, callback){ //GET
             var cb = callback || angular.noop;
@@ -41,7 +41,20 @@ angular.module('frontendApp')
         remove: function(data){ //DELETE
             return resource.remove(data);
         },
-
+        list: function( callback) {
+          var cb = callback || angular.noop;
+          $http.get('/taxons')
+            .success(function(data, status, headers, config){
+              console.log('>> status:'+ status);
+              return cb(null, data);
+            }).error(function(data, status, headers, config) {
+              console.log('>> error data:');
+              console.log(data);
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              return cb(data);
+            });
+        },
         updatePosition: function(entry, callback){
             //entry: sorted ids = '3,1,2.4,5'
             var cb = callback || angular.noop;
@@ -55,7 +68,7 @@ angular.module('frontendApp')
                     console.log(data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb( data);
                 });
         },
         searchTaxonomies: function(conditions, callback){
@@ -70,7 +83,7 @@ angular.module('frontendApp')
                     console.log(data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb(data);
                 });
         }
 

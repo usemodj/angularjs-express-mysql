@@ -6,13 +6,12 @@ module.exports = {
         Taxonomy.find().order('position').order('-id').all(function (err, taxonomies) {
             if(err) return next(err);
             //console.log('>> taxonomies:'+ JSON.stringify(taxonomies));
-            res.json(taxonomies);
+            res.status(200).json(taxonomies);
         });
     },
 
     taxonomy: function(req, res, next){
-        console.log('>> req.params.id:'+ req.params.id);
-
+        //console.log('>> req.params.id:'+ req.params.id);
         var id = req.params.id;
         var Taxonomy = req.models.taxonomies;
         var Taxon = req.models.taxons;

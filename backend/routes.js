@@ -358,7 +358,7 @@ var routes = [
         path: '/taxons',
         httpMethod: 'GET',
         middleware: [TaxonCtrl.index],
-        accessLevel: accessLevels.admin
+        accessLevel: accessLevels.public
     },
 
     //Shipping Method Resource
