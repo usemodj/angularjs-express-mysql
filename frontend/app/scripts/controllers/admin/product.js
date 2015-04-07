@@ -8,7 +8,6 @@ angular.module('frontendApp')
         $scope.conditions = {};
 
         $scope.pageChanged = function() {
-
             $scope.searchProducts();
             //$state.go('admin.user.home',{page: $scope.page});
             //$location.path('/users/page/'+$scope.page);
@@ -22,7 +21,7 @@ angular.module('frontendApp')
                 page: $scope.page
             }, function(err, data){
                 //console.log('>> data:'+ JSON.stringify(data));
-                if(!err && err === null) {
+                if(!err) {
                     $scope.data.products = data.products;
                     $scope.totalItems = data.count;
                     $scope.page = data.page;

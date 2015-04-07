@@ -4,11 +4,23 @@ angular.module('frontendApp')
 .controller('ProductCtrl', ['$scope', '$state', '$stateParams', 'products', function ($scope, $state, $stateParams, products) {
     $scope.data = {};
     $scope.conditions = {};
+    $scope.page = $stateParams.page;
 
     $scope.listProducts = function(){
-        products.listProducts($scope.conditions,function(err, products){
-            $scope.data.products = products;
+        $scope.conditions.page = $scope.page;
+        products.listProducts($scope.conditions,function(err, data){
+          if(!err){
+            //console.log(data);
+            $scope.data.products = data.products;
+            $scope.totalItems = data.count;
+            $scope.page = data.page;
+          }
         });
+    };
+    $scope.pageChanged = function() {
+      $scope.listProducts();
+      //$state.go('admin.user.home',{page: $scope.page});
+      //$location.path('/users/page/'+$scope.page);
     };
 
     $scope.listProducts();

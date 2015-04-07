@@ -94,8 +94,22 @@ angular.module('frontendApp.router', ['ui.router'])
                 url: ':id',
                 templateUrl: 'views/partials/products/products.view.html',
                 controller: 'ViewProductCtrl'
-            })
-            ;
+            });
+        $stateProvider
+          .state('taxons', {
+            abstract: true,
+            url: '/taxons/',
+            //template: '<ui-view/>',
+            templateUrl: 'views/partials/products/layout.html',
+            data: {
+              access: access.public
+            }
+          })
+          .state('taxons.products', {
+            url: ':id/products/:page?',
+            templateUrl: 'views/partials/taxons/taxons.products.html',
+            controller: 'TaxonCtrl'
+          });
         // checkout controllers
         $stateProvider
             .state('orders', {

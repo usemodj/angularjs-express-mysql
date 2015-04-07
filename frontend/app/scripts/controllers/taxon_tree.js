@@ -8,8 +8,19 @@
  * Controller of the frontendApp
  */
 angular.module('frontendApp')
-  .controller('TaxonTreeCtrl', ['$scope','taxons', function ($scope, taxons) {
+  .controller('TaxonTreeCtrl', ['$scope', '$state', '$stateParams','taxons', function ($scope, $state, $stateParams, taxons) {
     $scope.data = {};
+    $scope.page = $stateParams.page;
+
+    $scope.$watch( 'taxontree.currentNode', function( newObj, oldObj ) {
+      if( $scope.taxontree && angular.isObject($scope.taxontree.currentNode) ) {
+        console.log( 'Node Selected!!' );
+        console.log( $scope.taxontree.currentNode );
+        var taxon = $scope.taxontree.currentNode;
+        $state.go('taxons.products', {id: taxon.id});
+      }
+    }, false);
+
     $scope.taxonTree = function(){
       taxons.list(function(err, data){
         console.log(data);
@@ -18,16 +29,32 @@ angular.module('frontendApp')
       });
     };
 
-    $scope.$watch( 'taxontree.currentNode', function( newObj, oldObj ) {
-      if( $scope.taxontree && angular.isObject($scope.taxontree.currentNode) ) {
-        console.log( 'Node Selected!!' );
-        console.log( $scope.taxontree.currentNode );
-        var taxon = $scope.taxontree.currentNode;
-        //TODO: get taxon products
-        //taxons.getProducts(taxon, function(err, products){
-        //});
-      }
-    }, false);
-
     $scope.taxonTree();
+  }])
+  .controller('TaxonCtrl', ['$scope', '$state', '$stateParams','taxons', function ($scope, $state, $stateParams, taxons) {
+    $scope.data = {};
+    $scope.conditions = {};
+    $scope.page = $stateParams.page;
+    $scope.taxonId = $stateParams.id;
+
+    $scope.taxonProducts = function(){
+      $scope.conditions.id = $scope.taxonId;
+        $scope.conditions.page = $scope.page;
+      taxons.getProducts($scope.conditions, function(err, data){
+        if(!err){
+          console.log(data);
+          $scope.data.products = data.products;
+          $scope.totalItems = data.count;
+          $scope.page = data.page;
+        }
+      });
+    };
+
+    $scope.pageChanged = function() {
+      $scope.taxonProducts();
+      //$state.go('admin.user.home',{page: $scope.page});
+      //$location.path('/users/page/'+$scope.page);
+    };
+
+    $scope.taxonProducts();
   }]);

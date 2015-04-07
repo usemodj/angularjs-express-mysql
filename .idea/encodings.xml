@@ -10,6 +10,7 @@
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/delivery.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/order.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/payment.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/product.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/taxon_tree.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/router.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/services/orders.js" charset="UTF-8" />
@@ -31,5 +32,6 @@
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/orders/orders.view.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/products/layout.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/products/products.list.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/views/partials/taxons/taxons.products.html" charset="UTF-8" />
   </component>
 </project>

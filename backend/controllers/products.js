@@ -175,7 +175,6 @@ module.exports = {
             , function(err, products){
                 if(err) return next(err);
                 //console.log('>>products:'+ JSON.stringify(products));
-
                 req.db.driver.execQuery('SELECT count(*) AS cnt FROM ('+sql +') p LIMIT 1;', function(err, row){
                     if(err) return next(err);
                     //console.log('>>row:'+ JSON.stringify(row));
@@ -184,7 +183,6 @@ module.exports = {
                         count: row[0].cnt,
                         page: page
                     });
-
                 });
             }
         );
@@ -417,15 +415,16 @@ module.exports = {
     // Public search
     listProducts: function(req, res, next){
         var Query = req.db.driver.query;
-        //log.debug('>>listProducts');
-        log.debug( req.body);
+        var perPages = 10;
+        var page = parseInt(req.params.page || req.body.page) || 1;
+        if( isNaN(page) || page < 1) page = 1;
         var name = req.body.name || '';
         try {
             name = Query.escape('%' + name + '%').toLowerCase();
         } catch(err){
             log.error(err);
         }
-        var q = ' SELECT p.id, p.name, va.price, va.file_path, va.alt,p.available_on \n'+
+        var sql = ' SELECT p.id, p.name, va.price, va.file_path, va.alt,p.available_on \n'+
             ' FROM products p  \n'+
             ' 	LEFT JOIN  (SELECT v.*, a.attachment_file_path AS file_path, a.alt \n'+
             ' 				FROM variants v LEFT JOIN assets a ON v.id = a.viewable_id  \n'+
@@ -434,13 +433,19 @@ module.exports = {
         ' WHERE p.deleted_at IS NULL AND (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
         '   AND p.available_on <= NOW() AND va.price IS NOT NULL \n'+
         '   AND (LOWER(p.name) LIKE ? OR LOWER(p.description) LIKE ?) \n'+
-        ' ORDER BY p.available_on DESC;';
-        log.debug(q);
-
-        req.db.driver.execQuery(q, [name, name], function(err, products){
+        ' ORDER BY p.available_on DESC ';
+        //log.debug(sql);
+        req.db.driver.execQuery( sql + ' LIMIT ? OFFSET ?;',[name, name, perPages, (page - 1)* perPages], function(err, products){
             if(err) return next(err);
-
-            res.json(products);
+            req.db.driver.execQuery('SELECT count(*) AS cnt FROM ('+sql +') p LIMIT 1;', [name, name], function(err, row){
+                if(err) return next(err);
+                //console.log('>>row:'+ JSON.stringify(row));
+                res.status(200).json({
+                    products: products,
+                    count: row[0].cnt,
+                    page: page
+                });
+            });
         });
     },
 

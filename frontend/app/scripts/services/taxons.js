@@ -73,10 +73,10 @@ angular.module('frontendApp')
         },
         searchTaxonomies: function(conditions, callback){
             var cb = callback || angular.noop;
-            console.log(conditions);
+            //console.log(conditions);
             $http.post('/admin/taxons/search/', conditions)
                 .success(function(data, status, headers, config){
-                    console.log('>> status:'+ status);
+                    //console.log('>> status:'+ status);
                     return cb(null, data);
                 }).error(function(data, status, headers, config) {
                     console.log('>> error data:');
@@ -85,6 +85,21 @@ angular.module('frontendApp')
                     // or server returns response with an error status.
                     return cb(data);
                 });
+        },
+        getProducts: function(conditions, callback){
+          var cb = callback || angular.noop;
+          //console.log(conditions);
+          $http.post('/taxons/products/', conditions)
+            .success(function(data, status, headers, config){
+              //console.log('>> status:'+ status);
+              return cb(null, data);
+            }).error(function(data, status, headers, config) {
+              console.log('>> error data:');
+              console.log(data);
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              return cb(data);
+            });
         }
 
     };

@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="panel-body" >
+    <form name="form" class="form-inline" role="form" ng-submit="taxonProducts(form)">
+      <div class="form-group">
+        <div class="row">
+          <div class="form-group col-xs-8 col-md-8">
+            <input class="form-control" ng-model="conditions.name" placeholder="Search">
+          </div>
+          <div class="form-group col-xs-2 col-md-2">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <br/>
+
+    <div class="">
+      <ul id="products" class="inline product-listing">
+        <li class="columns three alpha" ng-repeat="item in data.products">
+          <div class="clearfix">
+            <div class="product-image ">
+              <a ui-sref="products.view({id: item.id})">
+                <img width="200px" height="190px" ng-src="/uploads/images/{{item.file_path}}" alt="{{item.alt}}"/>
+              </a>
+            </div>
+            <a class="info" ui-sref="products.view({id: item.id})">{{item.name}}</a>
+            <span class="price selling">{{item.price}}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="row">
+      <div class="col-xs-2 col-md-2">Page:{{page}}/{{numPages}} ({{totalItems}})</div>
+      <div class="col-xs-8  col-md-8">
+        <pagination total-items="totalItems" ng-model="page" max-size="3" items-per-page="10"
+                    num-pages="numPages" ng-change="pageChanged()"></pagination>
+      </div>
+      <div class="col-xs-2 col-md-2">
+        <a ui-sref="admin.products.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
+          <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+      </div>
+    </div>
+  </div>
+</div>
