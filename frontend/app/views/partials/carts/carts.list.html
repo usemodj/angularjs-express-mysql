@@ -45,9 +45,9 @@
         <div class="col-xs-6  col-md-6">
         </div>
         <div class="col-xs-4 col-md-4">
-            <button type="submit" class="btn btn-primary" >
+            <button type="submit" class="btn btn-primary"  ng-disabled="!myform.$dirty">
                 <span class="glyphicon glyphicon-repeat"></span> Update </button>
-            <a ng-click="checkout()" class="btn btn-primary" >
+            <a ng-click="checkout()" class="btn btn-primary" ng-disabled="myform.$dirty">
                 <span class="glyphicon glyphicon-send"></span> Checkout </a>
         </div>
     </div>

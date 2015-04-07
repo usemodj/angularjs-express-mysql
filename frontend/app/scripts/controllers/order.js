@@ -28,6 +28,12 @@ angular.module('frontendApp')
 .controller('ViewOrderCtrl',['$scope','$state', '$stateParams', 'orders', function ($scope, $state, $stateParams, orders) {
     $scope.data = {};
 
+    $scope.confirmOrder = function() {
+      orders.confirmOrder({id: $stateParams.id}, function(err, data){
+        if(err) $scope.error = err;
+        else $scope.data.order = data;
+      });
+    };
     $scope.getOrder = function(){
         orders.get({id: $stateParams.id}, function(err, data){
             $scope.data.order = data;
