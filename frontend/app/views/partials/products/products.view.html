@@ -2,16 +2,18 @@
     <div class="row">
     <div id="product-images" class="col-md-3 col-push-0">
         <div class="row">
-            <div id="main-image">
-                <img width="340" height="340" ng-src="{{mainImage}}"/>
+          <div style="height:340px;display: table;position: relative;">
+            <div id="main-image" style="display:table-cell;vertical-align:middle;">
+                <div style="margin-left: auto;margin-right: auto;"><img width="340" ng-src="{{mainImage}}"/></div>
             </div>
+          </div>
         </div>
         <div class="row">
            <div id="thumbnails">
                <ul id="product-thumbnails" class="thumbnails inline">
                    <li class="" ng-repeat="item in data.assets">
-                       <a href="" alt="{{item.alt}}" ng-click="viewImage(item.file_path)">
-                           <img width="72" height="72" ng-src="/uploads/images/{{item.file_path}}"/>
+                       <a href="" alt="{{item.alt}}" ng-click="viewImage(item.file_path)" class="btn btn-default">
+                           <img width="83x" ng-src="/uploads/images/{{item.file_path}}"/>
                        </a>
                    </li>
                </ul>
