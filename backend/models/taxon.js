@@ -65,7 +65,7 @@ module.exports = function(orm, db) {
         }
 
     }, {
-        //cache: false,
+        cache: false,
         autoFetch: true,
         autoFetchLimit: 1,
         methods: {
@@ -172,9 +172,10 @@ module.exports = function(orm, db) {
      if(err) console.log(err);
      });
      */
-    Taxon.rebuildTreeAll = function(){
+    Taxon.rebuildTreeAll = function( callback){
         Taxon.rebuildTree(null,0,-1, function(err, data){
-            if(err) console.log(err);
+            if(err) return callback(err);
+            return callback(null, data);
         });
     };
 

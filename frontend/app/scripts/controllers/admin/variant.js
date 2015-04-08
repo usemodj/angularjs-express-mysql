@@ -13,9 +13,13 @@ angular.module('frontendApp')
         $scope.newVariant = {
             option_values:{}
         };
+
         products.get({id: $stateParams.product_id}, function(err, product){
+          if(!err) {
+            console.log('>>product:')
+            console.log(product);
             $scope.data.product = product;
-            //console.log($scope.data.product);
+          }
         });
 
         $scope.sortableOptions = {

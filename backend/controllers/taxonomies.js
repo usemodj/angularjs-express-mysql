@@ -1,5 +1,5 @@
 var async = require('async');
-
+var log = require('log4js').getLogger('taxonomies');
 module.exports = {
     index: function(req, res, next){
         var Taxonomy = req.models.taxonomies;
@@ -18,12 +18,13 @@ module.exports = {
 
         Taxonomy.get(id, function(err, taxonomy){
             if(err) return next(err);
+            log.debug(taxonomy);
             //delete taxonomy.taxons;
-            Taxon.find({taxonomy_id: taxonomy.id}).order('position').run(function(err, data){
-                taxonomy.taxons = data;
-                //console.log('>> taxonomy:'+ JSON.stringify(taxonomy));
+            //Taxon.find({taxonomy_id: taxonomy.id}).order('position').run(function(err, data){
+            //    log.debug(data);
+            //    taxonomy.taxons = data;
                 res.status(200).json(taxonomy);
-            });
+            //});
         });
 
     },
@@ -56,9 +57,11 @@ module.exports = {
                         });
                     }, function(err){
                         if(err) return next(err);
-                        Taxon.rebuildTreeAll();
-                        console.log('Taxonomy updated!');
-                        res.status(200).json(taxonomy);
+                        Taxon.rebuildTreeAll(function(err, data){
+                            if(err) return res.status(400).json('Taxonomy does not updated!');
+                            console.log('Taxonomy updated!');
+                            res.status(200).json(taxonomy);
+                        });
                     });
                 });
 

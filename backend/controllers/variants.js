@@ -120,7 +120,7 @@ module.exports = {
 
     // GET request
     variant: function(req, res, next){
-        console.log(req.params );
+        log.debug(req.params );
 
         var id = req.params.id;
         var Variant = req.models.variants;

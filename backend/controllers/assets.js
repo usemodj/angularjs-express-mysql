@@ -6,6 +6,10 @@ var gm = require('gm');
 var fs = require("fs"),
     rimraf = require("rimraf"),
     mkdirp = require("mkdirp");
+
+var imageWidth = 340,
+    imageHeight = 340;
+
 //
 //var uploadedFilesPath = settings.upload_path + 'images/';
 //function onDeleteFile(req, res) {
@@ -84,7 +88,7 @@ module.exports = {
     index: function(req, res, next){
         var Product = req.models.products;
         var product_id = req.params.product_id;
-
+        log.debug(req.params);
         Product.get(product_id, function(err, product){
             //log.debug(product);
             var variantSql = 'SELECT va.id, va.price, va.sku, va.product_id, va.position, va.is_master, r.options ' +
@@ -96,7 +100,7 @@ module.exports = {
                 '  GROUP BY o.id) r ' +
                 ' ON va.id = r.id WHERE va.deleted_at IS NULL AND va.product_id = ? ORDER BY position, id DESC;';
             req.db.driver.execQuery(variantSql, [product_id], function(err, variants){
-                product.variants = variants;
+                if(!err) product.variants = variants;
                 var assetSql = 'SELECT a.*, v.sku, v.options FROM assets a INNER JOIN ' +
                 ' (SELECT va.id, va.price, va.sku, va.product_id, va.position, va.is_master, va.deleted_at, r.options ' +
                 ' FROM variants va LEFT JOIN ' +
@@ -109,7 +113,8 @@ module.exports = {
                 ' WHERE v.deleted_at IS NULL AND v.product_id = ? ' +
                 ' ORDER BY a.position, a.id;';
                 req.db.driver.execQuery(assetSql, [product_id], function(err, assets){
-                    res.json({
+                    log.debug(assets);
+                    res.status(200).json({
                         product: product,
                         assets: assets
                     });
@@ -125,8 +130,6 @@ module.exports = {
      */
     create : function(req, res, next){
         var Asset = req.models.assets;
-        var imageWidth = 340,
-            imageHeight = 340;
 
         log.debug(req.body);
 //        log.debug(req.files);
@@ -160,7 +163,7 @@ module.exports = {
                     });
                     if(err) {
                         log.error( err);
-                        return res.status(400).json(JSON.stringify(err));
+                        return res.status(500).json(JSON.stringify(err));
                     }
                     //else log.info('Image resizing done!');
                     gm(destPath).options({imageMagick: true})
@@ -241,7 +244,7 @@ module.exports = {
         log.debug(req.files);
         var asset = JSON.parse(req.body.asset),
             file = req.files.file;
-
+        if(!asset) return res.status(500).json('asset not found');
         if(!asset.variant || asset.variant.id == null) asset.variant = asset.master_variant;
         log.info(asset.variant);
         var variant_id = asset.variant.id;
@@ -252,11 +255,14 @@ module.exports = {
                 Variant.get(variant_id, function(err, variant){
                     //log.debug('>> variant: '+ JSON.stringify(variant));
                     data.alt = file_alt;
-                    data.setVariant(variant, function(err){
-
-                    });
-                    res.status(200).json(data);
-
+                    data.variant = variant;
+                    data.save(function(err){
+                        if(err) {
+                            log.error(err);
+                            return res.status(500).json(err);
+                        }
+                        res.status(200).json(data);
+                    })
                 });
             });
             return;
@@ -275,36 +281,41 @@ module.exports = {
         // create image file asset
         mkdirp(uploadPath, function(err){
             if(err) return next(err);
-            var readStream = fs.createReadStream(file_fullpath);
-            gm(readStream, 'img.jpg')
-                .options({imageMagick: true})
-                .resize(240, 240)
-                .write(destPath, function(err){
-                    if(err) log.error('Image resizing failed!');
-                    else log.info('Image resizing done!');
-                    fs.unlink(file.path, function(err){
-                        if(!err) log.info('Image removed!');
-                    });
-                    gm(destPath).options({imageMagick: true})
-                        .identify(function(err, data){
-                            if(!err) {
-                                 var conditions = {
-                                    attachment_width: data.size.width,
-                                    attachment_height: data.size.height,
-                                    attachment_file_size: data.Filesize,
-                                    position: 0,
-                                    attachment_content_type: content_type,
-                                    attachment_file_name: file_name,
-                                    attachment_file_path: file_path,
-                                    alt: file_alt,
-                                    variant_id: variant_id
-                                };
-                                Asset.create(conditions, function( err, asset){
-                                    res.json(asset);
-                                });
-                            }
-                        });
+            var readStream = fs.createReadStream(file.path);
+            var imageMagic = (asset.resize)? gm(readStream, 'img.jpg').options({imageMagick: true}).resize(imageWidth, imageHeight)
+                : gm(readStream, 'img.jpg').options({imageMagick: true});
+            //.
+            imageMagic.write(destPath, function(err){
+                rimraf(file.path, function(err){
+                    if(!err) log.info('Temp image removed!');
                 });
+                if(err) {
+                    log.error( err);
+                    return res.status(500).json(JSON.stringify(err));
+                }
+                //else log.info('Image resizing done!');
+                gm(destPath).options({imageMagick: true})
+                    .identify(function(err, data){
+                        if(!err) {
+                            var conditions = {
+                                attachment_width: data.size.width,
+                                attachment_height: data.size.height,
+                                attachment_file_size: data.Filesize,
+                                position: 0,
+                                attachment_content_type: content_type,
+                                attachment_file_name: file_name,
+                                attachment_file_path: file_path,
+                                alt: file_alt,
+                                viewable_id: variant_id,
+                                viewable_type: 'variant'
+                            };
+                            Asset.create(conditions, function( err, asset){
+                                log.info('Asset created!');
+                                res.status(200).json(asset);
+                            });
+                        }
+                    });
+            });
         });
     },
 

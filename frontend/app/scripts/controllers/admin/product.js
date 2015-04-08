@@ -66,6 +66,7 @@ angular.module('frontendApp')
         };
 
         products.get({id: $stateParams.id}, function(err, data){
+            console.log(data);
             $scope.currentProduct = data;
             //console.log($scope.currentProduct.taxons);
             if($scope.currentProduct.option_types){
@@ -83,7 +84,7 @@ angular.module('frontendApp')
 
         $scope.updateProduct = function(){
             //console.log('>> currentProduct:');
-            //console.log($scope.currentProduct)
+            console.log($scope.currentProduct)
             products.update($scope.currentProduct
               , function(err, product){
                  if(err){

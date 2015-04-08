@@ -78,14 +78,13 @@ angular.module('frontendApp')
             console.log(conditions);
             $http.get('/admin/products/'+ conditions.product_id + '/assets')
                 .success(function(data, status, headers, config){
-                    console.log('>> status:'+ status);
                     return cb(null, data);
                 }).error(function(data, status, headers, config) {
                     console.log('>> error data:');
                     console.log(data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-                    return cb(status, data);
+                    return cb(data);
                 });
         }
 

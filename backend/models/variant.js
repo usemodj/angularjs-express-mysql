@@ -80,6 +80,6 @@ module.exports = function(orm, db) {
     // creates column 'customer_id' in 'users' table
     // User.hasOne('customer', db.models.customers, { required: true, reverse:'users', autoFetch: true });
     Variant.hasOne('product', db.models.products, { reverse: 'variants'});
-    Variant.hasMany('option_values', db.models.option_values, {}, {key:true});
+    Variant.hasMany('option_values', db.models.option_values, {}, { key:true});
     //Variant.sync();
 };

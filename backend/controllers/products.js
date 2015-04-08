@@ -121,6 +121,7 @@ req.db.
  */
 var log = require('log4js').getLogger("products");
 var markdown = require('markdown').markdown;
+var _ = require('underscore');
 
 module.exports = {
 
@@ -207,35 +208,42 @@ module.exports = {
     product: function(req, res, next) {
         var Product = req.models.products;
         var OptionType = req.models.option_types;
-
-        var id = req.params.id;
+        var Variant = req.models.variants;
+        var id = req.params.id || req.body.id;
         //console.log(req.params);
         Product.get( id,function(err, product) {
             if (err) return next(err);
-
-            req.models.variants.one({product_id: product.id, is_master: true}, function(err, variant){
-                if (err) return next(err);
-                product.variant = variant;
-                //console.log('>> variant:'+ JSON.stringify(variant));
+            log.debug('>> product: ' + JSON.stringify(product));
+            //Product.findByVariants({ product_id: product.id, is_master: true}, function(err, variants){
+            //    log.debug('>> product variants: ' + JSON.stringify(variants));
+            //});
+            Variant.one({product_id: product.id, is_master: true}, function(err, variant){
+                if (!err) product.variant = variant;
+                log.debug('>> variant:'+ JSON.stringify(variant));
 
                 req.db.driver.execQuery('SELECT o.* FROM products p, products_option_types po, option_types o ' +
                       ' WHERE p.id = po.products_id AND po.option_types_id = o.id AND p.id = ? '+
                       ' ORDER BY position ',[product.id], function( err, data){
-                    product.option_types = data;
-
+                //product.getOptionTypes(function(err, data){
+                    if(!err) product.option_types = data;
+                    log.debug('>> product.option_types: '+ JSON.stringify(product.option_types));
                     async.eachSeries(product.option_types, function(optionType, callback){
-                        console.log(optionType);
+                        //console.log(optionType);
                         OptionType.get(optionType.id, function(err, data){
+                            if(err) return res.status(500).json(err);
                             data.getValues(function(err, values){
+                                if(err) return res.status(500).json(err);
                                 optionType.option_values = values;
                                 callback();
                             });
                         });
                     }, function(err){
+                        if(err) return res.status(500).json(err);
                         var taxons_sql= 'SELECT t.* FROM products p, products_taxons pt, taxons t ' +
                             ' WHERE p.id = pt.products_id AND pt.taxons_id = t.id AND p.id = ? ' +
                             ' ORDER BY position; ';
                         req.db.driver.execQuery(taxons_sql, [product.id], function(err, data){
+                            if(err) return res.status(500).json(err);
                             product.taxons = data;
                             //console.log('>> product:' + JSON.stringify(product));
                             res.status(200).json( product);
@@ -338,12 +346,12 @@ module.exports = {
        var OptionType = req.models.option_types;
        var Variant = req.models.variants;
        // log.debug('>>req.body:');
-       // log.debug(req.body);
+        log.debug(req.body);
        //console.log(req.models.products);
        var productData = req.body;
        var taxon_ids = productData.taxon_ids || [];
        var option_type_ids = productData.option_type_ids || [];
-       var variant_id = productData.variant.id;
+       var masterVariant = productData.variant;
 
        Product.get(productData.id, function(err, product){
           if(err) return res.status(500).json(err);
@@ -351,53 +359,76 @@ module.exports = {
            productData['taxons'] = [];
            //log.debug(productData);
 
-           delete product.option_types;
-           delete product.taxons;
-           var conditions = {
-               name: productData.name,
-               description: productData.description,
-               available_on: productData.available_on,
-               slug: productData.slug,
-               meta_description: productData.meta_description,
-               meta_keywords: productData.meta_keywords
-
-           };
-           product.save(productData, function(err){
+           //delete product.option_types;
+           //delete product.taxons;
+           //delete product.variants;
+           //var conditions = {
+           //    name: productData.name,
+           //    description: productData.description,
+           //    available_on: productData.available_on,
+           //    slug: productData.slug,
+           //    meta_description: productData.meta_description,
+           //    meta_keywords: productData.meta_keywords
+           //
+           //};
+           product.save(productData, function(err, product){
                if(err) return res.status(500).json(err);
                log.debug('>> product data saved!');
-               Variant.get(variant_id, function(err, variant){
-                   if(err) return res.status(500).json(err);
-                   productData.variant.is_master = true;
-                   variant.save(productData.variant, function(err){
-                       if(err) return res.json(500, err);
-                       log.debug('>> variant data saved!');
-                       var optionTypes = [];
-                       async.eachSeries(option_type_ids, function(option_type_id, callback){
-                           OptionType.get(option_type_id, function(err, optionType){
-                               optionTypes.push(optionType);
-                               callback();
-                           });
-                       }, function(err){
-                           product.setOptionTypes(optionTypes);
-                           var taxons = [];
-                           async.eachSeries(taxon_ids, function(taxon_id, callback){
-                               Taxon.get(taxon_id, function(err, taxon){
-                                   taxons.push(taxon);
-                                   callback();
+               async.waterfall([
+                   function(callback){
+                       if(!masterVariant) return callback(null, product);
+                       Variant.one({product_id: product.id, is_master: true}, function(err, variant){
+                           if(err || !variant) {
+                               masterVariant.is_master = true;
+                               masterVariant.product_id = product.id;
+                               Variant.create(masterVariant, function(err){
+                                   if(!err) log.debug('>> variant data created!');
+                                   return callback(null, product);
                                });
-                           }, function(err){
-                               product.setTaxons(taxons);
-                               product.save();
-                               res.status(200).json(product);
+                           }
+                           variant.save( masterVariant, function(err) {
+                               if(!err) log.debug('>> variant data saved!');
+                               return callback(null, product);
                            });
                        });
-
+                   }, function(product, callback){
+                       var optionTypes = [];
+                       async.eachSeries(option_type_ids, function(option_type_id, cb){
+                           OptionType.get(option_type_id, function(err, optionType){
+                               if(!err && optionType) optionTypes.push(optionType);
+                               cb();
+                           });
+                       }, function(err){
+                           //log.debug('>> optionTypes: '+ JSON.stringify(optionTypes));
+                           product.option_types = optionTypes;
+                           product.save(function(err){
+                               callback(null, product);
+                           });
+                       });
+                   },
+                   function(product, callback){
+                       var taxons = [];
+                       async.eachSeries(taxon_ids, function(taxon_id, cb){
+                           Taxon.get(taxon_id, function(err, taxon){
+                               if(!err && taxon) taxons.push(taxon);
+                               cb();
+                           });
+                       }, function(err){
+                           product.taxons = taxons;
+                           product.save(function(err){
+                               callback(null, product);
+                           });
                    });
+                   }
+               ], function(err, product){
+                   //product.save(function(err, product){
+                       if(err) return res.status(500).json( err);
+                       log.info('>> saved product: '+ JSON.stringify(product));
+                       res.status(200).json(product);
+                   //});
                });
            });
-
        });
-
     },
 
     deleteProduct: function(req, res, next){

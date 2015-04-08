@@ -149,6 +149,7 @@ angular.module('frontendApp')
 
         $scope.searchAssets = function(){
             assets.getAssets({product_id: $stateParams.product_id}, function(err, data){
+                console.log(data);
                 $scope.data.product = data.product;
                 $scope.data.assets = data.assets;
                 $scope.copy = [];
