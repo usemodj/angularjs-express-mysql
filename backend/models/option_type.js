@@ -53,5 +53,5 @@ module.exports = function(orm, db) {
     //Variant.hasOne('product', db.models.products, { reverse: 'variants', autoFetch:false, autoFetchLimit:1 });
     //Variant.hasOne('product', db.models.products, { autoFetch:true, autoFetchLimit:2 });
     //OptionType.hasMany('products', db.models.products, {}, {});
-    //OptionType.sync();
+
 };
