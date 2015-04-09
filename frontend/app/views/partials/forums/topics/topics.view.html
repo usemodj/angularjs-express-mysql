@@ -12,8 +12,8 @@
         <div class="panel-heading">{{item.name}}</div>
         <div class="panel-body" ng-bind-html="item.content | markdown"></div>
         <div class="well well-sm text-right">
-            <a class="btn btn-default" ng-click="editPost(item)">Edit</a>
-            <a ng-hide="item.root" class="btn btn-default" ng-confirm-click="Are you sure?" ng-click="deletePost(item)">Delete</a>
+            <a class="btn btn-default btn-xs" ng-click="editPost(item)">Edit</a>
+            <a ng-hide="item.root" class="btn btn-default btn-xs" ng-confirm-click="Are you sure?" ng-click="deletePost(item)">Delete</a>
         </div>
     </div>
 

@@ -15,10 +15,10 @@
                   <label>Option Type *:</label>
                   <a class="form-control btn btn-primary" ui-sref="admin.products.edit({id: $stateParams.product_id})" target="product"> Select Option Types of the Product ...</a>
                 </div>
-                <div ng-repeat="(key, optionType) in data.product.option_types">
+                <div ng-repeat="(key, optionType) in data.product.option_types | orderBy:'position' ">
                     <label>Option Type *:</label> {{optionType.presentation}}
                     <select style="width:100%" ui-select2 ng-model="newVariant.option_values[optionType.id]" placeholder="Pick a option value" required>
-                        <option class="form-control" ng-repeat="option_value in optionType.option_values" value="{{option_value.id}}" ng-selected="newVariant.option_values[optionType.id] == option_value.id.toString()">{{option_value.presentation}}</option>
+                        <option class="form-control" ng-repeat="option_value in optionType.option_values | orderBy:'position' " value="{{option_value.id}}" ng-selected="newVariant.option_values[optionType.id] == option_value.id.toString()">{{option_value.presentation}}</option>
                     </select>
                     <div ng-hide="optionType.option_values">
                       <a class="btn-primary" ui-sref="admin.products.option_types.edit({id: optionType.id})" target="option_values"> Create Option Values of {{optionType.presentation}}...</a>

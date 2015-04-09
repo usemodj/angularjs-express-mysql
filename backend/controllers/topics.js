@@ -310,9 +310,18 @@ module.exports = {
            post.name = body.name;
            post.content = body.content;
            post.ipaddress = ip;
-           post.save(function(err){
+           post.save(function(err, post){
                if(err) return next(err);
-               return res.status(200);
+               if(post.root){
+                   Topic.get(post.topic_id, function(err, topic){
+                       if(err) return next(err);
+                       topic.name = post.name;
+                       topic.save(function(err){
+                           if(err) return next(err);
+                           return res.status(200);
+                       });
+                   })
+               }
            });
         });
     },

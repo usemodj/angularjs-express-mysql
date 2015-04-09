@@ -16,7 +16,7 @@ module.exports = {
         var OptionValue = req.models.option_values;
         OptionType.get(id, function(err, optionType){
             if(err) return next(err);
-            optionType.getOption_values();
+            //optionType.getOption_values();
             log.debug(optionType);
             res.status(200).json(optionType);
             //console.log(optionType.getOptionValues().order('position'));
