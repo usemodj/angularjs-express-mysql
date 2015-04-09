@@ -231,7 +231,7 @@ module.exports = {
                         //console.log(optionType);
                         OptionType.get(optionType.id, function(err, data){
                             if(err) return res.status(500).json(err);
-                            data.getValues(function(err, values){
+                            data.getOption_values(function(err, values){
                                 if(err) return res.status(500).json(err);
                                 optionType.option_values = values;
                                 callback();

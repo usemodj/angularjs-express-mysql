@@ -37,7 +37,7 @@ module.exports = {
 
     changeOptionValues: function(req, res, next){
         var optionType = req.body;
-        var optionValues = optionType.optionValues;
+        var optionValues = optionType.option_values;
         console.log(optionType);
         var OptionValue = req.models.option_values;
         var updateOptionValue = function(optionValue, optionTypeId, position, callback){

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding">
+  <component name="Encoding" useUTFGuessing="false" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/frontend/.gitignore" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/admin/asset.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/admin/product.js" charset="UTF-8" />
@@ -10,3 +10,4 @@
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/admin/products/products.edit.html" charset="UTF-8" />
   </component>
 </project>
+

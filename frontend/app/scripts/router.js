@@ -326,7 +326,9 @@ angular.module('frontendApp.router', ['ui.router'])
                 controller: 'EditOptionTypeCtrl',
                 resolve: {
                     optionType: function(optionTypes, $stateParams){
-                        return optionTypes.get({id: $stateParams.id});
+                        optionTypes.get({id: $stateParams.id}, function(err, data){
+                            return data;
+                        });
                     }
                 }
             })

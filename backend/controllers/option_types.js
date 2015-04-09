@@ -1,5 +1,5 @@
 var async = require('async');
-
+var log = require('log4js').getLogger('option_types');
 module.exports = {
     index: function(req, res, next){
         var OptionType = req.models.option_types;
@@ -16,12 +16,17 @@ module.exports = {
         var OptionValue = req.models.option_values;
         OptionType.get(id, function(err, optionType){
             if(err) return next(err);
+            optionType.getOption_values();
+            log.debug(optionType);
+            res.status(200).json(optionType);
             //console.log(optionType.getOptionValues().order('position'));
-            delete optionType.optionValues;
-            OptionValue.find({option_type_id: optionType.id}).order('position').run(function(err, optionValues){
-                optionType['optionValues'] = optionValues;
-                res.status(200).json(optionType);
-            });
+//            delete optionType.optionValues;
+//            OptionValue.find({option_type_id: optionType.id}).order('position').run(function(err, optionValues){
+//                log.debug(optionValues);
+//                delete optionValues.option_type;
+//                optionType['optionValues'] = optionValues;
+//                res.status(200).json(optionType);
+//            });
         });
 
     },

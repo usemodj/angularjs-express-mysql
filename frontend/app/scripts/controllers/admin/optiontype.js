@@ -79,36 +79,47 @@ angular.module('frontendApp')
     var sorted = false;
     $scope.error = '';
     $scope.message = '';
-    $scope.optionType = {};
-    $scope.optionType = optionType;
-    //$filter('orderBy')($scope.optionType.optionValues, 'position', false);
-    //console.log($scope.optionType.optionValues);
+    //$scope.optionType = optionType;
+    optionTypes.get({id: $stateParams.id}, function(err, optionType){
+        if(err) console.log(err);
+        console.log(optionType);
+        $scope.optionType = optionType;
+
+        if($scope.optionType.option_values){
+            $scope.optionType.option_values = $filter('orderBy')($scope.optionType.option_values, 'position');
+//            $scope.optionType['option_values'].sort(function(a, b){
+//                return a.position - b.position;
+//            });
+        }
+    });
+
+//    console.log($scope.optionType.option_values);
 
     $scope.sortableOptions = {
         change: function(e, ui) {
-            console.log("change");
+            //console.log("change");
             //console.log(ui);
-            var entry = $scope.optionType.optionValues.map(function(item){
+            var entry = $scope.optionType.option_values.map(function(item){
                 return item.id;
             }).join(',');
             beforeSort = entry;
-            console.log('>>beforeSort:'+beforeSort);
+            //console.log('>>beforeSort:'+beforeSort);
 
         },
         // called after a node is dropped
         stop: function(e, ui) {
-            console.log("stop");
+            //console.log("stop");
 
-            var entry = $scope.optionType.optionValues.map(function(item){
+            var entry = $scope.optionType.option_values.map(function(item){
                 return item.id;
             }).join(',');
             sorted = entry != beforeSort;
-            console.log('>>beforeSort:'+ beforeSort);
-            console.log('>>entry:'+ entry);
-            console.log('>>sorted:'+ sorted);
+//            console.log('>>beforeSort:'+ beforeSort);
+//            console.log('>>entry:'+ entry);
+//            console.log('>>sorted:'+ sorted);
             //IF sorted == true, updatePosition()
             if(sorted){
-                $scope.updatePosition(entry);
+                //$scope.updatePosition(entry);
             }
         }
     };
@@ -120,12 +131,12 @@ angular.module('frontendApp')
     };
 
     $scope.addOptionValue = function(){
-        $scope.optionType.optionValues.unshift({name:'',presentation:'', position:0});
+        $scope.optionType.option_values.unshift({name:'',presentation:'', position:0});
     };
 
     $scope.deleteOptionValue = function( optionValue){
         if(optionValue.id) optionValues.remove({id:optionValue.id});
-        $scope.optionType.optionValues.splice($scope.optionType.optionValues.indexOf(optionValue), 1);
+        $scope.optionType.option_values.splice($scope.optionType.option_values.indexOf(optionValue), 1);
     };
 
     $scope.updateOptionType = function(form){

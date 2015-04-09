@@ -14,8 +14,12 @@ angular.module('frontendApp')
             return optionTypesResource.query();
         },
         get: function(data, callback){ //GET
-            //console.log(data);
-            return optionTypesResource.get(data);
+            var cb = callback || angular.noop;
+            optionTypesResource.get(data, function(optionType){
+                return cb(null, optionType);
+            }, function(err){
+                return cb(err, null);
+            });
         },
         update: function(data, callback){ //PUT
             var cb = callback || angular.noop;
