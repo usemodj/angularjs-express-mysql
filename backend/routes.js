@@ -575,6 +575,12 @@ var routes = [
         middleware: [TopicCtrl.add],
         accessLevel: accessLevels.user
     },
+    {//add new topics with file attachment
+        path: '/forums/topics/upload',
+        httpMethod: 'POST',
+        middleware: [TopicCtrl.uploadTopic],
+        accessLevel: accessLevels.user
+    },
     {//view topic
         path: '/forums/:forum_id/topics/:id',
         httpMethod: 'GET',

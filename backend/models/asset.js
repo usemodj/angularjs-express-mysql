@@ -51,9 +51,9 @@ module.exports = function(orm, db) {
         }
 
     }, {
-        //cache: false,
+        cache: false,
         autoFetch: true,
-        autoFetchLimit: 1,
+        autoFetchLimit: 2,
         methods: {
 
         },
@@ -76,9 +76,8 @@ module.exports = function(orm, db) {
         }
 
     });
-    // creates column 'taxonomy_id' in 'taxons' table
+    // creates column 'viewable_id' in 'Asset' table
     Asset.hasOne('viewable', db.models.variants, { reverse:'assets' });
-    //Taxon.hasMany('products', db.models.products, {}, {});
-    //Asset.sync(); //create a join table 'product_taxons'
+    Asset.hasOne('viewable', db.models.posts, { reverse:'postAssets' });
 
 };

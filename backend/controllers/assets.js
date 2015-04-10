@@ -1,4 +1,5 @@
 var log = require('log4js').getLogger("assets");
+var async = require('async');
 var path = require('path');
 var settings = require('../config/settings');
 var _ = require('underscore');
@@ -179,7 +180,7 @@ module.exports = {
                                     attachment_file_path: file_path,
                                     alt: file_alt,
                                     viewable_id: variant_id,
-                                    viewable_type: 'variant'
+                                    viewable_type: 'Variant'
                                 };
                                 Asset.create(conditions, function( err, asset){
                                    log.info('Asset created!');
@@ -223,9 +224,10 @@ module.exports = {
         var product_id = req.params.product_id;
 
         Product.get(product_id, function(err, product){
-            product.getVariants(function(err, variants){
-                product.variants = variants;
-            });
+            if(err) return next(err);
+//            product.getVariants(function(err, variants){
+//                product.variants = variants;
+//            });
             Asset.get(asset_id, function(err, asset){
                 log.debug('>>asset:'+ JSON.stringify(asset));
                 res.json({

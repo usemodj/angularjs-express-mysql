@@ -62,18 +62,53 @@ angular.module('frontendApp')
 
         $scope.searchTopics();
     }])
-    .controller('NewTopicCtrl', ['$scope', '$state', '$stateParams', 'topics', function ($scope,$state, $stateParams, topics) {
+    .controller('NewTopicCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$upload', 'topics', function ($scope, $state, $stateParams, $timeout, $upload, topics) {
         $scope.newTopic = {};
+        $scope.files = [];
+
+        //listen for the file selected event
+        $scope.$on("fileSelected", function (event, args) {
+            $scope.$apply(function () {
+                //add the file object to the scope's files collection
+                $scope.files.push(args.file);
+            });
+        });
 
         $scope.addTopic = function(form){
             $scope.newTopic.forum_id = $stateParams.forum_id;
             topics.save($scope.newTopic, function(err, data){
-                //console.log('>> data:'+ JSON.stringify(data));
+                console.log('>> data:'+ JSON.stringify(data));
                 if(err) {
                     $scope.error = err;
                 } else {
-                    $state.go('forums.topics.list', {forum_id: $stateParams.forum_id});
+                    //$state.go('forums.topics.list', {forum_id: $stateParams.forum_id});
+                    $state.go('forums.topics.view', {forum_id: $stateParams.forum_id, id: data.id});
                 }
+            });
+        };
+
+        $scope.uploadTopic = function(myform) {
+            $scope.newTopic.forum_id = $stateParams.forum_id;
+            $scope.progress = 0;
+            $scope.error = null;
+            console.log($scope.files);
+            console.log('>>selectedFiles:');
+            console.log($scope.selectedFiles = $scope.files);
+            $scope.upload = $upload.upload({
+                url: '/forums/topics/upload',
+                method: 'POST',
+                 data : {
+                    topic : $scope.newTopic
+                },
+                file: ($scope.selectedFiles != null)? $scope.selectedFiles: null,
+                fileFormDataName: 'file'
+            }).progress(function (evt) {
+                // Math.min is to fix IE which reports 200% sometimes
+                $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            }).success(function (data, status, headers, config) {
+                //console.log(config); console.log(data);
+                //console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                $state.go('forums.topics.view',{forum_id: $stateParams.forum_id, id: data.id}, {reload: true});
             });
         };
 

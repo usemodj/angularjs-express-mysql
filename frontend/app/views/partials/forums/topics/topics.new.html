@@ -2,7 +2,7 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <h2>New Topic</h2>
-        <form class="myform" name="form" ng-submit="addTopic(myform)"  novalidate>
+        <form class="myform" name="form" ng-submit="uploadTopic(myform)"  novalidate>
         <div class="form-group">
             <label>Subject *:</label>
             <input  class="form-control"  ng-model="newTopic.name" required>
@@ -21,7 +21,11 @@
           <label><i class="fa fa-flag"></i> Sticky:</label>
           <input type="checkbox" ng-model="newTopic.sticky"> {{newTopic.sticky}}
         </div>
+        <div ng-include="" src="'views/partials/include/input_file.html'"></div>
 
+        <div class="form-group has-info" ng-show="progress">
+            <p class="help-block">{{ progress }}</p>
+        </div>
         <div class="form-group has-error" ng-show="error">
           <p class="help-block">{{ error }}</p>
         </div>
