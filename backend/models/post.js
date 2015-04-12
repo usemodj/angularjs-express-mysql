@@ -34,7 +34,7 @@ module.exports = function(orm, db) {
 
     }, {
         //cache: false,
-        autoFetch: true,
+        autoFetch: false,
         autoFetchLimit: 1,
         methods: {
         },
@@ -58,7 +58,7 @@ module.exports = function(orm, db) {
     });
     // creates column 'taxonomy_id' in 'taxons' table
     //Post.hasOne('topic', db.models.topics, { reverse:'posts', cascadeRemove:true });
-    Post.hasOne('topic', db.models.topics, { cascadeRemove:true });
+    Post.hasOne('topic', db.models.topics, { reverse:'posts', cascadeRemove:true });
     //Taxon.hasMany('products', db.models.products, {}, {});
     //Post.sync(); //create a join table 'product_taxons'
 

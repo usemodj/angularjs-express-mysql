@@ -1,4 +1,9 @@
-﻿
+﻿<div class="row">
+    <div class="col-md-12 text-right">
+        <span class="badge"><a class=" btn btn-default" ui-sref="forums.topics.list({forum_id: $stateParams.forum_id})"><i class="fa fa-arrow-left"/> Back </a></span>
+    </div>
+</div>
+
 <div class="panel panel-default">
     <div class="panel-body">
         <h2>New Topic</h2>
@@ -24,7 +29,7 @@
         <div ng-include="" src="'views/partials/include/input_file.html'"></div>
 
         <div class="form-group has-info" ng-show="progress">
-            <p class="help-block">{{ progress }}</p>
+            <p class="help-block">Progress... {{ progress }}%</p>
         </div>
         <div class="form-group has-error" ng-show="error">
           <p class="help-block">{{ error }}</p>

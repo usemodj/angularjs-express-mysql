@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+var path = require('path');
+var forever = require('forever-monitor');
+
+var child = new (forever.Monitor)( path.join(__dirname, 'www'), {
+    max: 3,
+    silent: false,
+    args: []
+});
+
+child.on('exit', function () {
+    console.log('www has exited after 3 restarts');
+});
+
+child.start();

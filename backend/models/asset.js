@@ -1,4 +1,10 @@
 //var async = require('async');
+var log = require('log4js').getLogger('Asset');
+var path = require('path');
+var fs = require('fs');
+var settings = require('../config/settings');
+
+var uploadPath = path.join(settings.upload_path, 'images/');
 
 module.exports = function(orm, db) {
     var Asset = db.define('assets', {
@@ -51,9 +57,9 @@ module.exports = function(orm, db) {
         }
 
     }, {
-        cache: false,
-        autoFetch: true,
-        autoFetchLimit: 2,
+        //cache: false,
+        //autoFetch: true,
+        autoFetchLimit: 1,
         methods: {
 
         },
@@ -77,7 +83,50 @@ module.exports = function(orm, db) {
 
     });
     // creates column 'viewable_id' in 'Asset' table
-    Asset.hasOne('viewable', db.models.variants, { reverse:'assets' });
-    Asset.hasOne('viewable', db.models.posts, { reverse:'postAssets' });
+    //Asset.hasOne('viewable', db.models.variants, { reverse:'assets' });
+    //Asset.hasOne('post', db.models.posts, { reverse:'assets' });
+    //Asset.hasOne('viewable', [db.models.variants, db.models.posts], { reverse:'assets' });
+    Asset.deleteAssetAndFile = function(asset, callback){
+        var pullpath = path.join(uploadPath, asset.attachment_file_path);
+        log.debug('>>file path:'+ pullpath);
+
+        fs.exists(pullpath, function(exists){
+            if(exists){
+                fs.unlink( pullpath, function(err){
+                    if(err){
+                        return callback(err);
+                    }
+                    asset.remove(function(err, asset){
+                        if(err) return callback(err);
+                        log.info('>> File and Asset data removed! '+ pullpath);
+                        return callback(null, asset);
+                    })
+                })
+            } else {
+                asset.remove(function(err, asset){
+                    if(err) return callback(err);
+                    log.info('>> Asset data removed! '+ asset.attachment_file_name);
+                    return callback(null, asset);
+                })
+
+            }
+        });
+    };
+    Asset.deleteFile = function(asset, callback){
+        var pullpath = path.join(uploadPath, asset.attachment_file_path);
+        log.debug('>>file path:'+ pullpath);
+
+        fs.exists(pullpath, function(exists){
+            if(exists){
+                fs.unlink( pullpath, function(err){
+                    if(err) return callback(err);
+                    log.info('>> Asset file removed! '+ pullpath);
+                    return callback(null, asset);
+                })
+            } else {
+                return callback(null, asset);
+            }
+        });
+    };
 
 };

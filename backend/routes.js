@@ -497,25 +497,25 @@ var routes = [
     {
         path: '/admin/products/:product_id/assets/',
         httpMethod: 'POST',
-        middleware: [AssetCtrl.create],
+        middleware: [AssetCtrl.createVariantAsset],
         accessLevel: accessLevels.admin
     },
     {
         path: '/admin/products/:product_id/assets/',
         httpMethod: 'GET',
-        middleware: [AssetCtrl.index],
+        middleware: [AssetCtrl.productAssets],
         accessLevel: accessLevels.admin
     },
     {
         path: '/admin/products/:product_id/assets/:id',
         httpMethod: 'GET',
-        middleware: [AssetCtrl.getAsset],
+        middleware: [AssetCtrl.getProductAsset],
         accessLevel: accessLevels.admin
     },
     {
         path: '/admin/products/:product_id/assets/:id',
         httpMethod: 'POST',
-        middleware: [AssetCtrl.updateAsset],
+        middleware: [AssetCtrl.updateVariantAsset],
         accessLevel: accessLevels.admin
     },
     //Forums Resource
@@ -575,10 +575,16 @@ var routes = [
         middleware: [TopicCtrl.add],
         accessLevel: accessLevels.user
     },
-    {//add new topics with file attachment
+    {//create topic with file attachment
         path: '/forums/topics/upload',
         httpMethod: 'POST',
         middleware: [TopicCtrl.uploadTopic],
+        accessLevel: accessLevels.user
+    },
+    {//update topic's post with file attachment
+        path: '/forums/topics/save_post',
+        httpMethod: 'POST',
+        middleware: [TopicCtrl.savePost],
         accessLevel: accessLevels.user
     },
     {//view topic

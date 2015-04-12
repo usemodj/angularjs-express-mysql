@@ -8,7 +8,7 @@ angular.module('frontendApp')
 
 
         $scope.pageChanged = function() {
-            $scope.searchForums();
+            $scope.searchTopics();
             //$state.go('admin.user.home',{page: $scope.page});
             //$location.path('/users/page/'+$scope.page);
         };
@@ -37,7 +37,7 @@ angular.module('frontendApp')
         };
 
         $scope.delete = function(item){
-            topics.remove(item);
+            topics.remove({forum_id: item.forum_id, id: item.id});
             $state.go('forums.topics.list', {forum_id: item.forum_id}, {reload: true});
         };
         $scope.searchTopics = function(form){
@@ -74,10 +74,11 @@ angular.module('frontendApp')
             });
         });
 
+        // create topic without file attachment
         $scope.addTopic = function(form){
             $scope.newTopic.forum_id = $stateParams.forum_id;
             topics.save($scope.newTopic, function(err, data){
-                console.log('>> data:'+ JSON.stringify(data));
+                //console.log('>> data:'+ JSON.stringify(data));
                 if(err) {
                     $scope.error = err;
                 } else {
@@ -87,36 +88,53 @@ angular.module('frontendApp')
             });
         };
 
+        // Create topic with file attachment
         $scope.uploadTopic = function(myform) {
             $scope.newTopic.forum_id = $stateParams.forum_id;
             $scope.progress = 0;
             $scope.error = null;
-            console.log($scope.files);
-            console.log('>>selectedFiles:');
-            console.log($scope.selectedFiles = $scope.files);
+            //console.log($scope.files);
             $scope.upload = $upload.upload({
                 url: '/forums/topics/upload',
                 method: 'POST',
                  data : {
                     topic : $scope.newTopic
                 },
-                file: ($scope.selectedFiles != null)? $scope.selectedFiles: null,
+                file: ($scope.files != null)? $scope.files: null,
                 fileFormDataName: 'file'
             }).progress(function (evt) {
                 // Math.min is to fix IE which reports 200% sometimes
                 $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
             }).success(function (data, status, headers, config) {
-                //console.log(config); console.log(data);
-                //console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                //console.log(config);
+                console.log('>>success data')
+                console.log(data);
                 $state.go('forums.topics.view',{forum_id: $stateParams.forum_id, id: data.id}, {reload: true});
             });
         };
-
+        $scope.cancelEdit = function(){
+            $state.go('forums.topics.list', {forum_id: $stateParams.forum_id});
+        };
 
     }])
-    .controller('ViewTopicCtrl', ['$scope', '$state', '$stateParams', '$modal', 'topics', '$rootScope', function ($scope,$state, $stateParams, $modal, topics, $rootScope) {
+    .controller('ViewTopicCtrl', ['$scope', '$state', '$stateParams', '$modal', '$upload', 'topics', '$rootScope',
+        function ($scope, $state, $stateParams, $modal, $upload, topics, $rootScope) {
         $scope.data = {};
 
+        $scope.delete = function(topic){
+            console.log('call delete');
+//            topics.remove(topic);
+//            $state.go('forums.topics.list', {forum_id: topic.forum_id}, {reload: true});
+            topics.remove({forum_id: topic.forum_id, id: topic.id}, function(err){
+                if(err) {
+                    console.log(err);
+                    $scope.error = err;
+
+                }
+                console.log('remove called');
+                $state.go('forums.topics.list', {forum_id: topic.forum_id}, {reload: true});
+            });
+        };
         $scope.viewTopic = function(form){
             console.log($rootScope.currentUser);
             //console.log(routingConfig);
@@ -183,7 +201,8 @@ angular.module('frontendApp')
             });
             modalInstance.result.then(function(editedPost){
                 console.log(editedPost);
-                topics.updatePost(editedPost);
+                //topics.updatePost(editedPost); //update post without file attachment
+                savePost(editedPost); //update post with file attachment
             });
 
             //$state.go('forums.topics.edit', {forum_id: $stateParams.forum_id, id: $stateParams.id});
@@ -192,14 +211,50 @@ angular.module('frontendApp')
         $scope.cancelEdit = function(){
             $state.go('forums.topics.list', {forum_id: $stateParams.forum_id});
         };
+        // Update topic with file attachment
+        var savePost = function(post) {
+            post.forum_id = $stateParams.forum_id;
+            post.topic_id = $stateParams.id;
+            $scope.progress = 0;
+            $scope.error = null;
+            //console.log($scope.files);
+            $scope.upload = $upload.upload({
+                url: '/forums/topics/save_post',
+                method: 'POST',
+                data : {
+                    post : post
+                },
+                file: (post.files != null)? post.files: null,
+                fileFormDataName: 'file'
+            }).progress(function (evt) {
+                // Math.min is to fix IE which reports 200% sometimes
+                $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            }).success(function (data, status, headers, config) {
+                //console.log(config);
+                console.log('>>success data')
+                console.log(data); //post with assets
+                $state.go('forums.topics.view',{forum_id: $stateParams.forum_id, id: $stateParams.id}, {reload: true});
+            });
+        };
 
         $scope.viewTopic();
     }])
-    .controller('EditTopicCtrl', ['$scope', '$state', '$modalInstance', 'post', function ($scope,$state, $modalInstance, post) {
+    .controller('EditTopicCtrl', ['$scope', '$state', 'assets', '$modalInstance', 'post', function ($scope, $state, assets, $modalInstance, post) {
         $scope.data = {};
         var origin = angular.copy(post);
         $scope.data.post = post;
+        $scope.files = [];
+
+        //listen for the file selected event
+        $scope.$on("fileSelected", function (event, args) {
+            $scope.$apply(function () {
+                //add the file object to the scope's files collection
+                $scope.files.push(args.file);
+            });
+        });
+
         $scope.save = function(){
+            $scope.data.post.files = $scope.files;
             $modalInstance.close($scope.data.post);
         };
         $scope.cancel = function(){
@@ -207,7 +262,13 @@ angular.module('frontendApp')
             $scope.data.post.content = origin.content;
             $modalInstance.dismiss('cancel');
         };
-
-
+        $scope.removeFile = function(file){
+            var files = $scope.data.post.assets;
+            if(files){
+                assets.remove({id: file.id}, function(err, asset){
+                    if(!err) files.splice(files.indexOf(file),1);
+                });
+             }
+        };
 
     }]);

@@ -35,8 +35,13 @@ angular.module('frontendApp')
                     return cb(err, null);
                 });
             },
-            remove: function (data) { //DELETE
-                return resource.remove(data);
+            remove: function (data, callback) { //DELETE
+                var cb = callback || angular.noop;
+                return resource.remove(data, function(topic){
+                    return cb(null, topic);
+                }, function(err){
+                    return cb(err);
+                });
             },
             searchTopics: function (conditions, callback) {
                 var cb = callback || angular.noop;

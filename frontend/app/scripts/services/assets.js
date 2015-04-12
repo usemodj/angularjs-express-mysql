@@ -38,8 +38,13 @@ angular.module('frontendApp')
                 return cb(err, null);
             });
         },
-        remove: function(data){ //DELETE
-            return resource.remove(data);
+        remove: function(data, callback){ //DELETE
+            var cb = callback || angular.noop;
+            resource.remove(data, function(asset){
+                return cb(null, asset);
+            }, function(err){
+                return cb(err);
+            });
         },
 
         updatePosition: function(entry, callback){

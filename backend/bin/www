@@ -46,7 +46,8 @@ log4js.configure(
                         }
                     },
                     {
-                        "type": "console"
+                        "type": "console",
+                        "level": "INFO"
                     }
                 ]
                 //replaceConsole: true

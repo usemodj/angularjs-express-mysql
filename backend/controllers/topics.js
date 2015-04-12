@@ -1,12 +1,13 @@
 var log = require('log4js').getLogger("topics");
 var _ = require('underscore');
 var path = require('path');
+var fs = require('fs');
 var async = require('async');
 var gm = require('gm');
 var mv = require('mv');
 var settings = require('../config/settings');
 
-var uploadPath = settings.upload_path + 'images/forums/';
+var uploadPath = path.join(settings.upload_path, 'images/');
 
 module.exports = {
     //public index
@@ -53,7 +54,8 @@ module.exports = {
                 ' FROM topics t \n'+
                 ' LEFT OUTER JOIN users u ON u.id = t.user_id \n'+
                 ' LEFT OUTER JOIN posts p ON p.topic_id = t.id \n'+
-                ' WHERE t.forum_id = ? AND t.sticky = true \n';
+                ' WHERE t.forum_id = ? AND t.sticky = true \n'+
+                ' ORDER BY t.created_at DESC ';
 
             var sql = 'SELECT  * FROM ( \n'+
             ' SELECT DISTINCT t.*, u.email, \n'+
@@ -104,7 +106,7 @@ module.exports = {
 
     },
 
-    // Add new topic
+    // Add new topic without file attachment
     add: function(req, res, next){
         var Forum = req.models.forums;
         var Topic = req.models.topics;
@@ -162,12 +164,11 @@ module.exports = {
         var ip = req.connection.remoteAddress;
         var user = JSON.parse(req.cookies.user);
         var body = req.body;
-        log.debug(body);
         var topic = JSON.parse(req.body.topic),
             files = req.files.file;
 
+        log.debug(body);
         log.debug(req.files);
-        log.debug('>> files is array: '+ Array.isArray(files));
 
         User.one({email: user.email}, function(err, user) {
             if (err || user == null) {
@@ -201,15 +202,15 @@ module.exports = {
                             topic1.save({last_post_id: post.id,
                                 last_poster_id: post.user_id}, function(err){
                                 Forum.get(topic1.forum_id, function(err, forum){
-                                    forum.save({topic_count: forum.topic_count + 1}, function(err){
-                                        return callback(null, topic1, post);
+                                    forum.save({topic_count: forum.topic_count + 1}, function(err,forum){
+                                        return callback(null, forum, topic1, post);
                                     });
                                 });
                             });
                         });
                     });
                 },
-                function(topic, post, callback) {
+                function(forum, topic, post, callback) {
                     if(!Array.isArray(files)){
                         files = (files)? [files]: [];
                     }
@@ -219,12 +220,13 @@ module.exports = {
                         var viewable_type = 'Post';
                         var content_type = file.type;
                         var file_name = file.name;
-                        var file_path = path.basename(file.path);
+                        var file_path = path.join('forums', path.basename(file.path));
                         var destPath = uploadPath + file_path;
 
                         mv( file.path, destPath, {mkdirp:true}, function(err){
                             if(err) {
                                 log.error(err);
+                                return cb();
                             }
                             else {
                                 gm(destPath).options({imageMagick: true})
@@ -243,24 +245,128 @@ module.exports = {
                                                 viewable_type: viewable_type
                                             };
                                             Asset.create(conditions, function( err, asset){
-                                                log.info('Asset created!');
-
+                                                if(!err) {
+                                                    log.info('Asset created!');
+                                                    if(!post.assets) post.assets = [];
+                                                    post.assets.push(asset);
+                                                }
+                                                return cb();
                                             });
+                                        } else {
+                                            return cb();
                                         }
                                     });
-
                             }
-                            cb();
+
                         });
                     }, function(err){
-                        callback(null, topic);
+                        if(err) log.error(err);
+                        return callback(null, topic);
                     });
+                }
+            ], function(err, results){
+                //log.info('>> completed task');
+                if(err) return res.status(500).json(err);
+                return res.status(200).json(results); //topic
+            });
+        });
+    },
 
+    savePost: function(req, res, next){
+        var Post = req.models.posts;
+        var Asset = req.models.assets;
+        var User = req.models.users;
+        var ip = req.connection.remoteAddress;
+        var user = JSON.parse(req.cookies.user);
+        var body = req.body;
+        var post = JSON.parse(req.body.post),
+            files = req.files.file;
+        log.debug(body);
+        log.debug(req.files);
+        //TODO: update post with file attachment
+        User.one({email: user.email}, function(err, user) {
+            if (err || user == null) {
+                log.error('Login required!');
+                return next(new Error('Login required!'));
+            }
+
+            async.waterfall([
+                function(callback){
+                    Post.get(post.id, function (err, post1) {
+                        if (err) return callback(err);
+                        //log.debug(JSON.stringify(post1));
+                        post1.save({
+                            name: post.name,
+                            content: post.content,
+                            user_id:user.id,
+                            ipaddress: ip
+                        }, function (err, post2) {
+                            if (err) {
+                                log.warn(err);
+                                return callback(err);
+                            }
+                            return callback(null, post2);
+                        });
+                    });
+                },
+                function(post, callback) {
+                    if(!Array.isArray(files)){
+                        files = (files)? [files]: [];
+                    }
+                    var index = 0;
+                    async.eachSeries(files, function(file, cb){
+                        var viewable_id = post.id;
+                        var viewable_type = 'Post';
+                        var content_type = file.type;
+                        var file_name = file.name;
+                        var file_path = path.join('forums', path.basename(file.path));
+                        var destPath = uploadPath + file_path;
+
+                        mv( file.path, destPath, {mkdirp:true}, function(err){
+                            if(err) {
+                                log.error(err);
+                                return cb();
+                            }
+                            else {
+                                gm(destPath).options({imageMagick: true})
+                                    .identify(function(err, data){
+                                        if(!err) {
+                                            var conditions = {
+                                                attachment_width: data.size.width,
+                                                attachment_height: data.size.height,
+                                                attachment_file_size: data.Filesize,
+                                                position: index++,
+                                                attachment_content_type: content_type,
+                                                attachment_file_name: file_name,
+                                                attachment_file_path: file_path,
+                                                //alt: file_alt,
+                                                viewable_id: viewable_id,
+                                                viewable_type: viewable_type
+                                            };
+                                            Asset.create(conditions, function( err, asset){
+                                                if(!err) {
+                                                    log.info('Asset created!');
+                                                    if(!post.assets) post.assets = [];
+                                                    post.assets.push(asset);
+                                                }
+                                                return cb();
+                                            });
+                                        } else {
+                                            return cb();
+                                        }
+                                    });
+                            }
+
+                        });
+                    }, function(err){
+                        if(err) log.error(err);
+                        return callback(null, post);
+                    });
                 }
             ], function(err, results){
                 if(err) return res.status(500).json(err);
-
-                res.status(200).json(results); //topic
+                log.debug('>> updated post: '+ JSON.stringify(post));
+                return res.status(200).json(results); //post
             });
         });
     },
@@ -269,34 +375,66 @@ module.exports = {
         var Forum = req.models.forums;
         var Topic = req.models.topics;
         //var Post = req.models.posts;
+        var Asset = req.models.assets;
         var topic_id = req.params.id;
         //var forum_id = req.params.forum_id;
 
         Topic.get(topic_id, function(err, topic){
             if(err) return next(err);
-            req.db.driver.execQuery('DELETE FROM posts WHERE topic_id = ? ', [topic.id], function(err, posts) {
-                if(!err) {
-                    log.info('>> Deleted posts count: '); log.info(posts);
-                    topic.remove(function (err) {
-                        if(err) {
-                            log.error(err);
-                            return res.status(500);
-                        }
-                        Forum.get(topic.forum_id, function(err, forum){
-                            forum.topic_count -= 1;
-                            forum.post_count -= posts.affectedRows - 1;
-                            log.info('>> forum topics: '+ forum.topic_count + ' , posts: '+ forum.post_count);
-                            forum.save(function(err){
-                                if(err) {
-                                    log.error(err);
-                                    return res.status(500);
-                                }
-                                return res.status(200);
+
+            async.waterfall([
+                function(callback){
+                    //TODO: delete assets and files of the post
+                    log.debug('>>topic: '+ JSON.stringify(topic));
+                    async.each(topic.posts, function(post, cb){
+                        Asset.find({viewable_id: post.id, viewable_type:'Post'}, function(err, assets){
+                           if(err) return cb(err);
+                           log.debug('>>post assets: '+ JSON.stringify(assets));
+                           async.each(assets, function(asset, cb1){
+                              Asset.deleteAssetAndFile(asset, function(err){
+                                 if(err) return cb1(err);
+                                 return cb1();
+                              });
+                           }, function(err){
+                               if(err) return cb(err);
+                               return cb();
+                           });
+                        });
+                    }, function(err){
+                        if(err) return callback(err);
+                        callback(null, topic);
+                    });
+                },
+                function(topic, callback){
+                    req.db.driver.execQuery('DELETE FROM posts WHERE topic_id = ? ', [topic.id], function(err, posts) {
+                        if(err) return callback(err);
+                        log.info('>> Deleted posts count: '); log.info(posts);
+                        topic.remove(function (err) {
+                            if(err) return callback(err);
+
+                            Forum.get(topic.forum_id, function(err, forum){
+                                forum.topic_count -= 1;
+                                forum.post_count -= posts.affectedRows - 1;
+                                log.info('>> forum topics: '+ forum.topic_count + ' , posts: '+ forum.post_count);
+                                forum.save(function(err){
+                                    if(err) {
+                                        log.error(err);
+                                        return callback(err);
+                                    }
+                                    return callback(null);
+                                });
                             });
+
                         });
 
                     });
                 }
+            ], function(err, results){
+                if(err) {
+                    log.error(err);
+                    return res.status(500);
+                }
+                res.status(200);
             });
         });
     },
@@ -317,11 +455,12 @@ module.exports = {
                     if(err) return next(err);
                     topic.save({views: topic.views + 1, updated_at: topic.updated_at}, function(err){});
                     async.each(posts, function( post, callback){
-                        Asset.find({viewable_id: post.id}, function(err, assets){
+                        Asset.find({viewable_id: post.id, viewable_type:'Post'}, function(err, assets){
                             if(!err) post.assets = assets;
                             callback();
                         });
                     }, function(err){
+                        log.debug('>>post: '+ JSON.stringify(posts));
                         res.json({
                             forums: forums,
                             topic: topic,
@@ -473,6 +612,6 @@ module.exports = {
                 return res.status(200);
             });
         });
-    },
+    }
 
 }

@@ -25,7 +25,7 @@ angular.module('frontendApp')
 
     $scope.listProducts();
 }])
-.controller('ViewProductCtrl', ['$scope', '$state', '$stateParams', 'products', function ($scope, $state, $stateParams, products) {
+.controller('ViewProductCtrl', ['$scope', '$state', '$stateParams', '$filter', 'products', function ($scope, $state, $stateParams, $filter, products) {
     $scope.data = {};
     $scope.product = {
         quantity: 1
@@ -35,12 +35,10 @@ angular.module('frontendApp')
     products.viewProduct({id: $stateParams.id},function(err, data){
         $scope.data.product = data.product;
         $scope.data.variants = data.variants;
-        $scope.data.assets = data.assets;
+        if(data.variants) $scope.product.variant = data.variants[0];
+        $scope.data.assets = $filter('orderBy')(data.assets, 'position -id') ;
+        if($scope.data.assets) $scope.mainImage = '/uploads/images/'+ $scope.data.assets[0].file_path;
 
-        if(data.assets) $scope.mainImage = '/uploads/images/'+ data.assets[0].file_path;
-        if(data.variants) {
-            $scope.product.variant = data.variants[0];
-        }
         //console.log(data);
     });
 

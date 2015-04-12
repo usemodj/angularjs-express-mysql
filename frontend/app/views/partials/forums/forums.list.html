@@ -41,8 +41,8 @@
                         <td>{{item.id}}</td>
                         <td><a ui-sref="forums.topics.list({forum_id: item.id})" >{{"&nbsp;&nbsp;&nbsp;".repeat(item.level)}}{{item.name}}</a> <br/>
                           <small>{{item.description}}</small></td>
-                        <td><small>Topics: {{item.topic_count}}, Posts: {{item.post_count}}<br/>
-                          Updated at: {{item.updated_at}}</small></td>
+                        <td><small><span class="badge">Topics: {{item.topic_count}}</span> <span class="badge">Posts: {{item.post_count}}</span><br/>
+                            <span class="btn btn-default btn-xs">Updated at: {{item.updated_at}}</span></small></td>
                      </tr>
                     </tbody>
                 </table>
