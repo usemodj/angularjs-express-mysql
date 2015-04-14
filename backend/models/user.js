@@ -133,7 +133,7 @@ module.exports = function(orm, db) {
 
     });
     // creates column 'customer_id' in 'users' table
-    // User.hasOne('customer', db.models.customers, { required: true, reverse:'users', autoFetch: true });
+    User.hasOne('profile', db.models.profiles, { reverse:'profiles' });
     User.hasOne('role', db.models.roles, { });
 
     User.makeSalt = function() {

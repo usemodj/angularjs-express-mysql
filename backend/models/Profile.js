@@ -1,15 +1,21 @@
 module.exports = function(orm, db) {
     var Profile = db.define('profiles', {
         first_name: {
-            type: 'text',
+            type: 'text', size: 40,
             required: true
         },
         last_name: {
-            type: 'text',
+            type: 'text', size: 40,
             required: true
         },
-        active: {
-            type: 'boolean'
+        nickname: {
+            type: text, size: 40
+        },
+        gender: {
+            type: 'enum', values:['Male', 'Female', 'Other']
+        },
+        birth_day: {
+            type: 'date', time: false
         },
         created_at: {
             type: 'date',
@@ -35,11 +41,7 @@ module.exports = function(orm, db) {
         }
     });
     // creates column 'user_id' in 'customers' table
-    Profile.hasOne('user', db.models.users, {
-        //required: true,
-        reverse: 'profile',
-        autoFetch: true
-    });
+    //Profile.hasOne('user', db.models.users, {});
     //Profile.hasOne('address', db.models.addresses, {reverse: 'addresses', autoFetch: true});
-    Profile.hasOne('address', db.models.addresses, {reverse: 'addresses'});
+    Profile.hasMany('address', db.models.addresses, {reverse: 'addresses'});
 };

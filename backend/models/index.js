@@ -42,7 +42,7 @@ var connection = null;
 function setup(db, cb) {
     require('./user')(orm, db);
     require('./role')(orm, db);
-    //require('./profile')(orm, db);
+    require('./profile')(orm, db);
     require('./address')(orm, db);
     require('./product')(orm, db);
     require('./variant')(orm, db);
