@@ -7,8 +7,10 @@
     <div class="row">
         <div class="col-md-12 text-right">
             <span class="badge"><a class=" btn btn-default" ui-sref="forums.topics.list({forum_id: $stateParams.forum_id})"><i class="fa fa-arrow-left"/> Back </a></span>
-            <span class="badge"><a ng-show="currentUser.role.title =='admin' || currentUser.email == data.topic.email" ng-confirm-click="Are you sure?" ng-click="delete(data.topic)" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Delete topic"><span class="glyphicon glyphicon-remove"></span> Delete Topic </a></span>
-            <span class="badge"><a class=" btn btn-default" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})">New Topic</a></span>
+            <span class="badge" style="color:#666666;"><a ng-show="currentUser.role.title =='admin' || currentUser.email == data.topic.email" ng-confirm-click="Are you sure?" ng-click="delete(data.topic)"
+                                   class="btn btn-default" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required!"><i class="glyphicon glyphicon-remove"></i> Delete Topic </a></span>
+            <span class="badge" style="color:#666666;"><a data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required!"
+                                   class=" btn btn-default" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})" >New Topic</a></span>
         </div>
     </div>
 
@@ -31,6 +33,9 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
+            <div ng-show="!currentUser || currentUser.role.title == 'public'" class="label label-info">
+              Login Required if you can reply
+            </div>
             <h2>Reply </h2>
             <form class="myform" name="form" ng-submit="replyPost(myform)"  novalidate>
             <div class="form-group">
@@ -54,3 +59,8 @@
         </div>
     </div>
 </div>
+<script type="application/javascript">
+  $(function(){
+    $('[data-toggle="popover"]').popover();
+  })
+</script>

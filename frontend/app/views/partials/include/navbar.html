@@ -10,15 +10,19 @@
           <a class="navbar-brand" ng-href="/" name="top"><img src="images/nodesoft-logo-253x30.png" width="253" height="30" alt="nodesoft.co.kr"></a>
       </div>
       <div class="collapse navbar-collapse pull-right">
-          <ul class="nav navbar-nav navbar-right">
-              <li access-level="accessLevels.user" active-nav><a ui-sref="orders.list" translate>My Order</a>
-              </li>
-              <li active-nav><a ui-sref="forums.list" translate>Forums</a>
-              </li>
-              <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.login" translate>Login</a>
-              </li>
-              <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.signup" translate>Signup</a>
-              </li>
+          <ul class="nav navbar-nav">
+            <li active-nav><a ui-sref="products.list">Store</a>
+            </li>
+            <li active-nav><a ui-sref="news.list" translate>News</a>
+            </li>
+            <li active-nav><a ui-sref="forums.list" translate>Forums</a>
+            </li>
+            <li access-level="accessLevels.user" active-nav><a ui-sref="orders.list" translate>My Order</a>
+            </li>
+            <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.login" translate>Login</a>
+            </li>
+            <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.signup" translate>Signup</a>
+            </li>
           </ul>
           <ul style="z-index:100" class="nav navbar-nav navbar-right" access-level="accessLevels.user">
               <li class="dropdown">

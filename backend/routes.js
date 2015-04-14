@@ -19,6 +19,7 @@ var _ = require('underscore')
     , ShipmentCtrl =  require('./controllers/shipments')
     , ForumCtrl =  require('./controllers/forums')
     , TopicCtrl =  require('./controllers/topics')
+    , ArticleCtrl =  require('./controllers/articles')
     ;
 
 var routes = [
@@ -628,6 +629,38 @@ var routes = [
         httpMethod: 'POST',
         middleware: [TopicCtrl.setLocked],
         accessLevel: accessLevels.user
+    },
+
+    //News Article Resource
+    {
+        path: '/articles/search',
+        httpMethod: 'POST',
+        middleware: [ArticleCtrl.index],
+        accessLevel: accessLevels.public
+    },
+    {//create article with file attachment
+        path: '/articles/upload',
+        httpMethod: 'POST',
+        middleware: [ArticleCtrl.uploadArticle],
+        accessLevel: accessLevels.admin
+    },
+    {//update article with file attachment
+        path: '/articles/save_article',
+        httpMethod: 'POST',
+        middleware: [ArticleCtrl.saveArticle],
+        accessLevel: accessLevels.admin
+    },
+    {//view article
+        path: '/articles/:id(\\d+)',
+        httpMethod: 'GET',
+        middleware: [ArticleCtrl.viewArticle],
+        accessLevel: accessLevels.public
+    },
+    {//delete article
+        path: '/articles/:id(\\d+)',
+        httpMethod: 'DELETE',
+        middleware: [ArticleCtrl.deleteArticle],
+        accessLevel: accessLevels.admin
     },
 
     // All other get requests should be handled by AngularJS's client-side routing system

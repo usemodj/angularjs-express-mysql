@@ -2,19 +2,24 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
 
-#: app/views/partials/navbar.html
+#: app/views/partials/include/navbar.html
 msgid "Forums"
 msgstr ""
 
-#: app/views/partials/navbar.html
+#: app/views/partials/include/navbar.html
 msgid "Login"
 msgstr ""
 
-#: app/views/partials/navbar.html
+#: app/views/partials/include/navbar.html
 msgid "My Order"
 msgstr ""
 
-#: app/views/partials/navbar.html
+#: app/views/partials/include/navbar.html
+msgid "News"
+msgstr ""
+
+#: app/views/partials/include/navbar.html
 msgid "Signup"
 msgstr ""

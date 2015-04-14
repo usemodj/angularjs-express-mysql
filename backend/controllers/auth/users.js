@@ -16,7 +16,7 @@ async = require("async");
  // finds people with surname='Doe', skips the first 2 and returns the others
  });
 
- Person.find({ surname: "Doe" }).limit(3).offset(2).only("name", "surname").run(function (err, people) {
+ Person.find({ surname: "Doe" }).order('-name').limit(3).offset(2).only("name", "surname").run(function (err, people) {
  // finds people with surname='Doe', skips first 2 and limits to 3 elements,
  // returning only 'name' and 'surname' properties
  Person.find({ age: 18 }).where("LOWER(surname) LIKE ?", ['dea%']).all( ... );
@@ -43,6 +43,8 @@ async = require("async");
  { col1: 123, col2: "foo" } // `col1` = 123 AND `col2` = 'foo'
  { col1: [ 1, 3, 5 ] } // `col1` IN (1, 3, 5)
 
+var orm = req.db.tools;
+
  { col1: orm.eq(123) } // `col1` = 123 (default)
  { col1: orm.ne(123) } // `col1` <> 123
  { col1: orm.gt(123) } // `col1` > 123
@@ -52,6 +54,8 @@ async = require("async");
  { col1: orm.between(123, 456) } // `col1` BETWEEN 123 AND 456
  { col1: orm.not_between(123, 456) } // `col1` NOT BETWEEN 123 AND 456
  { col1: orm.like(12 + "%") } // `col1` like '12%'
+
+ { or:[{col1: orm.like('%'+12+'%')}, {col2: 'foo'}]} // col1 LIKE '%'+12+'%' OR col2 = 'foo'
 
  req.db.tools:
  { between: [Function],

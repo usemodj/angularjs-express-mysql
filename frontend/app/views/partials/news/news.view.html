@@ -1,0 +1,39 @@
+﻿<div class="container">
+    <a ui-sref="forums.list">Forums List</a> &gt;
+    <ul style="display: inline-block;" class="list-inline pills" ng-repeat="item in data.forums">
+      <li ng-if="!$last"><a ui-sref="forums.topics.list({forum_id: item.id})">{{item.name}}</a> &gt;</li>
+      <li ng-if="$last"><a ui-sref="forums.topics.list({forum_id: item.id})"><b>{{item.name}}</b></a></li>
+    </ul>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <span class="badge"><a class=" btn btn-default" ui-sref="news.list"><i class="fa fa-arrow-left"/> Back </a></span>
+            <a ng-show="currentUser && currentUser.role.title =='admin'" ng-confirm-click="Are you sure?" ng-click="delete(data.article)"
+                                   class="btn btn-default" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Admin is allowed!">
+                                  <span class="glyphicon glyphicon-remove"></span> Delete Article </a>
+            <a ng-show="currentUser && currentUser.role.title =='admin'"
+                                   class=" btn btn-default" ui-sref="news.new" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Admin is allowed!">New Article</a>
+        </div>
+    </div>
+
+    <div>
+       <h2>{{data.article.name}}</h2>
+    </div>
+    <div class="panel panel-default">
+        <div ng-show="data.article.img_url"><img width="100%" ng-src="{{data.article.img_url}}"/></div>
+        <div class="panel-body" ng-bind-html="data.article.content | markdown"></div>
+        <div class="btn-group" ng-repeat="file in data.article.assets | orderBy:'position' ">
+            <a class="btn btn-default btn-sm" ng-href="/uploads/images/{{file.attachment_file_path}}" alt="{{file.attachment_file_name}}" target="attachment">
+                <i class="fa fa-file"/> {{file.attachment_file_name}} ({{file.attachment_file_size}})
+            </a>
+        </div>
+        <div ng-show="currentUser && currentUser.role.title =='admin'" class="well well-sm text-right">
+            <a class="btn btn-default btn-xs" ng-click="editArticle(data.article)">Edit</a>
+            <a class="btn btn-default btn-xs" ng-confirm-click="Are you sure?" ng-click="delete(data.article)">Delete</a>
+        </div>
+    </div>
+
+<script type="application/javascript">
+  $(function(){
+    $('[data-toggle="popover"]').popover();
+  })
+</script>

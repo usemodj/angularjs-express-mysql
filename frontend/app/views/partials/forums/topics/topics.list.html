@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-xs-2 col-md-2">
                     <br>
-                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search form-control-feedback"></span> Search</button>
+                    <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> Search</button>
                 </div>
             </div>
         </form>
@@ -47,7 +47,10 @@
 
         <div class="row">
             <div class="col-md-12 text-right">
-                <span class="badge"><a class=" btn btn-default" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})">New Topic</a></span>
+                <span ng-show="currentUser && currentUser.email" class="badge" style="color:#666666;">
+                  <a class=" btn btn-default" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})" title="Login Required"><i class="fa fa-edit"/> New Topic</a></span>
+                <span class="badge" style="color:#666666;">
+                  <a ng-hide="currentUser && currentUser.email" class=" btn btn-default" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required"><i class="fa fa-edit"/> New Topic</a></span>
             </div>
         </div>
         <div>
@@ -69,9 +72,9 @@
                     <td><span class="badge">Views: {{item.views}}</span>, <span class="badge">Replies: {{item.replies}}</span><br/>
                       <small>Last: {{item.last_post}}</small></td>
                     <td class="text-center">
-                        <a ng-show="currentUser.role.title == 'admin'"  ng-confirm-click="Are you sure?" ng-click="unsticky(item)" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Unsticky"><span class="glyphicon glyphicon-flag"></span></a>
-                        <a ng-show="currentUser.role.title =='admin' || currentUser.email == item.email" ng-confirm-click="Are you sure?" ng-click="delete(item)" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="Delete topic"><span class="glyphicon glyphicon-remove"></span></a>
-                        <a ng-show="currentUser.role.title =='admin' || currentUser.email == item.email" ng-confirm-click="Are you sure?" ng-click="locked(item, !item.locked)" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="Toggle Locked"><span class="fa fa-unlock-alt"></span></a>
+                        <a ng-show="currentUser.role.title == 'admin'"  ng-confirm-click="Are you sure?" ng-click="unsticky(item)" class="btn btn-xs btn-primary" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Unsticky"><span class="glyphicon glyphicon-flag"></span></a>
+                        <a ng-show="currentUser.role.title =='admin' || currentUser.email == item.email" ng-confirm-click="Are you sure?" ng-click="delete(item)" class="btn btn-xs btn-default" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Delete topic"><span class="glyphicon glyphicon-remove"></span></a>
+                        <a ng-show="currentUser.role.title =='admin' || currentUser.email == item.email" ng-confirm-click="Are you sure?" ng-click="locked(item, !item.locked)" class="btn btn-xs btn-default" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Toggle Locked"><span class="fa fa-unlock-alt"></span></a>
                     </td>
                 </tr>
                 <tr ng-repeat="item in data.topics">
@@ -82,9 +85,9 @@
                     <td><span class="badge">Views: {{item.views}}</span> <span class="badge">Replies: {{item.replies}}</span><br/>
                       <small>Last: {{item.last_post}}</small></td>
                     <td class="text-center">
-                        <a ng-show="currentUser.role.title == 'admin'"  ng-confirm-click="Are you sure?" ng-click="sticky(item)" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="Sticky"><span class="glyphicon glyphicon-flag"></span></a>
-                        <a ng-show="currentUser.role.title =='admin' || currentUser.email == item.email" ng-confirm-click="Are you sure?" ng-click="delete(item)" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="Delete topic"><span class="glyphicon glyphicon-remove"></span></a>
-                        <a ng-show="currentUser.role.title =='admin' || currentUser.email == item.email" ng-confirm-click="Are you sure?" ng-click="locked(item, !item.locked)" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="Toggle Locked"><span class="fa fa-unlock-alt"></span></a>
+                        <a ng-show="currentUser.role.title == 'admin'"  ng-confirm-click="Are you sure?" ng-click="sticky(item)" class="btn btn-xs btn-default" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Sticky"><span class="glyphicon glyphicon-flag"></span></a>
+                        <a ng-show="currentUser.role.title =='admin' || currentUser.email == item.email" ng-confirm-click="Are you sure?" ng-click="delete(item)" class="btn btn-xs btn-default" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Delete topic"><span class="glyphicon glyphicon-remove"></span></a>
+                        <a ng-show="currentUser.role.title =='admin' || currentUser.email == item.email" ng-confirm-click="Are you sure?" ng-click="locked(item, !item.locked)" class="btn btn-xs btn-default" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Toggle Locked"><span class="fa fa-unlock-alt"></span></a>
                     </td>
                 </tr>
                 </tbody>
@@ -104,3 +107,8 @@
         </div>
     </div>
 </div>
+<script type="application/javascript">
+  $(function () {
+    $('[data-toggle="popover"]').popover();
+  })
+</script>

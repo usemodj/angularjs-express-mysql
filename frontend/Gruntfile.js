@@ -452,7 +452,7 @@ module.exports = function (grunt) {
       'nggettext_compile': {
           all: {
               files: {
-                  'app/translations.js': ['lang/*.po']
+                  'app/scripts/translations.js': ['lang/*.po']
               }
           }
       }

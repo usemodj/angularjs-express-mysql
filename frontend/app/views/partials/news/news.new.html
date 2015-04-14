@@ -1,0 +1,44 @@
+﻿<div class="row">
+    <div class="col-md-12 text-right">
+        <span class="badge"><a class=" btn btn-default" ui-sref="news.list"><i class="fa fa-arrow-left"/> Back </a></span>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h2>New Topic</h2>
+        <form class="myform" name="form" ng-submit="uploadArticle(myform)"  novalidate>
+        <div class="form-group">
+            <label>Subject *:</label>
+            <input  class="form-control"  ng-model="article.name" required>
+        </div>
+          <div class="form-group">
+            <label>Image URL :</label>
+            <input  class="form-control"  ng-model="article.img_url" >
+          </div>
+        <div class="form-group">
+          <label>Summary:</label>
+          <textarea maxlength="254" class="form-control" rows="3" ng-model="article.summary"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Message:</label>
+            <textarea  class="form-control" rows="15" ng-model="article.content" markdown-editor></textarea>
+        </div>
+
+        <div ng-include="" src="'views/partials/include/input_file.html'"></div>
+
+        <div class="form-group has-info" ng-show="progress">
+            <p class="help-block">Progress... {{ progress }}%</p>
+        </div>
+        <div class="form-group has-error" ng-show="error">
+          <p class="help-block">{{ error }}</p>
+        </div>
+        <div class="form-group has-success" ng-show="success">
+            <p class="help-block">{{ message }}</p>
+        </div>
+
+            <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">Save</button>
+        <button class="btn btn-primary" ng-click="cancelEdit()">Cancel</button>
+        </form>
+    </div>
+</div>

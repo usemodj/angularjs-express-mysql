@@ -31,4 +31,14 @@ index.html:
 ## angular-gettext
 http://lostechies.com/gabrielschenker/2014/02/11/angularjspart-12-multi-language-support/
   $ bower install angular-gettext --save
-  
+ Usage: https://lostechies.com/gabrielschenker/2014/02/11/angularjspart-12-multi-language-support/
+ 
+ 1. frontend> grunt nggettext_extract
+ 
+ 2. Open template.pot file and translate text to local language:
+  virtaal lang/template.pot   
+
+ 3. Save to 'lang/ko.po'
+ 
+ 4. frontend> grunt nggettext_compile
+    update app/scripts/translations.js file

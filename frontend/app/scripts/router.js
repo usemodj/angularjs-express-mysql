@@ -202,30 +202,63 @@ angular.module('frontendApp.router', ['ui.router'])
             })
             .state('forums.topics', {
                 abstract: true,
-                url: '',
+                url: ':forum_id/topics/',
                 template: '<ui-view/>'
             })
             .state('forums.topics.list', {
-                url: ':forum_id/topics/',
+                url: '',
                 templateUrl: 'views/partials/forums/topics/topics.list.html',
                 controller: 'TopicCtrl'
             })
             .state('forums.topics.new', {
-                url: ':forum_id/topics/new',
+                url: 'new',
                 templateUrl: 'views/partials/forums/topics/topics.new.html',
                 controller: 'NewTopicCtrl'
             })
             .state('forums.topics.view', {
-                url: ':forum_id/topics/:id',
+                url: ':id',
                 templateUrl: 'views/partials/forums/topics/topics.view.html',
                 controller: 'ViewTopicCtrl'
             })
             .state('forums.topics.edit', {
-                url: ':forum_id/topics/:id/edit',
+                url: ':id/edit',
                 templateUrl: 'views/partials/forums/topics/topics.edit.html',
-                controller: 'ViewTopicCtrl'
-            })
-        ;
+                controller: 'EditTopicCtrl'
+            });
+      //News Controllers
+      $stateProvider
+        .state('news', {
+          abstract: true,
+          url: '/news/',
+          // Example of loading a template from a file. This is also a top level state,
+          // so this template file will be loaded and then inserted into the ui-view
+          // within index.html.
+          template: '<ui-view/>',
+          //templateUrl: 'views/partials/news/layout.html',
+          data: {
+            access: access.public
+          }
+        })
+        .state('news.list', {
+          url: '',
+          templateUrl: 'views/partials/news/index.html',
+          controller: 'NewsCtrl'
+        })
+        .state('news.new', {
+          url: 'new',
+          templateUrl: 'views/partials/news/news.new.html',
+          controller: 'NewNewsCtrl'
+        })
+        .state('news.view', {
+          url: ':id/',
+          templateUrl: 'views/partials/news/news.view.html',
+          controller: 'ViewNewsCtrl'
+        })
+        .state('news.edit', {
+          url: ':id/edit',
+          templateUrl: 'views/partials/news/news.edit.html',
+          controller: 'EditNewsCtrl'
+        });
 
         // Admin controllers
         $stateProvider
@@ -482,8 +515,8 @@ angular.module('frontendApp.router', ['ui.router'])
             })
         ;
 
-        $urlRouterProvider.when('', '/products');
-        $urlRouterProvider.when('/', '/products');
+        $urlRouterProvider.when('', '/news/');
+        $urlRouterProvider.when('/', '/news/');
         $urlRouterProvider.otherwise('/404');
 
     }

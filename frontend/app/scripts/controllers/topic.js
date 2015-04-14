@@ -62,14 +62,20 @@ angular.module('frontendApp')
 
         $scope.searchTopics();
     }])
-    .controller('NewTopicCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$upload', 'topics', function ($scope, $state, $stateParams, $timeout, $upload, topics) {
+    .controller('NewTopicCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$window', '$upload', 'topics',
+    function ($scope, $state, $stateParams, $timeout, $window, $upload, topics) {
         $scope.newTopic = {};
         $scope.files = [];
 
+        //console.log($scope.currentUser);
+        if(!$scope.currentUser || !$scope.currentUser.email){
+          //$window.alert('Login Required');
+          return $state.go('anon.login');
+        }
         //listen for the file selected event
         $scope.$on("fileSelected", function (event, args) {
             $scope.$apply(function () {
-                //add the file object to the scope's files collection
+                //add the file object to the scope's files collectionU
                 $scope.files.push(args.file);
             });
         });

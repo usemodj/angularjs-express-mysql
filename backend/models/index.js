@@ -62,6 +62,7 @@ function setup(db, cb) {
     require('./forum')(orm, db);
     require('./topic')(orm, db);
     require('./post')(orm, db);
+    require('./article')(orm, db);
 
     db.sync(function(err){
         if(err) console.log(err);

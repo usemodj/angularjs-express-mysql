@@ -21,7 +21,7 @@
     <!-- endbower -->
     <!-- endbuild -->
     <link rel="stylesheet" href="bower_components/angular-treeview/css/angular.treeview.css"/>
-    
+
     <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/all.css" />
     <link rel="stylesheet" href="styles/main.css">
@@ -36,6 +36,7 @@
       <!-- Add your site or application content here -->
       <div ng-include="" src="'views/partials/include/navbar.html'"></div>
       <div ui-view></div>
+      <div ng-include="" src="'views/partials/include/footer.html'"></div>
     </div>
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
@@ -142,6 +143,8 @@
     <script src="scripts/controllers/taxon_tree.js"></script>
     <script src="scripts/controllers/upload.js"></script>
     <script src="scripts/directives/file_upload.js"></script>
+    <script src="scripts/controllers/news.js"></script>
+    <script src="scripts/services/articles.js"></script>
     <!-- endbuild -->
 </body>
 </html>

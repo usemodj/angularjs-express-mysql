@@ -402,10 +402,10 @@ module.exports = {
                         });
                     }, function(err){
                         if(err) return callback(err);
-                        callback(null, topic);
+                        callback(null);
                     });
                 },
-                function(topic, callback){
+                function( callback){
                     req.db.driver.execQuery('DELETE FROM posts WHERE topic_id = ? ', [topic.id], function(err, posts) {
                         if(err) return callback(err);
                         log.info('>> Deleted posts count: '); log.info(posts);
@@ -432,9 +432,9 @@ module.exports = {
             ], function(err, results){
                 if(err) {
                     log.error(err);
-                    return res.status(500);
+                    return res.status(500).json(err);
                 }
-                res.status(200);
+                res.status(200).json('Topic deleted!');
             });
         });
     },
@@ -529,6 +529,7 @@ module.exports = {
         var Forum = req.models.forums;
         var Topic = req.models.topics;
         var Post = req.models.posts;
+        var Asset = req.models.assets;
         var User = req.models.users;
         var ip = req.connection.remoteAddress;
         var user = JSON.parse(req.cookies.user);
@@ -537,26 +538,52 @@ module.exports = {
 
         User.one({email: user.email}, function (err, user) {
             if (err || user == null) {
-                log.error('Login required!');
-                return next(new Error('Login required!'));
+                log.error('Login email does not exist!');
+                return next(new Error('Login email does not exist!'));
             }
             Post.one({id: body.id, user_id: user.id}, function(err, post){
                if(err || post == null) return next(err);
-               post.remove(function(err){
-                   if(err) return next(err);
-                   Topic.get(body.topic_id, function(err, topic){
-                       if(err) return next(err);
-                       //log.debug(JSON.stringify(topic));
-                       var replies = topic.replies - 1
-                       topic.save({
-                           replies: ((replies< 0)? 0: replies)
-                       }, function(err){ });
-                   });
-                   Forum.get(post.forum_id, function(err, forum){
-                       var count = forum.post_count - 1;
-                       forum.save({post_count:((count < 0)? 0: count)}, function(err){});
-                   })
-                   return res.status(200);
+               async.waterfall([
+                   function(callback){
+                      Asset.find({viewable_id: post.id, viewable_type: 'Post'}, function(err, assets){
+                          async.each(assets, function(asset, cb){
+                              Asset.deleteAssetAndFile(asset, function(err){
+                                  if(err) return cb(err);
+                                  return cb();
+                              });
+                          }, function(err){
+                              if(err) return callback(err);
+                              return callback(null, post);
+                          });
+                      })
+                   },
+                   function(post, callback){
+                       post.remove(function(err){
+                           if(err) return callback(err);
+                           Topic.get(body.topic_id, function(err, topic){
+                               if(err) return callback(err);
+                               //log.debug(JSON.stringify(topic));
+                               var replies = topic.replies - 1
+                               topic.save({
+                                   replies: ((replies< 0)? 0: replies)
+                               }, function(err){
+                                   if(err) log.error(err);
+                                   Forum.get(post.forum_id, function(err, forum){
+                                       var count = forum.post_count - 1;
+                                       forum.save({post_count:((count < 0)? 0: count)}, function(err){
+                                           if(err) log.error(err);
+
+                                           return callback(null);
+                                       });
+                                   })
+                               });
+                           });
+
+                       });
+                   }
+               ], function(err, results){
+                   if(err) return res.status(500).json(err);
+                   return res.status(200).json('Post deleted!');
                });
             });
         });
