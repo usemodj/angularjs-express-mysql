@@ -273,6 +273,7 @@ module.exports = {
     },
 
     savePost: function(req, res, next){
+        var Topic = req.models.topics;
         var Post = req.models.posts;
         var Asset = req.models.assets;
         var User = req.models.users;
@@ -294,7 +295,7 @@ module.exports = {
                 function(callback){
                     Post.get(post.id, function (err, post1) {
                         if (err) return callback(err);
-                        //log.debug(JSON.stringify(post1));
+                        log.debug(JSON.stringify(post1));
                         post1.save({
                             name: post.name,
                             content: post.content,
@@ -305,7 +306,18 @@ module.exports = {
                                 log.warn(err);
                                 return callback(err);
                             }
-                            return callback(null, post2);
+                            if(post2.root){
+                                Topic.get(post2.topic_id, function(err, topic){
+                                    if(err) return callback(err);
+                                    topic.name = post2.name; //update topic title
+                                    topic.save(function(err){
+                                        if(err) return callback(err);
+                                        return callback(null, post2);
+                                    });
+                                })
+                            } else {
+                                return callback(null, post2);
+                            }
                         });
                     });
                 },
@@ -589,6 +601,7 @@ module.exports = {
         });
 
     },
+    // update post without file attachment
     updatePost: function(req, res, next) {
         //var Forum = req.models.forums;
         var Topic = req.models.topics;

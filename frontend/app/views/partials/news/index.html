@@ -72,6 +72,17 @@
   </div><!--/row-->
 
   <hr/>
+  <div class="row">
+    <div class="col-xs-2 col-md-2">Page:{{page}}/{{numPages}} ({{totalItems}})</div>
+    <div class="col-xs-8  col-md-7">
+      <pagination total-items="totalItems" ng-model="page" max-size="3" items-per-page="12"
+                  num-pages="numPages" ng-change="pageChanged()"></pagination>
+    </div>
+    <div class="col-xs-1 col-md-1">
+      <a ui-sref="news.list" ui-sref-opts="{reload: true}" class="btn btn-default btn-xs" >
+        <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+    </div>
+  </div>
 
 </div><!--/main-->
 

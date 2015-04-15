@@ -17,6 +17,9 @@ module.exports = function(orm, db) {
         birth_day: {
             type: 'date', time: false
         },
+        picture_id: {
+            type: 'integer'
+        },
         created_at: {
             type: 'date',
             time: true
