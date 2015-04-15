@@ -40,6 +40,7 @@ module.exports = function(orm, db) {
 
         }
     });
+    
     // creates column 'user_id' in 'customers' table
     //Profile.hasOne('user', db.models.users, {});
     //Profile.hasOne('address', db.models.addresses, {reverse: 'addresses', autoFetch: true});
