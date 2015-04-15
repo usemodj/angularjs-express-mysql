@@ -7,11 +7,12 @@ angular.module('frontendApp')
         'AuthFactory',
         '$location',
         '$remember',
-        function($scope, AuthFactory, $location, $remember) {
+        'redirects',
+        function($scope, AuthFactory, $location, $remember, redirects) {
             $scope.error = {};
             $scope.user = {};
             $scope.user.rememberMe = false;
-            
+
             if($remember('email')){
             	$scope.user.rememberMe = true;
             	$scope.user.email = $remember('email');
@@ -38,7 +39,10 @@ angular.module('frontendApp')
                     $scope.errors = {};
 
                     if (!err) {
-                        $location.path('/');
+                        console.log('>>redirect: '+ $scope.redirect);
+                        console.log('>>redirectURL: '+  redirects.getRedirectURL());
+                        $location.path( redirects.getRedirectURL()? redirects.getRedirectURL(): '/');
+                        //$location.path( $scope.redirect ? $scope.redirect : '/');
                     } else {
                         console.log('>>login controller error:'+ JSON.stringify(err));
                         console.log(err);

@@ -69,27 +69,18 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(csrf({cookie: true}))
+app.use(csrf({cookie: true}));
 // error handler
 app.use(function (err, req, res, next) {
     if (err.code !== 'EBADCSRFTOKEN') return next(err)
      // handle CSRF token errors here
-    res.status(403)
-    res.send('session has expired or form tampered with')
-})
+    res.status(403).send('session has expired or form tampered with')
+});
 
 app.use(function (req, res, next) {
   res.cookie('XSRF-TOKEN', req.csrfToken())
   next()
-})
-//app.use(function(req, res, next) {
-//    res.setHeader("Access-Control-Allow-Origin", '*');
-//    res.setHeader("Access-Control-Allow-Credentials","true");
-//    res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
-//    res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-xsrf-token, X-Requested-With, Accept, Expires, Last-Modified, Cache-Control");
-//    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//    next();
-//});
+});
 
 // app.use(modRewrite([
 //                 '!\\.html|\\.js|\\.css|\\woff|\\ttf|\\swf$ /index.html [L]'

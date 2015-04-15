@@ -37,12 +37,20 @@ var routes = [
     {
         path: '/auth/session',
         httpMethod: 'POST',
-        middleware: [SessionCtrl.login]
+        middleware: [SessionCtrl.login],
+        accessLevel: accessLevels.public
     },
     {
         path: '/auth/session',
         httpMethod: 'DELETE',
-        middleware: [SessionCtrl.logout]
+        middleware: [SessionCtrl.logout],
+        accessLevel: accessLevels.public
+    },
+    {
+        path: '/auth/session/delete',
+        httpMethod: 'DELETE',
+        middleware: [SessionCtrl.logout],
+        accessLevel: accessLevels.public
     },
     {
         path: '/auth/mail',

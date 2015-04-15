@@ -52,7 +52,7 @@ angular.module('frontendApp')
       },
       searchArticles: function (conditions, callback) {
         var cb = callback || angular.noop;
-        console.log(conditions);
+        //console.log(conditions);
         $http.post('/articles/search', conditions)
           .success(function (data, status, headers, config) {
             console.log('>> status:' + status);

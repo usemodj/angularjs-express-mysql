@@ -55,8 +55,8 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                 },
 
                 logout: function(callback) {
-                    console.log('>>$cookies[XSRF-TOKEN]: '); console.log($cookies['XSRF-TOKEN']);
-    
+                    console.log("$cookieStore.get('user'): "); console.log( $cookieStore.get('user'));
+
                     var cb = callback || angular.noop;
                     SessionFactory.remove( function(res) {
                             console.log(res);

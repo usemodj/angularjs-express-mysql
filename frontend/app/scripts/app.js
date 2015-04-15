@@ -55,14 +55,16 @@ angular.module('frontendApp',
              * in. Read all about it here:
              * http://www.espeo.pl/2012/02/26/authentication-in-angularjs-application
              */
-            var interceptor = ['$q', '$location', '$rootScope',function ($q, $location, $rootScope) {
+            var interceptor = ['$q', '$location', '$rootScope', 'redirects',function ($q, $location, $rootScope, redirects) {
                 function success(response) {
                     return response;
                 }
                 function error(response) {
                     var status = response.status;
                     if (status === 401 || status === 403) {
+                      console.log('>>location url: '+ $location.url());
                         $rootScope.redirect = $location.url(); // save the current url so we can redirect the user back
+                        redirects.setRedirectURL($location.url());
                         $rootScope.currentUser = null;
                         $location.path('/login');
 
@@ -73,26 +75,28 @@ angular.module('frontendApp',
                     return promise.then(success, error);
                 }
             }];
-            //$httpProvider.interceptors.push(interceptor);
+
+            $httpProvider.interceptors.push(interceptor);
         }
     ])
-    .run(['$rootScope', '$state','$stateParams', 'AuthFactory','gettextCatalog', '$http','$cookies',
-        function ($rootScope, $state, $stateParams, AuthFactory,gettextCatalog, $http, $cookies) {
+    .run(['$rootScope', '$state','$stateParams', 'AuthFactory','gettextCatalog', '$http','$cookies', '$location', 'redirects',
+        function ($rootScope, $state, $stateParams, AuthFactory,gettextCatalog, $http, $cookies, $location, redirects) {
         // It's very handy to add references to $state and $stateParams to the $rootScope
         // so that you can access them from any scope within your applications.For example,
         // <li ng-class="{ active: $state.includes('contacts.list') }"> will set the <li>
         // to active whenever 'contacts.list' or one of its decendents is active.
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
-
         //$http.defaults.headers.post['x-csrf-token'] = $cookies._csrf;
-        $http.defaults.headers.post['X-XSRF-TOKEN'] = $cookies['XSRF-TOKEN'];
+        //$http.defaults.headers.post['X-XSRF-TOKEN'] = $cookies['XSRF-TOKEN'];
         //$http.defaults.headers.post['_csrf'] = $cookies._csrf;
 
         gettextCatalog.currentLanguage = 'ko';
         gettextCatalog.debug = true;
 
         $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
+            console.log('>>location: '+ $location.path());
+            if($location.path() != '/login/') redirects.setRedirectURL($location.path());
             if (!AuthFactory.authorize(toState.data.access)) {
                 $rootScope.error = "Seems like you tried accessing a route you don't have access to...";
                 event.preventDefault();

@@ -9,7 +9,7 @@ module.exports = function(orm, db) {
             required: true
         },
         nickname: {
-            type: text, size: 40
+            type: 'text', size: 40
         },
         gender: {
             type: 'enum', values:['Male', 'Female', 'Other']
@@ -43,5 +43,6 @@ module.exports = function(orm, db) {
     // creates column 'user_id' in 'customers' table
     //Profile.hasOne('user', db.models.users, {});
     //Profile.hasOne('address', db.models.addresses, {reverse: 'addresses', autoFetch: true});
-    Profile.hasMany('address', db.models.addresses, {reverse: 'addresses'});
+    Profile.hasMany('addresses', db.models.addresses, {}, {key: true});
+    Profile.hasOne('picture', db.models.assets); //picture path
 };
