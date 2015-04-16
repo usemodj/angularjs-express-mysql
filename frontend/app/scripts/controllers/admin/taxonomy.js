@@ -44,11 +44,13 @@ angular.module('frontendApp')
         };
 
         $scope.searchTaxonomies = function(form){
-            taxonomies.index(function(err, list){
+            taxonomies.list(function(err, list){
               if(err){
+                console.log(err);
                 $scope.error = err;
                 return;
               }
+              console.log(list);
               $scope.data.taxonomies = list;
               $filter('orderBy')($scope.data.taxonomies, 'position', false);
             });
@@ -91,8 +93,8 @@ angular.module('frontendApp')
         //$scope.taxonomy = taxonomy;
         taxonomies.get({id: $stateParams.id}, function(err, data){
             $scope.taxonomy = data;
-            $scope.taxonomy.nodes = makeTree({q: $scope.taxonomy.taxons})
-            //console.log( $scope.taxonomy);
+            if($scope.taxonomy.taxons) $scope.taxonomy.nodes = makeTree({q: $scope.taxonomy.taxons})
+            console.log( $scope.taxonomy);
             //console.log($scope.taxonomy.nodes);
         });
         //$scope.taxonomy.nodes = makeTree({id:'id', q:$scope.taxonomy.taxons});

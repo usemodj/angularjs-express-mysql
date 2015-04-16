@@ -51,7 +51,7 @@ module.exports = {
             ' 	    (SELECT a.* FROM \n'+
             '           (SELECT * FROM assets ORDER BY position, id DESC) a \n' +
             '        GROUP BY a.viewable_id \n'+
-            ' 		) a ON v.id = a.viewable_id \n'+
+            ' 		) a ON v.id = a.viewable_id AND a.viewable_type ="Variant" \n'+
             ' 	WHERE v.deleted_at IS NULL \n'+
             ' 	) va ON va.product_id = p.id \n'+
             ' WHERE pt.taxons_id = ? AND pt.products_id = p.id \n'+

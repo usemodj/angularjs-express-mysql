@@ -7,7 +7,14 @@ angular.module('frontendApp',
         function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $logProvider, ngClipProvider) {
             $logProvider.debugEnabled = true;
             ngClipProvider.setPath("bower_components/zeroclipboard/dist/ZeroClipboard.swf");
-
+//>>> IE browser cache problem >>>
+          $httpProvider.defaults.cache = false;
+          if (!$httpProvider.defaults.headers.get) {
+            $httpProvider.defaults.headers.get = {};
+          }
+          // disable IE ajax request caching
+          $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
+//<<<
             // For Access-Control-Allow-Origin and Set-Cookie header
             // $httpProvider.defaults.useXDomain = true;
             // $httpProvider.defaults.withCredentials = true;

@@ -3,7 +3,8 @@ var log = require('log4js').getLogger('taxonomies');
 module.exports = {
     index: function(req, res, next){
         var Taxonomy = req.models.taxonomies;
-        Taxonomy.find().order('position').order('-id').all(function (err, taxonomies) {
+        //log.debug('>> taxonomies index....')
+        Taxonomy.find().order('position').order('-id').run(function (err, taxonomies) {
             if(err) return next(err);
             //console.log('>> taxonomies:'+ JSON.stringify(taxonomies));
             res.status(200).json(taxonomies);
@@ -17,13 +18,15 @@ module.exports = {
         var Taxon = req.models.taxons;
 
         Taxonomy.get(id, function(err, taxonomy){
-            if(err) return next(err);
-            log.debug(taxonomy);
-            //delete taxonomy.taxons;
+            if(err) return res.status(500).json(err);
+            //log.debug('>>taxonomy: ' + JSON.stringify(taxonomy));
+            return res.status(200).json(taxonomy);
+            //get taxonomy.taxons;
             //Taxon.find({taxonomy_id: taxonomy.id}).order('position').run(function(err, data){
+            //    if(err) return res.status(500).json(err);
             //    log.debug(data);
             //    taxonomy.taxons = data;
-                res.status(200).json(taxonomy);
+            //    return res.status(200).json(taxonomy);
             //});
         });
 

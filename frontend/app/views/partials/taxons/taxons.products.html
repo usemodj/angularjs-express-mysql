@@ -20,11 +20,11 @@
           <div class="clearfix">
             <div class="product-image ">
               <a ui-sref="products.view({id: item.id})">
-                <img width="200px" height="190px" ng-src="/uploads/images/{{item.file_path}}" alt="{{item.alt}}"/>
+                <img  width="310px" ng-src="/uploads/images/{{item.file_path}}" alt="{{item.alt}}"/>
               </a>
             </div>
             <a class="info" ui-sref="products.view({id: item.id})">{{item.name}}</a>
-            <span class="price selling">{{item.price}}</span>
+            <span class="price selling">{{item.price | currency}}</span>
           </div>
         </li>
       </ul>

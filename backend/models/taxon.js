@@ -65,7 +65,7 @@ module.exports = function(orm, db) {
         }
 
     }, {
-        cache: false,
+        //cache: false,
         autoFetch: true,
         autoFetchLimit: 1,
         methods: {
@@ -92,6 +92,7 @@ module.exports = function(orm, db) {
         }
 
     });
+
     // creates column 'taxonomy_id' in 'taxons' table
     Taxon.hasOne('taxonomy', db.models.taxonomies, { reverse:'taxons', cascadeRemove:true });
     //Taxon.hasMany('products', db.models.products, {}, {});

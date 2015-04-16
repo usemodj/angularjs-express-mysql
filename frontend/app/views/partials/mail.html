@@ -6,9 +6,9 @@
             </h1>
             <div class="account-wall">
                 <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120" alt="">
-					
+
                 <form class="form-password" name="form" ng-submit="mailPassword(form)" novalidate>
-						Token:{{passwordToken}}
+                    Login Email:
                     <div ng-class="{'has-error': form.email.$error.server}">
                         <input type="text" class="form-control" placeholder="Email" name="email" ng-model="user.email" required autofocus server-error>
                         <p class="help-block" ng-show="form.email.$error.server">

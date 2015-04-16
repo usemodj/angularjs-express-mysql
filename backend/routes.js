@@ -326,7 +326,13 @@ var routes = [
 
     //Taxonomies resource
     {
-        path: '/taxonomies',
+        path: '/taxonomies/',
+        httpMethod: 'GET',
+        middleware: [TaxonomyCtrl.index],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/taxonomies/list',
         httpMethod: 'GET',
         middleware: [TaxonomyCtrl.index],
         accessLevel: accessLevels.admin

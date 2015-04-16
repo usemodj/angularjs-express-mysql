@@ -10,7 +10,7 @@ angular.module('frontendApp')
     // Public API here
     return {
 
-        index: function (callback) { //GET
+        query: function (callback) { //GET
           var cb = callback || angular.noop;
             resource.query(function(list){
               return cb(null, list);
@@ -21,7 +21,7 @@ angular.module('frontendApp')
         get: function(data, callback){ //GET
             var cb = callback || angular.noop;
             resource.get(data, function(taxonomy){
-                //console.log('>>taxonomy:'+JSON.stringify(taxonomy));
+                //console.log(taxonomy);
                 return cb(null, taxonomy);
             }, function(err){
                 return cb(err, null);
@@ -46,7 +46,16 @@ angular.module('frontendApp')
         remove: function(data){ //DELETE
             return resource.remove(data);
         },
-
+        list: function(callback){
+          var cb = callback || angular.noop;
+          $http.get('/taxonomies/list')
+            .success(function(data, status, headers, config){
+              return cb(null, data);
+            })
+            .error(function (data, status, header, config) {
+              return cb(data);
+            });
+        },
         updatePosition: function(entry, callback){
             //entry: sorted ids = '3,1,2.4,5'
             var cb = callback || angular.noop;

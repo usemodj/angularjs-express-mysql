@@ -78,8 +78,13 @@ app.use(function (err, req, res, next) {
 });
 
 app.use(function (req, res, next) {
-  res.cookie('XSRF-TOKEN', req.csrfToken())
-  next()
+    res.cookie('XSRF-TOKEN', req.csrfToken());
+//>>> IE brower cache problem >>>
+    res.header('Access-Control-Max-Age', 0);
+    res.header('Cache-Control', 'max-age=0,no-cache,no-store,post-check=0,pre-check=0,must-revalidate');
+    res.header('Expires', '-1');
+//>>>
+    next()
 });
 
 // app.use(modRewrite([
