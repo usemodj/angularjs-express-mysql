@@ -372,7 +372,7 @@ angular.module('frontendApp.router', ['ui.router'])
                 //templateUrl: 'views/partials/admin/products/layout.html'
             })
             .state('admin.products.taxonomies.list', {
-                //url: '',
+                url: '',
                 templateUrl: 'views/partials/admin/taxonomies/taxonomies.list.html',
                 controller: 'AdminTaxonomyCtrl'
             })

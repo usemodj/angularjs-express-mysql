@@ -401,7 +401,7 @@ module.exports = {
                        }, function(err){
                            //log.debug('>> optionTypes: '+ JSON.stringify(optionTypes));
                            product.option_types = optionTypes;
-                           product.save(function(err){
+                           product.save(function(err, product){
                                callback(null, product);
                            });
                        });
@@ -415,7 +415,7 @@ module.exports = {
                            });
                        }, function(err){
                            product.taxons = taxons;
-                           product.save(function(err){
+                           product.save(function(err, product){
                                callback(null, product);
                            });
                    });
@@ -478,7 +478,7 @@ module.exports = {
         ' 	    (SELECT a.* FROM \n'+
         '           (SELECT * FROM assets ORDER BY position, id DESC) a \n'+
         ' 		GROUP BY a.viewable_id \n'+
-        '       ) a ON v.id = a.viewable_id \n'+
+        '       ) a ON v.id = a.viewable_id AND a.viewable_type = "Variant" \n'+
         '   WHERE v.deleted_at IS NULL \n'+
         '   ) va ON va.product_id = p.id \n'+
         ' WHERE p.deleted_at IS NULL AND (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
@@ -499,7 +499,7 @@ module.exports = {
             });
         });
     },
-
+    //public product view
     viewProduct: function(req, res, next){
         var Product = req.models.products;
         //var Variant = req.models.variants;
@@ -521,9 +521,10 @@ module.exports = {
             ' WHERE va.product_id = ? AND va.deleted_at IS NULL AND va.is_master = false ORDER BY position, id;',[product_id],
             function(err, variants){
                 if(err) return next(err);
+
                 req.db.driver.execQuery('SELECT a.id, a.attachment_file_path AS file_path, a.alt, a.viewable_id '+
                 ' FROM assets a INNER JOIN variants v ON a.viewable_id = v.id '+
-                ' WHERE v.deleted_at IS NULL AND v.product_id = ? '+
+                ' WHERE v.deleted_at IS NULL AND a.viewable_type = "Variant" AND v.product_id = ? '+
                 ' ORDER BY a.position, a.id;',[product_id],
                 function(err, assets){
                     if(err) return next(err);

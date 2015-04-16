@@ -11,13 +11,13 @@
       </div>
       <div class="collapse navbar-collapse pull-right">
           <ul class="nav navbar-nav">
-            <li active-nav><a ui-sref="products.list">Store</a>
+            <li ng-class="{active:$state.includes('products')}"><a ui-sref="products.list">Store</a>
             </li>
-            <li active-nav><a ui-sref="news.list" translate>News</a>
+            <li ng-class="{active:$state.includes('news')}"><a ui-sref="news.list" translate>News</a>
             </li>
-            <li active-nav><a ui-sref="forums.list" translate>Forums</a>
+            <li ng-class="{active:$state.includes('forums')}"><a ui-sref="forums.list" translate>Forums</a>
             </li>
-            <li access-level="accessLevels.user" active-nav><a ui-sref="orders.list" translate>My Order</a>
+            <li access-level="accessLevels.user"ng-class="{active:$state.includes('orders')}"><a ui-sref="orders.list" translate>My Order</a>
             </li>
             <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.login" translate>Login</a>
             </li>

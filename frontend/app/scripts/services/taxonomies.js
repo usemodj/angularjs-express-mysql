@@ -10,8 +10,13 @@ angular.module('frontendApp')
     // Public API here
     return {
 
-        index: function () { //GET
-            return resource.query();
+        index: function (callback) { //GET
+          var cb = callback || angular.noop;
+            resource.query(function(list){
+              return cb(null, list);
+            }, function(err){
+              return cb(err);
+            });
         },
         get: function(data, callback){ //GET
             var cb = callback || angular.noop;
