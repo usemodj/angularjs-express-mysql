@@ -38,10 +38,10 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="item in data.forums">
-                        <td>{{item.id}}</td>
-                        <td><a ui-sref="forums.topics.list({forum_id: item.id})" >{{"&nbsp;&nbsp;&nbsp;".repeat(item.level)}}{{item.name}}</a> <br/>
+                        <td class="col-md-1">{{item.id}}</td>
+                        <td class="col-md-8"><a ui-sref="forums.topics.list({forum_id: item.id})" >{{"&nbsp;&nbsp;&nbsp;".repeat(item.level)}}{{item.name}}</a> <br/>
                           <small>{{item.description}}</small></td>
-                        <td><small><span class="badge">Topics: {{item.topic_count}}</span> <span class="badge">Posts: {{item.post_count}}</span><br/>
+                        <td class="col-md-5"><small><span class="badge">Topics: {{item.topic_count}}</span> <span class="badge">Posts: {{item.post_count}}</span><br/>
                             <span class="btn btn-default btn-xs">Updated at: {{item.updated_at}}</span></small></td>
                      </tr>
                     </tbody>

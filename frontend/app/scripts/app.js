@@ -69,7 +69,7 @@ angular.module('frontendApp',
                 function error(response) {
                     var status = response.status;
                     if (status === 401 || status === 403) {
-                      console.log('>>location url: '+ $location.url());
+                        //console.log('>>location url: '+ $location.url());
                         $rootScope.redirect = $location.url(); // save the current url so we can redirect the user back
                         redirects.setRedirectURL($location.url());
                         $rootScope.currentUser = null;
@@ -102,10 +102,10 @@ angular.module('frontendApp',
         gettextCatalog.debug = true;
 
         $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
-            console.log('>>location: '+ $location.path());
+            //console.log('>>location: '+ $location.path());
             if($location.path() != '/login/') redirects.setRedirectURL($location.path());
             if (!AuthFactory.authorize(toState.data.access)) {
-                $rootScope.error = "Seems like you tried accessing a route you don't have access to...";
+                $rootScope.error = "You tried accessing a route you don't have access to...";
                 event.preventDefault();
                 //console.log('>>fromState.url: %s', fromState.url);
                 if(fromState.url === '^') {
