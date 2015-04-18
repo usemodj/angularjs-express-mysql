@@ -77,14 +77,14 @@ a {
 }
 
 ul#products li .price {
-    color: #00ADEE;
+    color: #e61876;
     font-size: 16px;
     padding-top: 5px;
     display: block;
 }
 
 #product-price .price {
-    color: #00ADEE;
+    color: #e61876;
     font-size: 26px;
     padding-top: 5px;
     display: block;
@@ -94,7 +94,7 @@ span.price.selling, #checkout-summary table tr[data-hook="item_total"] td:last-c
 }
 span.price, #checkout-summary table tr[data-hook="item_total"] td:last-child strong, #checkout-summary table #summary-order-total, #order_details td.price span, #order_details td.total span, #order_summary td.price span, #order_summary td.total span, table#cart-detail tbody#line_items tr td[data-hook="cart_item_price"], table#cart-detail tbody#line_items tr td[data-hook="cart_item_total"], div[data-hook="inside_cart_form"] #subtotal span.order-total {
     font-weight: bold;
-    color: #00ADEE;
+    color: #e61876;
 }
 
 /* radio button */
@@ -125,5 +125,5 @@ span.price, #checkout-summary table tr[data-hook="item_total"] td:last-child str
 }
 #ck-button input:checked + span {
     background-color:#aaa;
-    color:#f00;
+    color:#e61876;
 }

@@ -33,7 +33,7 @@
                             </div>
                             <div class="form-group col-xs-6 col-md-4" ng-class="{'has-error': myform.price.$invalid}" >
                                 <label>Master Price*:</label>
-                                <input class="form-control" type="number" min="0" name="price" ng-model="currentProduct.variant.price" required/>
+                                <input class="form-control" type="number" step="0.01" min="0" name="price" ng-model="currentProduct.variant.price" required/>
                                 <p class="error" ng-show="myform.price.$error.number">Not valid number!</p>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                             </div>
                             <div class="form-group col-xs-5 col-md-2" ng-class="{'has-error': myform.cost_price.$invalid}">
                                 <label>Cost Price:</label>
-                                <input class="form-control" type="number" min="0" name="cost_price" ng-model="currentProduct.variant.cost_price"/>
+                                <input class="form-control" type="number" step="0.01" min="0" name="cost_price" ng-model="currentProduct.variant.cost_price"/>
                                 <p class="error" ng-show="myform.cost_price.$error.number">Not valid number!</p>
                             </div>
                             <div class="form-group col-xs-5 col-md-2">
@@ -75,6 +75,11 @@
                                         <input class="form-control" placeholder="yyyy-mm-dd" type="text"  name="available_on" ng-model="currentProduct.available_on" jqdatepicker/>
                                         <p class="error" ng-show="myform.available_on.$error.date">Not valid date!</p>
                                     </div>
+                                   <div class="form-group" ng-class="{'has-error': myform.deleted_at.$invalid}">
+                                     <label>Deleted At:</label>
+                                     <input class="form-control" placeholder="yyyy-mm-dd" type="text"  name="deleted_at" ng-model="currentProduct.deleted_at" jqdatepicker/>
+                                     <p class="error" ng-show="myform.available_on.$error.date">Not valid date!</p>
+                                   </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group">
@@ -85,19 +90,19 @@
                                 <div class="row">
                                     <div class="form-group col-xs-6 col-md-6" ng-class="{'has-error': myform.weight.$invalid}">
                                         <label>Weight:</label>
-                                        <input class="form-control" type="number" min="0" name="weight" ng-model="currentProduct.variant.weight"/>
+                                        <input class="form-control" type="number" step="0.01" min="0" name="weight" ng-model="currentProduct.variant.weight"/>
                                         <p class="error" ng-show="myform.weight.$error.number">Not valid number!</p>
                                     </div>
                                     <div class="form-group col-xs-6 col-md-6" ng-class="{'has-error': myform.height.$invalid}">
                                         <label>Height:</label>
-                                        <input class="form-control" type="number" min="0" name="height" ng-model="currentProduct.variant.height"/>
+                                        <input class="form-control" type="number" step="0.01" min="0" name="height" ng-model="currentProduct.variant.height"/>
                                         <p class="error" ng-show="myform.height.$error.number">Not valid number!</p>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-xs-6 col-md-6" ng-class="{'has-error': myform.weight.$invalid}">
                                         <label>Width:</label>
-                                        <input class="form-control" type="number" min="0" name="width" ng-model="currentProduct.variant.width"/>
+                                        <input class="form-control" type="number" step="0.01" min="0" name="width" ng-model="currentProduct.variant.width"/>
                                         <p class="error" ng-show="myform.width.$error.number">Not valid number!</p>
                                     </div>
                                     <div class="form-group col-xs-6 col-md-6" ng-class="{'has-error': myform.depth.$invalid}">

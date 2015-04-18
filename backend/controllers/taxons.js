@@ -49,13 +49,13 @@ module.exports = {
             ' 	(SELECT v.*, a.id AS asset_id, a.attachment_file_path AS file_path, a.alt \n'+
             ' 	FROM variants v INNER JOIN \n'+
             ' 	    (SELECT a.* FROM \n'+
-            '           (SELECT * FROM assets ORDER BY position, id DESC) a \n' +
+            '           (SELECT * FROM assets ORDER BY position, id) a \n' +
             '        GROUP BY a.viewable_id \n'+
             ' 		) a ON v.id = a.viewable_id AND a.viewable_type ="Variant" \n'+
             ' 	WHERE v.deleted_at IS NULL \n'+
             ' 	) va ON va.product_id = p.id \n'+
             ' WHERE pt.taxons_id = ? AND pt.products_id = p.id \n'+
-            '   AND p.deleted_at IS NULL AND (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
+            '   AND (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
             '   AND p.available_on <= NOW() AND va.price IS NOT NULL \n'+
             '   AND (LOWER(p.name) LIKE ? OR LOWER(p.description) LIKE ?) \n'+
             ' ORDER BY p.available_on DESC ';

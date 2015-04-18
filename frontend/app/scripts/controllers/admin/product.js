@@ -4,7 +4,7 @@ angular.module('frontendApp')
     .controller('AdminProductCtrl', ['$scope','$http','$state', '$stateParams', 'products',
         function ($scope, $http, $state, $stateParams, products) {
         $scope.page = $stateParams.page;
-        $scope.data = {};
+        $scope.data = { now: new Date()};
         $scope.conditions = {};
 
         $scope.pageChanged = function() {

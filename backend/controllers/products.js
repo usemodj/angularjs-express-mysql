@@ -476,12 +476,12 @@ module.exports = {
         ' 	(SELECT v.*, a.id AS asset_id, a.attachment_file_path AS file_path, a.alt \n'+
         ' 	FROM variants v INNER JOIN  \n'+
         ' 	    (SELECT a.* FROM \n'+
-        '           (SELECT * FROM assets ORDER BY position, id DESC) a \n'+
+        '           (SELECT * FROM assets ORDER BY position, id) a \n'+
         ' 		GROUP BY a.viewable_id \n'+
         '       ) a ON v.id = a.viewable_id AND a.viewable_type = "Variant" \n'+
         '   WHERE v.deleted_at IS NULL \n'+
         '   ) va ON va.product_id = p.id \n'+
-        ' WHERE p.deleted_at IS NULL AND (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
+        ' WHERE (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
         '   AND p.available_on <= NOW() AND va.price IS NOT NULL \n'+
         '   AND (LOWER(p.name) LIKE ? OR LOWER(p.description) LIKE ?) \n'+
         ' ORDER BY p.available_on DESC ';
@@ -521,8 +521,8 @@ module.exports = {
             ' WHERE va.product_id = ? AND va.deleted_at IS NULL AND va.is_master = false ORDER BY position, id;',[product_id],
             function(err, variants){
                 if(err) return next(err);
-
-                req.db.driver.execQuery('SELECT a.id, a.attachment_file_path AS file_path, a.alt, a.viewable_id '+
+                // assets of the product
+                req.db.driver.execQuery('SELECT a.id, a.attachment_file_path AS file_path, a.alt, a.viewable_id, a.position '+
                 ' FROM assets a INNER JOIN variants v ON a.viewable_id = v.id '+
                 ' WHERE v.deleted_at IS NULL AND a.viewable_type = "Variant" AND v.product_id = ? '+
                 ' ORDER BY a.position, a.id;',[product_id],

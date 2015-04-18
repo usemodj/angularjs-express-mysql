@@ -1,10 +1,10 @@
 ﻿<div class="row">
-    <div class="col-md-12 text-right">
+    <div class="col-md-10 col-md-offset-1 text-right">
         <span class="badge"><a class=" btn btn-default" ui-sref="forums.topics.list({forum_id: $stateParams.forum_id})"><i class="fa fa-arrow-left"/> Back </a></span>
     </div>
 </div>
 
-<div class="panel panel-default">
+<div class="panel panel-default col-md-10 col-md-offset-1">
     <div class="panel-body">
         <h2>New Topic</h2>
         <form class="myform" name="form" ng-submit="uploadTopic(myform)"  novalidate>
@@ -14,7 +14,7 @@
         </div>
         <div class="form-group">
             <label>Message:</label>
-            <textarea  class="form-control" rows="8" ng-model="newTopic.content" markdown-editor></textarea>
+            <textarea  class="form-control" rows="15" ng-model="newTopic.content" markdown-editor></textarea>
         </div>
 
         <div class="form-group">

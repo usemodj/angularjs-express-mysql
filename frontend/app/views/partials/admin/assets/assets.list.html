@@ -53,7 +53,7 @@
         </tr>
         </thead>
         <tbody ui-sortable="sortableOptions" ng-model="data.assets">
-        <tr ng-repeat="item in data.assets">
+        <tr ng-repeat="item in data.assets | orderBy: 'position +id'">
             <td style="width:100px" class="col-md-4"><span class="glyphicon glyphicon-list"></span> <img  height="50" ng-src="/uploads/images/{{item.attachment_file_path}}"/>
                 <input style="width:90px" ng-model="copy[$index]"><button class="btn btn-default btn-sm" clip-copy="copy[$index]">Copy</button>
             </td>

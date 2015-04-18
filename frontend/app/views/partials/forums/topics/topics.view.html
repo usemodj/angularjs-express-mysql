@@ -5,7 +5,7 @@
       <li ng-if="$last"><a ui-sref="forums.topics.list({forum_id: item.id})"><b>{{item.name}}</b></a></li>
     </ul>
     <div class="row">
-        <div class="col-md-12 text-right">
+        <div class="col-md-10 col-md-offset-1 text-right">
             <span class="badge"><a class=" btn btn-default" ui-sref="forums.topics.list({forum_id: $stateParams.forum_id})"><i class="fa fa-arrow-left"/> Back </a></span>
             <span class="badge" style="color:#666666;"><a ng-show="currentUser.role.title =='admin' || currentUser.email == data.topic.email" ng-confirm-click="Are you sure?" ng-click="delete(data.topic)"
                                    class="btn btn-default" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required!"><i class="glyphicon glyphicon-remove"></i> Delete Topic </a></span>
@@ -14,10 +14,10 @@
         </div>
     </div>
 
-    <div>
+    <div class="col-md-10 col-md-offset-1">
        <h2>{{data.topic.name}} <i ng-if="data.topic.locked" class="fa fa-unlock-alt"></i></h2>
     </div>
-    <div class="panel panel-default" ng-repeat="item in data.posts">
+    <div class="panel panel-default col-md-10 col-md-offset-1" ng-repeat="item in data.posts">
         <div class="panel-heading">{{item.name}}</div>
         <div class="panel-body" ng-bind-html="item.content | markdown"></div>
         <div class="btn-group" ng-repeat="file in item.assets | orderBy:'position' ">
@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default col-md-10 col-md-offset-1">
         <div class="panel-body">
             <div ng-show="!currentUser || currentUser.role.title == 'public'" class="label label-info">
               Login Required if you can reply

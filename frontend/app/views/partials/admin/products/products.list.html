@@ -50,9 +50,9 @@
                 <td>{{item.available_on}}</td>
                 <td>{{item.deleted_at}}</td>
                 <td class="text-center">
-                    <a ng-hide="item.deleted_at != null" ui-sref="admin.products.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                    <a ui-sref="admin.products.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                     <a ui-sref="admin.products.clone({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Clone"><span class="glyphicon glyphicon-file"></span></a>
-                    <a ng-hide="item.deleted_at != null" ng-confirm-click="Are you sure?" ng-click="deleteProduct(item)" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Delete"><span class="glyphicon glyphicon-trash"></span></a>
+                    <a ng-hide="item.deleted_at != null && (item.deleted_at | toDate) < data.now " ng-confirm-click="Are you sure?" ng-click="deleteProduct(item)" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Delete"><span class="glyphicon glyphicon-trash"></span></a>
                 </td>
             </tr>
             </tbody>
@@ -65,7 +65,7 @@
             </div>
             <div class="col-xs-2 col-md-2">
                 <a ui-sref="admin.products.list" ui-sref-opts="{reload: true}" class="btn btn-primary" >
-                    <span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+                    <span class="glyphicon glyphicon-refresh"></span> Refresh </a>
             </div>
         </div>
     </div>

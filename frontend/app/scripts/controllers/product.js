@@ -36,9 +36,9 @@ angular.module('frontendApp')
         $scope.data.product = data.product;
         $scope.data.variants = data.variants;
         if(data.variants) $scope.product.variant = data.variants[0];
-        $scope.data.assets = $filter('orderBy')(data.assets, 'position -id') ;
+        $scope.data.assets = $filter('orderBy')(data.assets, 'position +id') ;
+        //console.log( $scope.data.assets);
         if($scope.data.assets) $scope.mainImage = '/uploads/images/'+ $scope.data.assets[0].file_path;
-
         //console.log(data);
     });
 
