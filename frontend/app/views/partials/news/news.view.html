@@ -2,7 +2,7 @@
   <div class="center-block">
     <div class="row">
         <div class="col-md-10  col-md-offset-1 text-right">
-            <span class="badge"><a class=" btn btn-default btn-xs" ui-sref="news.list"><i class="fa fa-arrow-left"/> Back </a></span>
+            <span class="badge"><a class=" btn btn-default btn-xs" ui-sref="news.list"><i class="fa fa-arrow-left"></i> Back </a></span>
             <span class="badge" style="color:#666666;"><a ng-show="currentUser && currentUser.role.title =='admin'" ng-confirm-click="Are you sure?" ng-click="delete(data.article)"
                                    class="btn btn-default btn-xs" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Admin is allowed!">
                                   <span class="glyphicon glyphicon-remove"></span> Delete Article </a></span>
@@ -15,11 +15,11 @@
            <h2>{{data.article.name}}</h2>
         </div>
         <div class="panel panel-default">
-            <div ng-show="data.article.img_url"><img width="100%" ng-src="{{data.article.img_url}}"/></div>
+            <img ng-show="data.article.img_url"><img width="100%" ng-src="{{data.article.img_url}}"></div>
             <div class="panel-body" ng-bind-html="data.article.content | markdown"></div>
             <div class="btn-group" ng-repeat="file in data.article.assets | orderBy:'position' ">
                 <a class="btn btn-default btn-sm" ng-href="/uploads/images/{{file.attachment_file_path}}" alt="{{file.attachment_file_name}}" target="attachment">
-                    <i class="fa fa-file"/> {{file.attachment_file_name}} ({{file.attachment_file_size}})
+                    <i class="fa fa-file"></i> {{file.attachment_file_name}} ({{file.attachment_file_size}})
                 </a>
             </div>
             <div ng-show="currentUser && currentUser.role.title =='admin'" class="well well-sm text-right">

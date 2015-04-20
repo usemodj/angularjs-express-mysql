@@ -21,7 +21,7 @@
             <div class="btn-group" ng-repeat="file in data.article.assets | orderBy:'position' ">
                 <div>
                     <a class="btn btn-default btn-xs" ng-href="/uploads/images/{{file.attachment_file_path}}" alt="{{file.attachment_file_name}}" target="attachment">{{file.attachment_file_name}} ({{file.attachment_file_size}})</a>
-                    <a class="btn btn-default btn-xs" ng-click="removeFile(file)" data-toggle="tooltip" data-placement="top" title="Remove '{{file.attachment_file_name}}' "><i class="fa fa-trash-o"/></a>
+                    <a class="btn btn-default btn-xs" ng-click="removeFile(file)" data-toggle="tooltip" data-placement="top" title="Remove '{{file.attachment_file_name}}' "><i class="fa fa-trash-o"></i></a>
                 </div>
             </div>
         </div>

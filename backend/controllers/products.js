@@ -461,7 +461,7 @@ module.exports = {
         // 	(SELECT v.*, a.id AS asset_id, a.attachment_file_path AS file_path, a.alt
         // 	FROM variants v INNER JOIN
         // 		(SELECT a.* FROM
-        // 			(SELECT * FROM assets ORDER BY position, id DESC) a
+        // 			(SELECT * FROM assets WHERE viewable_type = "Variant" ORDER BY position, id) a
         // 		GROUP BY a.viewable_id
         // 		) a ON v.id = a.viewable_id
         // 	WHERE v.deleted_at IS NULL
@@ -476,9 +476,9 @@ module.exports = {
         ' 	(SELECT v.*, a.id AS asset_id, a.attachment_file_path AS file_path, a.alt \n'+
         ' 	FROM variants v INNER JOIN  \n'+
         ' 	    (SELECT a.* FROM \n'+
-        '           (SELECT * FROM assets ORDER BY position, id) a \n'+
+        '           (SELECT * FROM assets WHERE viewable_type = "Variant" ORDER BY position, id) a \n'+
         ' 		GROUP BY a.viewable_id \n'+
-        '       ) a ON v.id = a.viewable_id AND a.viewable_type = "Variant" \n'+
+        '       ) a ON v.id = a.viewable_id \n'+
         '   WHERE v.deleted_at IS NULL \n'+
         '   ) va ON va.product_id = p.id \n'+
         ' WHERE (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+

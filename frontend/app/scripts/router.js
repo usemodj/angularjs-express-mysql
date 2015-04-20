@@ -1,7 +1,10 @@
+'use strict';
 angular.module('frontendApp.router', ['ui.router'])
-.config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
+.config(['$stateProvider', '$urlRouterProvider',
     function ($stateProvider,   $urlRouterProvider) {
         var access = routingConfig.accessLevels;
+        $urlRouterProvider.when('/', '/news/');
+        $urlRouterProvider.otherwise('/404');
 
         // Public controllers
         $stateProvider
@@ -284,12 +287,12 @@ angular.module('frontendApp.router', ['ui.router'])
                 templateUrl: 'views/partials/admin/users/users.edit.html',
                 controller: 'UserEditCtrl',
                 resolve: {
-                    user: function(UserFactory, $stateParams){
+                    user: ['UserFactory', '$stateParams', function(UserFactory, $stateParams){
                         return UserFactory.get({id: $stateParams.id});
-                    },
-                    roles: function(RoleFactory){
+                    }],
+                    roles: ['RoleFactory', function(RoleFactory){
                         return RoleFactory.query();
-                    }
+                    }]
                 }
             })
             .state('admin.products', {
@@ -315,15 +318,15 @@ angular.module('frontendApp.router', ['ui.router'])
                 templateUrl: 'views/partials/admin/products/products.edit.html',
                 controller: 'EditProductCtrl',
                 resolve: {
-                    product: function(products, $stateParams){
+                    product: ['products', '$stateParams', function(products, $stateParams){
                         return products.get({id: $stateParams.id});
-                    },
-                    optionTypesData: function(optionTypes){
+                    }],
+                    optionTypesData: ['optionTypes', function(optionTypes){
                         return optionTypes.index();
-                    },
-                    taxonsData: function(taxons){
+                    }],
+                    taxonsData: ['taxons', function(taxons){
                         return taxons.index();
-                    }
+                    }]
                 }
             })
             .state('admin.products.clone', {
@@ -331,15 +334,15 @@ angular.module('frontendApp.router', ['ui.router'])
                 templateUrl: 'views/partials/admin/products/products.clone.html',
                 controller: 'CloneProductCtrl',
                 resolve: {
-                    product: function(products, $stateParams){
+                    product: ['products', '$stateParams', function(products, $stateParams){
                         return products.get({id: $stateParams.id});
-                    },
-                    optionTypesData: function(optionTypes){
+                    }],
+                    optionTypesData: ['optionTypes', function(optionTypes){
                         return optionTypes.index();
-                    },
-                    taxonsData: function(taxons){
+                    }],
+                    taxonsData: ['taxons', function(taxons){
                         return taxons.index();
-                    }
+                    }]
                 }
             })
             .state('admin.products.option_types', {
@@ -358,11 +361,11 @@ angular.module('frontendApp.router', ['ui.router'])
                 templateUrl: 'views/partials/admin/option_types/option_types.edit.html',
                 controller: 'EditOptionTypeCtrl',
                 resolve: {
-                    optionType: function(optionTypes, $stateParams){
+                    optionType: ['optionTypes', '$stateParams', function(optionTypes, $stateParams){
                         optionTypes.get({id: $stateParams.id}, function(err, data){
                             return data;
                         });
-                    }
+                    }]
                 }
             })
             .state('admin.products.taxonomies', {
@@ -408,11 +411,11 @@ angular.module('frontendApp.router', ['ui.router'])
                 templateUrl: 'views/partials/admin/variants/variants.edit.html',
                 controller: 'EditVariantCtrl',
                 resolve: {
-                    variantData: function(variants, $stateParams){
+                    variantData: ['variants', '$stateParams', function(variants, $stateParams){
                         variants.get({id: $stateParams.id}, function(err, data){
                             return data;
                         });
-                    }
+                    }]
                 }
             })
             .state('admin.products.assets', {
@@ -448,9 +451,9 @@ angular.module('frontendApp.router', ['ui.router'])
                 templateUrl: 'views/partials/admin/shipping_methods/shipping_methods.edit.html',
                 controller: 'EditShippingMethodCtrl',
                 resolve: {
-                    shippingMethod: function(shippingMethods, $stateParams){
+                    shippingMethod: ['shippingMethods', '$stateParams', function(shippingMethods, $stateParams){
                         return shippingMethods.get({id: $stateParams.id});
-                    }
+                    }]
                 }
             })
 
@@ -470,9 +473,9 @@ angular.module('frontendApp.router', ['ui.router'])
                 templateUrl: 'views/partials/admin/payment_methods/payment_methods.edit.html',
                 controller: 'EditPaymentMethodCtrl',
                 resolve: {
-                    paymentMethod: function(paymentMethods, $stateParams){
+                    paymentMethod: ['paymentMethods', '$stateParams', function(paymentMethods, $stateParams){
                         return paymentMethods.get({id: $stateParams.id});
-                    }
+                    }]
                 }
             })
 
@@ -514,10 +517,6 @@ angular.module('frontendApp.router', ['ui.router'])
                 controller: 'EditForumCtrl'
             })
         ;
-
-        $urlRouterProvider.when('', '/news/');
-        $urlRouterProvider.when('/', '/news/');
-        $urlRouterProvider.otherwise('/404');
 
     }
 ]);

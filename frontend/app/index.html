@@ -20,9 +20,9 @@
     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
     <!-- endbower -->
     <!-- endbuild -->
-    <link rel="stylesheet" href="bower_components/angular-treeview/css/angular.treeview.css"/>
 
     <!-- build:css({.tmp,app}) styles/main.css -->
+    <link rel="stylesheet" href="bower_components/angular-treeview/css/angular.treeview.css"/>
     <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/all.css" />
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
@@ -38,12 +38,11 @@
       <div ui-view></div>
       <div ng-include="" src="'views/partials/include/footer.html'"></div>
     </div>
-    <!--[if lt IE 9]>
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-    <script src="bower_components/json3/lib/json3.min.js"></script>
-    <![endif]-->
 
     <!-- build:js scripts/vendor.js -->
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/ng-file-upload-shim/angular-file-upload-shim.js"></script>
@@ -67,14 +66,14 @@
     <script src="bower_components/showdown/src/showdown.js"></script>
     <script src="bower_components/angular-markdown-filter/markdown.js"></script>
     <!-- endbower -->
-    <!-- endbuild -->
-
     <script src="bower_components/markdown/lib/markdown.js"></script>
     <script src="bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
-    <script src="bower_components/angular-treeview/angular.treeview.min.js"></script>
-    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="bower_components/angular-treeview/angular.treeview.js"></script>
     <script src="bower_components/jquery-ui/ui/i18n/datepicker-ko.js"></script>
     <script src="bower_components/angular-i18n/angular-locale_ko.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/common/routingConfig.js"></script>
     <script src="scripts/common/tree.js"></script>
     <script src="scripts/common/utils.js"></script>
@@ -121,7 +120,6 @@
     <script src="scripts/controllers/product.js"></script>
     <script src="scripts/controllers/cart.js"></script>
     <script src="scripts/services/orders.js"></script>
-    <!--script src="scripts/directives/input.js"></script-->
     <script src="scripts/controllers/address.js"></script>
     <script src="scripts/controllers/payment.js"></script>
     <script src="scripts/services/payments.js"></script>

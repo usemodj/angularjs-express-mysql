@@ -21,6 +21,8 @@ var log4js = require('log4js');
 
 //var log = log4js.getLogger("app");
 var app = express();
+//  Avoids DEPTH_ZERO_SELF_SIGNED_CERT error
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 //Passport-local Strategy and  DB Models
 app.use(function(req, res, next) {
@@ -50,7 +52,8 @@ app.use(function(req, res, next){
 app.use(favicon());
 // replace this with the log4js connect-logger
 // app.use(logger('dev'));
-app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
+//app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
+log4js.configure(path.join(__dirname, './config/log4js.json'));
 
 app.use(cookieParser());
 app.use(bodyParser.json());

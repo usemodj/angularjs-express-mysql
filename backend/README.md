@@ -14,6 +14,14 @@ $ npm install
 ## Start express server
 
 $ npm start
+or
+$ ./bin/forever
+
+or production mode:
+$ NODE_ENV=production ./bin/forever
+
+or development environment:
+$ nodemon ./bin/forever
 
 ## Install node packages
 

@@ -1,13 +1,20 @@
 <div class="container">
-    <div class="pull-left">
-        <a ui-sref="products.list"> Home </a>
-    </div>
-    <div class="pull-right">
-        <a ui-sref="carts.list"><span class="glyphicon glyphicon-shopping-cart"></span> Cart </a>
-    </div>
     <h2>Order {{data.order.number}} <a ng-show="data.order.state == 'confirm'" ng-click="confirmOrder()" class="btn btn-primary" >
       <span class="glyphicon glyphicon-ok"></span> Confirm </a></h2>
-
+    <div class="row well">
+      <div class="col-md-4">
+        <label>Status</label><br/>
+        <div class="badge">{{data.order.state}}</div>
+      </div>
+      <div class="col-md-4">
+        <label>Payment State</label><br/>
+        <div class="badge">{{data.order.payment_state}}</div>
+      </div>
+      <div class="col-md-4">
+        <label>Shipment State</label><br/>
+        <div class="badge">{{data.order.shipment_state}}</div>
+      </div>
+    </div>
     <div class="row">
         <div class="col-md-4">
             <label>Billing Address:</label><br/>

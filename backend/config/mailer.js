@@ -18,10 +18,10 @@ module.exports = function(cb) {
     transport = nodemailer.createTransport(smtpPool({
         host: 'localhost',
         port: 25,
-        auth: {
-            user: "postmaster@thinkrbot.com",
-            pass: "postmaster"
-        },
+        //auth: {
+        //    user: "postmaster@thinkrbot.com",
+        //    pass: "postmaster"
+        //},
         maxConnection: 5,
         maxMessages: 10
     }));

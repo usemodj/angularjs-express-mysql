@@ -1,8 +1,9 @@
 var path = require('path');
-
+//console.log(process.env);
 var settings = {
 
-    upload_path: path.normalize(path.join(__dirname, './../../frontend/app/uploads/')),
+    upload_path: (process.env.NODE_ENV == 'production')? path.normalize(path.join(__dirname, './../../frontend/dist/uploads/'))
+                    : path.normalize(path.join(__dirname, './../../frontend/app/uploads/')),
     port: process.env.NODE_PORT || 3000,
     database: {
         protocol: "mysql", // or  "postgresql"

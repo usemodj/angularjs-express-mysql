@@ -1,9 +1,15 @@
 <div class="container">
+  <div class="pull-left">
+    <a ui-sref="products.list"> Home </a>
+  </div>
+  <div class="pull-right">
+    <a ui-sref="carts.list"><span class="glyphicon glyphicon-shopping-cart"></span> Cart </a>
+  </div>
 
     <ul class="nav nav-tabs" role="tablist">
         <li class="navbar-brand"> Checkout: </li>
         <li ng-class="{active: $state.includes('orders.address')}"><a><span class="glyphicon glyphicon-align-left"></span> Address <span class="glyphicon glyphicon-chevron-right"></span></a></li>
-        <li ng-class="{active: $state.includes('orders.delivery')}"><a><span class="glyphicon glyphicon-plane"></span> Delivery <span class="glyphicon glyphicon-chevron-right"></span></a></li>
+        <li ng-class="{active: $state.includes('orders.delivery')}"><a><span class="fa fa-truck"></span> Delivery <span class="glyphicon glyphicon-chevron-right"></span></a></li>
         <li ng-class="{active: $state.includes('orders.payment')}"><a><span class="glyphicon glyphicon-usd"></span> Payment <span class="glyphicon glyphicon-chevron-right"></span></a></li>
         <li ng-class="{active: $state.includes('orders.view')}"><a><span class="glyphicon glyphicon-ok"></span> Complete </a></li>
     </ul>

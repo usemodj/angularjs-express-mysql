@@ -571,13 +571,17 @@ module.exports = {
                     });
                 },
                 function (ship, callback) {
+                    //log.debug('>>Shipment: '+ JSON.stringify(ship));
                     Order.get(ship.order_id, function (err, order) {
                         if(err) return callback(err);
-                        order.shipment_total = ship.cost;
-                        order.total = order.item_total + ship.cost;
-                        order.state = 'payment';
-                        order.save(function (err, data) {
+
+                        order.save({
+                            shipment_total: ship.cost,
+                            total: order.item_total + ship.cost,
+                            state: 'payment'
+                        }, function (err, data) {
                             if (err) return callback(err);
+                            //log.debug('>>Order: '+ JSON.stringify(data));
                             callback(null, data);
                         });
                     });
@@ -774,7 +778,13 @@ module.exports = {
                         if(err) return callback(err);
                         //log.debug('>>getOrderItems:'+ JSON.stringify(data));
                         sendConfirmationMail(data, req.transport, function(err, message){
-                            if(err) return callback(err);
+                            if(err) {
+                                order.confirmation_delivered = false;
+                                log.error(">> FAIL : sending confirmation mail!!");
+                                log.error(err);
+                            }else {
+                                order.confirmation_delivered = true;
+                            }
                             callback(null, order);
                         });
                     });
@@ -784,7 +794,6 @@ module.exports = {
                     log.error(err);
                     return res.status(400).json(err);
                 }
-                order.confirmation_delivered = true;
                 order.save(function(err){
                     //res.status(200).json('Confirm Order successfully!');
                     module.exports.getOrderById(req, res, next);

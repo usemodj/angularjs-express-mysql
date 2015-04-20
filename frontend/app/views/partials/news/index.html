@@ -21,20 +21,8 @@
           <ul class="nav navbar-nav navbar-right">
              <li>
                <a ng-disabled="currentUser.role.title != 'admin'" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Admin Role Required!"
-                  class="btn btn-default btn-xs" ui-sref="news.new"><i class="fa fa-edit"/> New Aritle </a>
+                  class="btn btn-default btn-xs" ui-sref="news.new"><i class="fa fa-edit"></i> New Aritle </a>
              </li>
-             <li>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-bell"></i></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#"><span class="badge pull-right">40</span>Link</a></li>
-                  <li><a href="#"><span class="badge pull-right">2</span>Link</a></li>
-                  <li><a href="#"><span class="badge pull-right">0</span>Link</a></li>
-                  <li><a href="#"><span class="label label-info pull-right">1</span>Link</a></li>
-                  <li><a href="#"><span class="badge pull-right">13</span>Link</a></li>
-                </ul>
-             </li>
-             <li><a href="#" id="btnToggle"><i class="glyphicon glyphicon-th-large"></i></a></li>
-             <li><a href="#"><i class="glyphicon glyphicon-user"></i></a></li>
            </ul>
         </div>
      </div>
@@ -53,11 +41,6 @@
                   <p>{{article.created_at}}</p>
                   <p>{{article.summary}}</p>
 
-                  <p>
-                    <img src="http://api.randomuser.me/portraits/med/men/20.jpg" width="28px" height="28px">
-                    <img src="http://api.randomuser.me/portraits/med/men/21.jpg" width="28px" height="28px">
-                    <img src="http://api.randomuser.me/portraits/med/men/14.jpg" width="28px" height="28px">
-                  </p>
                   <p>
                     <a ng-show="currentUser && currentUser.role.title =='admin'" ng-confirm-click="Are you sure?" ng-click="delete(article)"
                        class="btn btn-default btn-xs" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Admin is allowed!">

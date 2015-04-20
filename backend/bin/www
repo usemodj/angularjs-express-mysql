@@ -17,45 +17,44 @@ try {
 /**
  * Initialise log4js first, so we don't miss any log messages
  */
-var log4js = require('log4js');
-//log4js.configure('./config/log4js.json');
-log4js.configure(
-    {
-        "appenders": [
-            {
-                "type": "clustered",
-                "appenders": [
-                    {
-                        "type": "dateFile",
-                        "filename": "log/access.log",
-                        "pattern": "-yyyy-MM-dd",
-                        "category": "http"
-                    },
-                    {
-                        "type": "file",
-                        "filename": "log/app.log",
-                        "maxLogSize": 10485760,
-                        "numBackups": 3
-                    },
-                    {
-                        "type": "logLevelFilter",
-                        "level": "ERROR",
-                        "appender": {
-                            "type": "file",
-                            "filename": "log/errors.log"
-                        }
-                    },
-                    {
-                        "type": "console",
-                        "level": "INFO"
-                    }
-                ]
-                //replaceConsole: true
-            }
-        ]
-    }
-
-);
+//var log4js = require('log4js');
+//log4js.configure(
+//    {
+//        "appenders": [
+//            {
+//                "type": "clustered",
+//                "appenders": [
+//                    {
+//                        "type": "dateFile",
+//                        "filename": "log/access.log",
+//                        "pattern": "-yyyy-MM-dd",
+//                        "category": "http"
+//                    },
+//                    {
+//                        "type": "file",
+//                        "filename": "log/app.log",
+//                        "maxLogSize": 10485760,
+//                        "numBackups": 3
+//                    },
+//                    {
+//                        "type": "logLevelFilter",
+//                        "level": "ERROR",
+//                        "appender": {
+//                            "type": "file",
+//                            "filename": "log/errors.log"
+//                        }
+//                    },
+//                    {
+//                        "type": "console",
+//                        "level": "ERROR"
+//                    }
+//                ]
+//                //replaceConsole: true
+//            }
+//        ]
+//    }
+//
+//);
 
 app.set('port', process.env.PORT || 3000);
 var server = app.listen(app.get('port'), function() {

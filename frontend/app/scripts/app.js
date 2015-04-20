@@ -101,6 +101,10 @@ angular.module('frontendApp',
         gettextCatalog.currentLanguage = 'ko';
         gettextCatalog.debug = true;
 
+        $rootScope.$on('$stateChangeError',
+          function (event, toState, toParams, fromState, fromParams, error) {
+            console.log('$stateChangeError', event, toState, toParams, fromState, fromParams, error);
+          });
         $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
             //console.log('>>location: '+ $location.path());
             if($location.path() != '/login/') redirects.setRedirectURL($location.path());

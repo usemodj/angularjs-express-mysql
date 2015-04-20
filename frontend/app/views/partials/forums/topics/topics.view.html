@@ -6,7 +6,7 @@
     </ul>
     <div class="row">
         <div class="col-md-10 col-md-offset-1 text-right">
-            <span class="badge"><a class=" btn btn-default" ui-sref="forums.topics.list({forum_id: $stateParams.forum_id})"><i class="fa fa-arrow-left"/> Back </a></span>
+            <span class="badge"><a class=" btn btn-default" ui-sref="forums.topics.list({forum_id: $stateParams.forum_id})"><i class="fa fa-arrow-left"></i> Back </a></span>
             <span class="badge" style="color:#666666;"><a ng-show="currentUser.role.title =='admin' || currentUser.email == data.topic.email" ng-confirm-click="Are you sure?" ng-click="delete(data.topic)"
                                    class="btn btn-default" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required!"><i class="glyphicon glyphicon-remove"></i> Delete Topic </a></span>
             <span class="badge" style="color:#666666;"><a data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required!"
@@ -22,7 +22,7 @@
         <div class="panel-body" ng-bind-html="item.content | markdown"></div>
         <div class="btn-group" ng-repeat="file in item.assets | orderBy:'position' ">
             <a class="btn btn-default btn-sm" ng-href="/uploads/images/{{file.attachment_file_path}}" alt="{{file.attachment_file_name}}" target="attachment">
-                <i class="fa fa-file"/> {{file.attachment_file_name}} ({{file.attachment_file_size}})
+                <i class="fa fa-file"></i> {{file.attachment_file_name}} ({{file.attachment_file_size}})
             </a>
         </div>
         <div class="well well-sm text-right">

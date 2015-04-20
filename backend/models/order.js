@@ -81,7 +81,7 @@ module.exports = function(orm, db) {
         }
 
     }, {
-        //cache: false,
+        cache: false,
         autoFetch: true,
         methods: {
             // Returns a random integer between min (included) and max (excluded)

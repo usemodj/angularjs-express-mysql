@@ -17,11 +17,15 @@
         },
         {
           "type": "logLevelFilter",
-          "level": "ERROR",
+          "category": "ERROR",
           "appender": {
             "type": "file",
             "filename": "log/errors.log"
           }
+        },
+        {
+            "type": "console",
+            "category": "ERROR"
         }
       ]
     }
