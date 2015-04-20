@@ -23,7 +23,12 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                     if(role === undefined){
                         role = currentUser.role;
                     }
+                    if(typeof accessLevel === 'string'){
+                      accessLevel = accessLevels[accessLevel];
+                      console.log(accessLevel)
+                    }
                     $rootScope.currentUser = currentUser;
+                    console.log('>> accessLevel.bit_mask: '+accessLevel.bit_mask + ' & role.bit_mask: '+role.bit_mask + '='+ (accessLevel.bit_mask & role.bit_mask));
                     return accessLevel.bit_mask & role.bit_mask;
                 },
 

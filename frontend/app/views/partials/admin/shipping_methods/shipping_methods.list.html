@@ -3,7 +3,7 @@
 <div class="panel-body" >
     <form name="myform" class="form-inline" role="form" ng-submit="createShippingMethod(myform)">
         <div class="row">
-            <div class="form-group col-xs-5 col-md-5">
+            <div class="form-group col-xs-3 col-md-3">
                 <label>Name*:</label><br/>
                 <input class="form-control" ng-model="newShippingMethod.name" placeholder="Enter name" required>
             </div>
@@ -11,13 +11,14 @@
                 <label>Amount*:</label><br/>
                 <input class="form-control" ng-model="newShippingMethod.amount" placeholder="Enter amount" required>
             </div>
-            <div class="form-group col-xs-2 col-md-2">
+            <div class="form-group col-xs-3 col-md-3">
                 <label>Currency*:</label><br/>
                 <input class="form-control" ng-model="newShippingMethod.currency" placeholder="Enter currency" required>
             </div>
-            <div class="col-xs-2 col-md-2">
+
+            <div class="form-group col-xs-2 col-md-2">
                 <br>
-                <button type="submit" ng-disabled="myform.$invalid" class="btn btn-primary"><span class="glyphicon glyphicon-send"></span> Create</button>
+                <button type="submit" ng-disabled="myform.$invalid" class="form-control btn btn-primary"><span class="glyphicon glyphicon-send"></span> Create</button>
             </div>
         </div>
         <div class="form-group has-error">

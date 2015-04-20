@@ -636,7 +636,7 @@ var routes = [
         path: '/forums/topics/sticky',
         httpMethod: 'POST',
         middleware: [TopicCtrl.setSticky],
-        accessLevel: accessLevels.admin
+        accessLevel: accessLevels.editor
     },
     {
         path: '/forums/topics/locked',
@@ -656,13 +656,13 @@ var routes = [
         path: '/articles/upload',
         httpMethod: 'POST',
         middleware: [ArticleCtrl.uploadArticle],
-        accessLevel: accessLevels.admin
+        accessLevel: accessLevels.editor
     },
     {//update article with file attachment
         path: '/articles/save_article',
         httpMethod: 'POST',
         middleware: [ArticleCtrl.saveArticle],
-        accessLevel: accessLevels.admin
+        accessLevel: accessLevels.editor
     },
     {//view article
         path: '/articles/:id(\\d+)',
@@ -674,7 +674,7 @@ var routes = [
         path: '/articles/:id(\\d+)',
         httpMethod: 'DELETE',
         middleware: [ArticleCtrl.deleteArticle],
-        accessLevel: accessLevels.admin
+        accessLevel: accessLevels.editor
     },
 
     // All other get requests should be handled by AngularJS's client-side routing system

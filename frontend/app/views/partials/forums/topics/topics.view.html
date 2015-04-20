@@ -10,7 +10,7 @@
             <span class="badge" style="color:#666666;"><a ng-show="currentUser.role.title =='admin' || currentUser.email == data.topic.email" ng-confirm-click="Are you sure?" ng-click="delete(data.topic)"
                                    class="btn btn-default" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required!"><i class="glyphicon glyphicon-remove"></i> Delete Topic </a></span>
             <span class="badge" style="color:#666666;"><a data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required!"
-                                   class=" btn btn-default" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})" >New Topic</a></span>
+                                   class=" btn btn-default" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})"><i class="fa fa-edit"></i> New Topic</a></span>
         </div>
     </div>
 
@@ -26,17 +26,18 @@
             </a>
         </div>
         <div class="well well-sm text-right">
-            <a class="btn btn-default btn-xs" ng-click="editPost(item)">Edit</a>
+            <a class="btn btn-default btn-xs" ng-show="Auth.authorize('editor') || currentUser.email == item.email" ng-click="editPost(item)">Edit</a>
             <a ng-hide="item.root" class="btn btn-default btn-xs" ng-confirm-click="Are you sure?" ng-click="deletePost(item)">Delete</a>
         </div>
     </div>
 
     <div class="panel panel-default col-md-10 col-md-offset-1">
         <div class="panel-body">
-            <div ng-show="!currentUser || currentUser.role.title == 'public'" class="label label-info">
-              Login Required if you can reply
-            </div>
-            <h2>Reply </h2>
+            <h2>Reply
+              <span ng-show="!Auth.authorize('user')" class="label label-info label-lg">
+                Login Required if you can reply
+              </span>
+            </h2>
             <form class="myform" name="form" ng-submit="replyPost(myform)"  novalidate>
             <div class="form-group">
                 <label>Subject *:</label>
@@ -53,7 +54,7 @@
                 <p class="help-block">{{message}}</p>
             </div>
 
-                <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">Save</button>
+            <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">Save</button>
             <button class="btn btn-primary" ng-click="cancelEdit()">Cancel</button>
             </form>
         </div>

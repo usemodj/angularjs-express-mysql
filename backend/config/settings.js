@@ -8,7 +8,7 @@ var settings = {
     database: {
         protocol: "mysql", // or  "postgresql"
         query: {
-            debug: true, //prints queries to console
+            debug: (process.env.NODE_ENV == 'production')? false: true, //prints queries to console
             pool: true
         },
         host: "127.0.0.1",

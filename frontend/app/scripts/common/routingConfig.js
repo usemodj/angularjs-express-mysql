@@ -9,7 +9,11 @@
         roles :[
             'public',
             'user',
-            'admin'],
+            'editor',
+            'manager',
+            'admin',
+            'root'
+        ],
 
         /*
         Build out all the access levels you want referencing the roles listed above
@@ -22,15 +26,18 @@
         accessLevels : {
             'public' : "*",
             'anon': ['public'],
-            'user' : ['user', 'admin'],
-            'admin': ['admin']
+            'user' : ['user', 'editor', 'manager', 'admin', 'root'],
+            'editor': ['editor', 'manager', 'admin', 'root'],
+            'manager': ['manager', 'admin', 'root'],
+            'admin': ['admin', 'root'],
+            'root': ['root']
         }
 
     }
 
     /*
       userRoles = {'public': 1, 'user': 2, 'admin': 4}
-        {'public':{'title': 'public', 'bit_mask':1}, 'public':{'title': 'user', 'bit_mask':2},'public':{'title': 'admin', 'bit_mask':4},
+        {'public':{'title': 'public', 'bit_mask':1}, 'user':{'title': 'user', 'bit_mask':2},'admin':{'title': 'admin', 'bit_mask':4}},
       accessLevels = {'public': 7, 'anon': 1, 'user': 6, 'admin': 4}
      */
     exports.userRoles = buildRoles(config.roles);

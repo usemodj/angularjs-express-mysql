@@ -94,6 +94,7 @@ angular.module('frontendApp',
         // to active whenever 'contacts.list' or one of its decendents is active.
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
+        $rootScope.Auth = AuthFactory;
         //$http.defaults.headers.post['x-csrf-token'] = $cookies._csrf;
         //$http.defaults.headers.post['X-XSRF-TOKEN'] = $cookies['XSRF-TOKEN'];
         //$http.defaults.headers.post['_csrf'] = $cookies._csrf;

@@ -20,7 +20,7 @@
           </form>
           <ul class="nav navbar-nav navbar-right">
              <li>
-               <a ng-disabled="currentUser.role.title != 'admin'" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Admin Role Required!"
+               <a ng-disabled="!Auth.authorize('editor')" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Editor Role Required!"
                   class="btn btn-default btn-xs" ui-sref="news.new"><i class="fa fa-edit"></i> New Aritle </a>
              </li>
            </ul>
@@ -42,7 +42,7 @@
                   <p>{{article.summary}}</p>
 
                   <p>
-                    <a ng-show="currentUser && currentUser.role.title =='admin'" ng-confirm-click="Are you sure?" ng-click="delete(article)"
+                    <a ng-show="Auth.authorize('editor')" ng-confirm-click="Are you sure?" ng-click="delete(article)"
                        class="btn btn-default btn-xs" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Admin is allowed!">
                       <span class="glyphicon glyphicon-remove"></span> Delete </a>
                   </p>

@@ -42,3 +42,20 @@ http://lostechies.com/gabrielschenker/2014/02/11/angularjspart-12-multi-language
  
  4. frontend> grunt nggettext_compile
     update app/scripts/translations.js file
+
+## Run production mode:
+// ngminify
+$ frontend> grunt build
+
+### Ubuntu:
+$ backend> NODE_ENV=production ./bin/forever
+
+### Windows
+// PowerShell 
+$ backend> $env:NODE_ENV="production"
+$ backend> node ./bin/forever
+
+// cmd.exe
+$ backend> set NODE_ENV=production
+$ backend> node ./bin/forever
+

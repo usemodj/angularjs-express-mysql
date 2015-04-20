@@ -1,5 +1,6 @@
 var log = require('log4js').getLogger("roles model");
 var userRoles = require('../../frontend/app/scripts/common/routingConfig').userRoles;
+var async = require('async');
 
 module.exports = function(orm, db) {
     var Role = db.define('roles', {
@@ -26,15 +27,30 @@ module.exports = function(orm, db) {
         Role.count(function(err, number){
             if(err || number) return;
 
+            //for(var title in userRoles) {
+            //    log.info('>> title: '+ title + ', userRoles[title][bit_mask]: '+ userRoles[title]['bit_mask'])
+            //    Role.create([{
+            //        title: title,
+            //        bit_mask: userRoles[title]['bit_mask']
+            //    }], function(err, item){
+            //        if(err) log.error(err);
+            //    });
+            //}
+            var keys = [];
             for(var title in userRoles) {
-                log.info('>> title: '+ title + ', userRoles[title][bit_mask]: '+ userRoles[title]['bit_mask'])
+                keys.push(title);
+            }
+            async.eachSeries(keys, function( title, callback){
                 Role.create([{
                     title: title,
                     bit_mask: userRoles[title]['bit_mask']
                 }], function(err, item){
                     if(err) log.error(err);
+                    callback();
                 });
-            }
+            }, function(err){
+                log.info('>> Roles data created!');
+            });
         });
     }
 };
