@@ -52,8 +52,21 @@ app.use(function(req, res, next){
 app.use(favicon());
 // replace this with the log4js connect-logger
 // app.use(logger('dev'));
-//app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
-log4js.configure(path.join(__dirname, './config/log4js.json'));
+/**
+* make a log directory, just in case it isn't there.
+*/
+try {
+    fs.mkdirSync(path.join(__dirname, './log'));
+} catch (e) {
+    if (e.code != 'EEXIST') {
+        console.error("Could not set up log directory, error was: ", e);
+        process.exit(1);
+    }
+}
+//log4js.configure(path.join(__dirname, './config/log4js.json'));
+app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'debug' }));
+//if(process.env.NODE_ENV === 'production') app.use(log4js.connectLogger(log4js.getLogger("production"), { level: 'ERROR' }));
+//else app.use(log4js.connectLogger(log4js.getLogger("development"), { level: 'DEBUG' }));
 
 app.use(cookieParser());
 app.use(bodyParser.json());

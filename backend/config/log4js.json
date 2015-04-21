@@ -1,7 +1,4 @@
 {
-  "appenders": [
-    {
-      "type": "clustered",
       "appenders": [
         {
           "type": "dateFile",
@@ -13,11 +10,13 @@
           "type": "file",
           "filename": "log/app.log",
           "maxLogSize": 10485760,
-          "numBackups": 3
+          "numBackups": 3,
+          "encoding": "utf8"
         },
         {
           "type": "logLevelFilter",
-          "category": "ERROR",
+          "category": "production",
+          "level": "ERROR",
           "appender": {
             "type": "file",
             "filename": "log/errors.log"
@@ -25,9 +24,9 @@
         },
         {
             "type": "console",
-            "category": "ERROR"
+            "category": "development",
+            "level": "DEBUG"
         }
-      ]
-    }
-  ]
+      ],
+      "replaceConsole": "false"
 }

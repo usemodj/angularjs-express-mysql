@@ -62,13 +62,15 @@ module.exports = function(orm, db) {
     }, {
         cache: false,
         autoFetch: true,
-        autoFetchLimit: 1,
+        autoFetchLimit: 2,
         methods: {
             serialize: function() {
                 return {
                     id: this.id,
                     email: this.email,
-                    role: this.role
+                    profile_id: this.profile_id,
+                    role: this.role,
+                    profile: this.profile
                 };
             },
             /**
@@ -133,7 +135,7 @@ module.exports = function(orm, db) {
 
     });
     // creates column 'customer_id' in 'users' table
-    User.hasOne('profile', db.models.profiles, { reverse:'profiles' });
+    User.hasOne('profile', db.models.profiles, { });
     User.hasOne('role', db.models.roles, { });
 
     User.makeSalt = function() {

@@ -39,7 +39,7 @@ angular.module('frontendApp')
         $scope.upload = $upload.upload({
             url: '/admin/products/'+$stateParams.product_id + '/assets/'+ $stateParams.id,
             method: 'POST',
-            headers: {'my-header': 'my-header-value'},
+            //headers: {'my-header': 'my-header-value'},
             data : {
                 asset : $scope.asset
             },

@@ -5,6 +5,7 @@ var _ = require('underscore')
     , SessionCtrl =  require('./controllers/auth/sessions')
     , UserCtrl =  require('./controllers/auth/users')
     , RoleCtrl =  require('./controllers/auth/roles')
+    , ProfileCtrl =  require('./controllers/profiles')
     , MailCtrl =  require('./controllers/auth/mails')
     , ProductCtrl =  require('./controllers/products')
     , OptionTypeCtrl =  require('./controllers/option_types')
@@ -113,6 +114,20 @@ var routes = [
         path: '/roles',
         httpMethod: 'GET',
         middleware: [RoleCtrl.index],
+        accessLevel: accessLevels.user
+    },
+
+    // Profile resource
+    {
+        path: '/profiles/:id',
+        httpMethod: 'GET',
+        middleware: [ProfileCtrl.getProfile],
+        accessLevel: accessLevels.user
+    },
+    {   //save address of the profile
+        path: '/profiles/save_address',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.saveAddress],
         accessLevel: accessLevels.user
     },
 

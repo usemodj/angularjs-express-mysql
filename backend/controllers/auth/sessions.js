@@ -57,7 +57,7 @@ module.exports = {
                     req.user = user;
                     if (err) return next(err);
                     if (req.body.rememberMe) req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7;
-
+                    log.debug(user.serialize());
                     res.json(200, user.serialize());
                 });
             });

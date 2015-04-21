@@ -28,7 +28,7 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                       console.log(accessLevel)
                     }
                     $rootScope.currentUser = currentUser;
-                    console.log('>> accessLevel.bit_mask: '+accessLevel.bit_mask + ' & role.bit_mask: '+role.bit_mask + '='+ (accessLevel.bit_mask & role.bit_mask));
+                    //console.log('>> accessLevel.bit_mask: '+accessLevel.bit_mask + ' & role.bit_mask: '+role.bit_mask + '='+ (accessLevel.bit_mask & role.bit_mask));
                     return accessLevel.bit_mask & role.bit_mask;
                 },
 

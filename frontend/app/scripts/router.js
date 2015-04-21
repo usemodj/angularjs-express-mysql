@@ -39,9 +39,9 @@ angular.module('frontendApp.router', ['ui.router'])
                 templateUrl: '/views/partials/signup.html',
                 controller: 'SignupCtrl'
             })
-            .state('anon.mail', {
-                url: '/mail/',
-                templateUrl: '/views/partials/mail.html',
+            .state('anon.resetMail', {
+                url: '/reset_mail/',
+                templateUrl: '/views/partials/resetPasswordMail.html',
                 controller: 'MailCtrl'
             })
             .state('anon.passwordToken', {
@@ -66,13 +66,19 @@ angular.module('frontendApp.router', ['ui.router'])
             })
             .state('user.home', {
                 url:'/profile/',
-                templateUrl: '/views/partials/profile.html'
-            })
+                templateUrl: '/views/partials/users/profile.html',
+                controller: 'ProfileCtrl'
+          })
             .state('user.password', {
                 url: '/password/',
-                templateUrl: '/views/partials/password.html',
+                templateUrl: '/views/partials/users/password.html',
                 controller: 'PasswordCtrl'
-            });
+            })
+          .state('user.profile', {
+            url:'/profile/',
+            templateUrl: '/views/partials/users/profile.html',
+            controller: 'ProfileCtrl'
+          });
 
         // Public products controllers
         $stateProvider

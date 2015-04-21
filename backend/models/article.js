@@ -54,7 +54,7 @@ module.exports = function(orm, db) {
 
     });
     // creates column 'user_id' in 'articles' table
-    Article.hasOne('user', db.models.users, { reverse:'articles'});
+    Article.hasOne('user', db.models.users, {});
     //Article.hasMany('products', db.models.products, {}, {});
 
 };

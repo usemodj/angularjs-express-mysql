@@ -1,0 +1,52 @@
+<div class="contailer">
+  <h2>My Profile</h2>
+  <table class="table">
+    <tbody>
+    <tr>
+      <td class="col-md-2"> Email </td><td class="col-md-5"> {{currentUser.email}}</td><td class="col-md-1"></td>
+    </tr>
+    <tr>
+      <td> Role</td><td> {{currentUser.role.title}}</td><td></td>
+    </tr>
+    <tr>
+      <td> Address</td>
+      <td><div>&nbsp;{{currentUser.profile.address}}</div>
+        <div class="well well-xs" ng-show="viewAddress" id="input-address" >
+          <table class="table">
+            <form name="myform1" ng-submit="saveAddress()" novalidate>
+            <tbody>
+            <tr>
+              <td class="col-md-2">Address</td><td class="col-md-3 form-group"><input class="form-control" ng-model="profile.address.address"></td>
+            </tr>
+            <tr>
+              <td class="col-md-2">Zipcode</td><td class="col-md-3 form-group"><input class="form-control" ng-model="profile.address.zipcode"></td>
+            </tr>
+            <tr>
+              <td class="col-md-2">Mobile</td><td class="col-md-3 form-group"><input class="form-control" ng-model="profile.address.mobile"></td>
+            </tr>
+            <tr>
+              <td class="col-md-2">Phone</td><td class="col-md-3 form-group"><input class="form-control" ng-model="profile.address.phone"></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <button type="submit" ng-click="saveAddress()" ng-disabled="myform.$invalid" class="btn btn-primary btn-sm" >
+                <span class="glyphicon glyphicon-send"></span> Save </button>
+                <button  class="btn btn-default btn-sm" ng-click="toggleAddress()"> Cancel </button>
+              </td>
+            </tr>
+            </tbody>
+            </form>
+          </table>
+        </div>
+
+      </td>
+      <td><a ng-click="toggleAddress()"><i class="fa fa-pencil"></i></a></td>
+    </tr>
+    </tbody>
+  </table>
+  <div>{{currentUser.profile}}</div>
+
+</div>
+
+

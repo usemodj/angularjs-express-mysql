@@ -20,6 +20,9 @@ module.exports = function(orm, db) {
         picture_id: {
             type: 'integer'
         },
+        address_id: {
+            type: 'integer'
+        },
         created_at: {
             type: 'date',
             time: true
@@ -31,6 +34,8 @@ module.exports = function(orm, db) {
         }
 
     }, {
+        autoFetch: true,
+        autoFetchLimit: 2,
         methods: {},
         validations: {},
         hooks: {
@@ -46,7 +51,7 @@ module.exports = function(orm, db) {
     
     // creates column 'user_id' in 'customers' table
     //Profile.hasOne('user', db.models.users, {});
-    //Profile.hasOne('address', db.models.addresses, {reverse: 'addresses', autoFetch: true});
-    Profile.hasMany('addresses', db.models.addresses, {}, {key: true});
+    Profile.hasOne('address', db.models.addresses, {});
+    //Profile.hasMany('addresses', db.models.addresses, {}, {key: true});
     Profile.hasOne('picture', db.models.assets); //picture path
 };
