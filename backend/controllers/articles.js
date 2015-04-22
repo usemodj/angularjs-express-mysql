@@ -315,16 +315,20 @@ module.exports = {
     viewArticle: function(req, res, next){
         var Article = req.models.articles;
         var Asset = req.models.assets;
+        var User = req.models.users;
         var article_id = req.params.id;
 
         //log.debug(body);
             Article.get(article_id, function(err, article){
                 if(err) return next(err);
-                Asset.find({viewable_id: article.id, viewable_type:'Article'}, function(err, assets){
-                    if(!err) article.assets = assets;
-                    log.debug('>>article: '+ JSON.stringify(article));
-                    res.json( article);
-                });
+                User.one({id: article.user_id}, function(err, user){
+                    if(!err) article.user = user.serialize();
+                    Asset.find({viewable_id: article.id, viewable_type:'Article'}, function(err, assets){
+                        if(!err) article.assets = assets;
+                        log.debug('>>article: '+ JSON.stringify(article));
+                        res.status(200).json( article);
+                    });
+                })
         });
     }
 

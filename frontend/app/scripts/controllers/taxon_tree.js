@@ -14,8 +14,8 @@ angular.module('frontendApp')
 
     $scope.$watch( 'taxontree.currentNode', function( newObj, oldObj ) {
       if( $scope.taxontree && angular.isObject($scope.taxontree.currentNode) ) {
-        console.log( 'Node Selected!!' );
-        console.log( $scope.taxontree.currentNode );
+        //console.log( 'Node Selected!!' );
+        //console.log( $scope.taxontree.currentNode );
         var taxon = $scope.taxontree.currentNode;
         $state.go('taxons.products', {id: taxon.id});
       }
@@ -44,7 +44,7 @@ angular.module('frontendApp')
         $scope.conditions.page = $scope.page;
       taxons.getProducts($scope.conditions, function(err, data){
         if(!err){
-          console.log(data);
+          //console.log(data);
           $scope.data.products = data.products;
           $scope.totalItems = data.count;
           $scope.page = data.page;

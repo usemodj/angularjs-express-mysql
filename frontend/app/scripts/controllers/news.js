@@ -48,13 +48,13 @@ angular.module('frontendApp')
 
     $scope.searchArticles();
   }])
-  .controller('NewNewsCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$window', '$upload', 'articles',
-    function ($scope, $state, $stateParams, $timeout, $window, $upload, articles) {
+  .controller('NewNewsCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$window', '$upload', 'AuthFactory', 'articles',
+    function ($scope, $state, $stateParams, $timeout, $window, $upload, AuthFactory, articles) {
       $scope.article = {};
       $scope.files = [];
 
       //console.log($scope.currentUser);
-      if(!$scope.currentUser || $scope.currentUser.role.title != 'admin'){
+      if(!AuthFactory.authorize('editor')){
         //$window.alert('Login Required');
         return $state.go('anon.login');
       }
@@ -84,8 +84,8 @@ angular.module('frontendApp')
           $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
         }).success(function (data, status, headers, config) {
           //console.log(config);
-          console.log('>>success data')
-          console.log(data);
+          //console.log('>>success data')
+          //console.log(data);
           $state.go('news.view',{id: data.id}, {reload: true});
         });
       };
@@ -101,10 +101,10 @@ angular.module('frontendApp')
       $scope.delete = function(article){
         articles.remove({id: article.id}, function(err){
           if(err) {
-            console.log(err);
+            //console.log(err);
             $scope.error = err;
           }
-          console.log('deleted');
+          //console.log('deleted');
           $state.go('news.list',{},{reload:true});
         });
       };
@@ -115,7 +115,7 @@ angular.module('frontendApp')
         articles.get({
           id: $stateParams.id
         }, function(err, data){
-          console.log(data);
+          //console.log(data);
           if(err) {
             $scope.error = err;
           } else {
@@ -125,7 +125,7 @@ angular.module('frontendApp')
       };
 
       $scope.editArticle = function(){
-        console.log(">>article:");console.log($scope.data.article);
+        //console.log(">>article:");console.log($scope.data.article);
         var modalInstance = $modal.open({
           templateUrl: 'views/partials/news/news.edit.html',
           controller: 'EditNewsCtrl',
@@ -136,10 +136,10 @@ angular.module('frontendApp')
           }
         });
         modalInstance.result.then(function(editedArticle){
-          console.log(editedArticle);
+          //console.log(editedArticle);
           saveArticle(editedArticle); //update article with file attachment
         }, function(){
-          console.log('Caneled');
+          //console.log('Caneled');
         });
 
       };
@@ -166,8 +166,8 @@ angular.module('frontendApp')
           $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
         }).success(function (data, status, headers, config) {
           //console.log(config);
-          console.log('>>success data')
-          console.log(data); //article with assets
+          //console.log('>>success data')
+          //console.log(data); //article with assets
           $state.go('news.view',{id: $stateParams.id}, {reload: true});
         });
       };

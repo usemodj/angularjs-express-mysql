@@ -43,7 +43,7 @@ angular.module('frontendApp')
     });
 
     $scope.addToCart = function(){
-        console.log($scope.product);
+        //console.log($scope.product);
         products.addToCart($scope.product, function(err, data){
 
         $state.go('carts.list');

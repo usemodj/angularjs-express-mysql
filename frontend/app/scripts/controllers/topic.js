@@ -62,16 +62,17 @@ angular.module('frontendApp')
 
         $scope.searchTopics();
     }])
-    .controller('NewTopicCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$window', '$upload', 'topics',
-    function ($scope, $state, $stateParams, $timeout, $window, $upload, topics) {
+    .controller('NewTopicCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$window', '$upload', 'AuthFactory', 'topics',
+    function ($scope, $state, $stateParams, $timeout, $window, $upload, AuthFactory, topics) {
         $scope.newTopic = {};
         $scope.files = [];
 
         //console.log($scope.currentUser);
-        if(!$scope.currentUser || !$scope.currentUser.email){
+        if(!AuthFactory.authorize('user')){
           //$window.alert('Login Required');
           return $state.go('anon.login');
         }
+
         //listen for the file selected event
         $scope.$on("fileSelected", function (event, args) {
             $scope.$apply(function () {
@@ -113,8 +114,8 @@ angular.module('frontendApp')
                 $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
             }).success(function (data, status, headers, config) {
                 //console.log(config);
-                console.log('>>success data')
-                console.log(data);
+                //console.log('>>success data')
+                //console.log(data);
                 $state.go('forums.topics.view',{forum_id: $stateParams.forum_id, id: data.id}, {reload: true});
             });
         };
@@ -128,21 +129,21 @@ angular.module('frontendApp')
         $scope.data = {};
 
         $scope.delete = function(topic){
-            console.log('call delete');
+            //console.log('call delete');
 //            topics.remove(topic);
 //            $state.go('forums.topics.list', {forum_id: topic.forum_id}, {reload: true});
             topics.remove({forum_id: topic.forum_id, id: topic.id}, function(err){
                 if(err) {
-                    console.log(err);
+                    //console.log(err);
                     $scope.error = err;
 
                 }
-                console.log('remove called');
+                //console.log('remove called');
                 $state.go('forums.topics.list', {forum_id: topic.forum_id}, {reload: true});
             });
         };
         $scope.viewTopic = function(form){
-            console.log($rootScope.currentUser);
+            //console.log($rootScope.currentUser);
             //console.log(routingConfig);
             topics.get({
                 forum_id: $stateParams.forum_id,
@@ -195,7 +196,7 @@ angular.module('frontendApp')
         };
         $scope.editPost = function(post){
             $scope.data.post = post;
-            console.log(">>post:");console.log($scope.data.post);
+            //console.log(">>post:");console.log($scope.data.post);
             var modalInstance = $modal.open({
                 templateUrl: 'views/partials/forums/topics/topics.edit.html',
                 controller: 'EditTopicCtrl',
@@ -206,7 +207,7 @@ angular.module('frontendApp')
                 }
             });
             modalInstance.result.then(function(editedPost){
-                console.log(editedPost);
+                //console.log(editedPost);
                 //topics.updatePost(editedPost); //update post without file attachment
                 savePost(editedPost); //update post with file attachment
             });
@@ -237,8 +238,8 @@ angular.module('frontendApp')
                 $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
             }).success(function (data, status, headers, config) {
                 //console.log(config);
-                console.log('>>success data')
-                console.log(data); //post with assets
+                //console.log('>>success data')
+                //console.log(data); //post with assets
                 $state.go('forums.topics.view',{forum_id: $stateParams.forum_id, id: $stateParams.id}, {reload: true});
             });
         };

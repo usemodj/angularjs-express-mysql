@@ -22,9 +22,9 @@ angular.module('frontendApp')
                                 var msg = error.msg;
                                 var field = error.property;
                                 if (field === 'encrypted_password') field = 'password';
-                                console.log('>> field: ' + field);
-                                console.log('>> msg: ' + msg);
-                                console.log(form[field]);
+                                //console.log('>> field: ' + field);
+                                //console.log('>> msg: ' + msg);
+                                //console.log(form[field]);
                                 form[field].$setValidity('server', false);
                                 $scope.errors[field] = msg;
                             });

@@ -34,8 +34,8 @@ angular.module('frontendApp')
     $scope.uploadFile = function() {
         $scope.progress = 0;
         $scope.error = null;
-        console.log('>>selectedFiles:');
-        console.log($scope.selectedFiles);
+        //console.log('>>selectedFiles:');
+        //console.log($scope.selectedFiles);
         $scope.upload = $upload.upload({
             url: '/admin/products/'+$stateParams.product_id + '/assets/'+ $stateParams.id,
             method: 'POST',
@@ -48,7 +48,7 @@ angular.module('frontendApp')
         });
         $scope.upload.then(function(response) {//resolve
             $timeout(function() {
-                console.log(response);
+                //console.log(response);
                 $scope.uploadResult = response.data;
             });
             //$state.go('admin.products.assets.list',{product_id: $stateParams.product_id}, {reload:true});

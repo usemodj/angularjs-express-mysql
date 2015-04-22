@@ -48,7 +48,7 @@ angular.module('frontendApp')
             role_id: $scope.conditions.role_id,
             active: $scope.conditions.active
         }).success(function(results, status){
-            console.log('>> status:'+ status);
+            //console.log('>> status:'+ status);
             $scope.data.users = results.users;
             $scope.totalItems = results.count;
             $scope.page = results.page;
@@ -64,7 +64,7 @@ angular.module('frontendApp')
         $scope.page = $stateParams.page;
 
         $scope.updateRole = function(){
-            console.log('>> currentUser:'+ JSON.stringify($scope.currentUser));
+            //console.log('>> currentUser:'+ JSON.stringify($scope.currentUser));
             AuthFactory.changeRole({
                 id: $scope.currentUser.id,
                 email: $scope.currentUser.email,
@@ -72,7 +72,7 @@ angular.module('frontendApp')
                 active: $scope.currentUser.active
             }, function(err) {
                 if(err){
-                    console.log('>> changeRole error: ');
+                    //console.log('>> changeRole error: ');
                     console.log(err);
                 } else {
                     //$state.go('admin.user.home');
@@ -80,43 +80,6 @@ angular.module('frontendApp')
                 }
             });
         };
-
-//        $scope.updateUserRole = function(user){
-//            //user.$update({role_id: user.role_id});
-//            //user.$update();
-//            UserFactory.update({
-//                id: user.id,
-//                email: user.email,
-//                role_id: user.role_id,
-//                active: user.active
-//            }, function(user) {
-//                console.log('updateUserRole changed');
-//                console.log('>> user: ' + user);
-//
-//            }, function(err) {
-//                console.log('>> updateUserRole error: ');
-//                console.log(err);
-//
-//            });
-//
-//            //$location.path('/admin/users');
-//            //$state.go('admin.users.list');
-//        };
-
-//        $scope.editUser = function(user){
-//            $scope.currentUser = user;
-//            $state.go('/admin/users/edit',{id: user.id});
-//
-//        };
-
-//        $scope.saveEdit = function(user){
-//            if(angular.isDefined(user.id)){
-//                $scope.updateUser(user);
-//            } else {
-//                $scope.createUser(user);
-//            }
-//            $scope.currentUser = {};
-//        };
 
         $scope.cancelEdit = function(){
             if($scope.currentUser && $scope.currentUser.$get){

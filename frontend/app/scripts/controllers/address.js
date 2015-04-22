@@ -23,7 +23,7 @@ angular.module('frontendApp')
     $scope.getOrder = function(){
         orders.getOrder(function(err, data){
            $scope.order = data;
-            console.log(data);
+            //console.log(data);
         });
 
     };

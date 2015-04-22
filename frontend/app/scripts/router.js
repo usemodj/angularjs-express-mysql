@@ -256,7 +256,11 @@ angular.module('frontendApp.router', ['ui.router'])
         .state('news.new', {
           url: 'new',
           templateUrl: 'views/partials/news/news.new.html',
-          controller: 'NewNewsCtrl'
+          controller: 'NewNewsCtrl',
+          data: {
+            access: access.editor
+          }
+
         })
         .state('news.view', {
           url: ':id/',
@@ -266,7 +270,10 @@ angular.module('frontendApp.router', ['ui.router'])
         .state('news.edit', {
           url: ':id/edit',
           templateUrl: 'views/partials/news/news.edit.html',
-          controller: 'EditNewsCtrl'
+          controller: 'EditNewsCtrl',
+          data: {
+            access: access.editor
+          }
         });
 
         // Admin controllers

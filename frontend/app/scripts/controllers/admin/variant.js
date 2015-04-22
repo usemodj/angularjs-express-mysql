@@ -16,8 +16,8 @@ angular.module('frontendApp')
 
         products.get({id: $stateParams.product_id}, function(err, product){
           if(!err) {
-            console.log('>>product:')
-            console.log(product);
+            //console.log('>>product:')
+            //console.log(product);
             $scope.data.product = product;
           }
         });
@@ -76,7 +76,7 @@ angular.module('frontendApp')
             //console.log($scope.newVariant);
             variants.save($scope.newVariant, function(err, variant){
                 if(err){
-                    console.log(err);
+                    //console.log(err);
                     $scope.error = err.data;
                     return;
                 }
@@ -116,20 +116,12 @@ angular.module('frontendApp')
                     }
                 }
 
-                console.log('>>variant:');
-                console.log($scope.variant);
+                //console.log('>>variant:');
+                //console.log($scope.variant);
             });
 
             products.get({id: $stateParams.product_id}, function(err, product){
                 $scope.data.product = product;
-//                var optionTypes = product.option_types;
-//                for(var i = 0; i < optionTypes.length; i++){
-//                    var optionValues = optionTypes[i].option_values;
-//                    $scope.variant.option_values[optionTypes[i].id] = optionValues.map(function(item){
-//                        return item.id;
-//                    });
-//                }
-//                console.log(product);
             });
             //$filter('orderBy')($scope.optionType.optionValues, 'position', false);
             //console.log($scope.optionType.optionValues);
@@ -142,7 +134,7 @@ angular.module('frontendApp')
 
 
             $scope.updateVariant = function(form){
-                console.log($scope.variant);
+                //console.log($scope.variant);
                 variants.update($scope.variant
                     , function(err, variant){
                         if(err){

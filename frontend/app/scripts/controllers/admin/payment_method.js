@@ -41,7 +41,7 @@ angular.module('frontendApp')
         $scope.createPaymentMethod = function(form){
             paymentMethods.save($scope.newPaymentMethod, function(err, paymentMethod){
                 if(err){
-                    console.log(err);
+                    //console.log(err);
                     $scope.error = err.data;
                     return;
                 }

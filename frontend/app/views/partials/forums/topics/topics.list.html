@@ -32,7 +32,7 @@
         <br/>
         <div class="row">
             <div class="col-md-12 text-left">
-                <span class="badge"><a class="btn btn-default" ui-sref="forums.list">Forums List</a></span> &gt;
+                <span class="badge"><a class="btn btn-default btn-xs" ui-sref="forums.list">Forums List</a></span> &gt;
                 <ul style="display: inline-block;" class="list-inline pills" ng-repeat="item in data.forums">
                     <li ng-if="!$last"><a ui-sref="forums.topics.list({forum_id: item.id})">{{item.name}}</a> &gt;</li>
                     <li class="dropdown" ng-if="$last">
@@ -47,10 +47,9 @@
 
         <div class="row">
             <div class="col-md-12 text-right">
-                <span ng-show="Auth.authorize('user')" class="badge" style="color:#666666;">
-                  <a class=" btn btn-default" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})" title="Login Required"><i class="fa fa-edit"></i> New Topic</a></span>
                 <span class="badge" style="color:#666666;">
-                 <a ng-hide="Auth.authorize('user')" class=" btn btn-default" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required"><i class="fa fa-edit"></i> New Topic</a></span>
+                  <a class=" btn btn-default btn-xs" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})"
+                     data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required"><i class="fa fa-edit"></i> New Topic</a></span>
             </div>
         </div>
         <div>

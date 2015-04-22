@@ -41,7 +41,7 @@ angular.module('frontendApp')
     $scope.createShippingMethod = function(form){
         shippingMethods.save($scope.newShippingMethod, function(err, shippingMethod){
             if(err){
-                console.log(err);
+                //console.log(err);
                 $scope.error = err.data;
                 return;
             }

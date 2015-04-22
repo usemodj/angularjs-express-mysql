@@ -37,7 +37,7 @@ angular
                         $scope.errors = {};
                         $scope.success = {};
                         if (errors) {
-                            console.log(errors);
+                            //console.log(errors);
                             angular
                                 .forEach(
                                 errors,

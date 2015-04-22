@@ -46,11 +46,11 @@ angular.module('frontendApp')
         $scope.searchTaxonomies = function(form){
             taxonomies.list(function(err, list){
               if(err){
-                console.log(err);
+                //console.log(err);
                 $scope.error = err;
                 return;
               }
-              console.log(list);
+              //console.log(list);
               $scope.data.taxonomies = list;
               $filter('orderBy')($scope.data.taxonomies, 'position', false);
             });
@@ -59,7 +59,7 @@ angular.module('frontendApp')
         $scope.createTaxonomy = function(form){
             taxonomies.save($scope.newTaxonomy, function(err, data){
                 if(err){
-                    console.log(err);
+                    //console.log(err);
                     $scope.error = err.data;
                     return;
                 }
@@ -94,7 +94,7 @@ angular.module('frontendApp')
         taxonomies.get({id: $stateParams.id}, function(err, data){
             $scope.taxonomy = data;
             if($scope.taxonomy.taxons) $scope.taxonomy.nodes = makeTree({q: $scope.taxonomy.taxons})
-            console.log( $scope.taxonomy);
+            //console.log( $scope.taxonomy);
             //console.log($scope.taxonomy.nodes);
         });
         //$scope.taxonomy.nodes = makeTree({id:'id', q:$scope.taxonomy.taxons});
@@ -102,7 +102,7 @@ angular.module('frontendApp')
 
         $scope.newSubItem = function(scope) {
             var nodeData = scope.$modelValue;
-            console.log(scope);
+            //console.log(scope);
             nodeData.children.push({
                 id: nodeData.id * 10 + nodeData.children.length,
                 name: nodeData.name + '.' + (nodeData.children.length + 1),
@@ -112,7 +112,7 @@ angular.module('frontendApp')
         };
 
         $scope.editItem = function(scope) {
-            console.log(scope);
+            //console.log(scope);
             scope.editing = true;
         };
 
@@ -145,7 +145,7 @@ angular.module('frontendApp')
 //            }
 //
             //console.log('>> taxonomy:'+ JSON.stringify($scope.taxonomy));
-            console.log($scope.taxonomy);
+            //console.log($scope.taxonomy);
             taxonomies.update($scope.taxonomy
                 , function(err, taxonomy){
                     if(err){

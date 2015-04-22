@@ -42,13 +42,13 @@ angular.module('frontendApp')
       },
       searchProducts: function(conditions, callback){
           var cb = callback || angular.noop;
-          console.log(conditions);
+          //console.log(conditions);
           $http.post('/admin/products/page/'+conditions.page, conditions)
           .success(function(data, status, headers, config){
-              console.log('>> status:'+ status);
+              //console.log('>> status:'+ status);
               return cb(null, data);
           }).error(function(data, status, headers, config) {
-              console.log('>> error data:'+ data);
+              //console.log('>> error data:'+ data);
                   // called asynchronously if an error occurs
               // or server returns response with an error status.
               return cb(status, data);
@@ -61,7 +61,7 @@ angular.module('frontendApp')
                 //console.log('>> status:'+ status);
                 return cb(null, data);
             }).error(function(data, status, headers, config) {
-                console.log('>> error data:'+ data);
+                //console.log('>> error data:'+ data);
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 return cb(status, data);
@@ -74,8 +74,8 @@ angular.module('frontendApp')
                   //console.log('>> status:'+ status);
                   return cb(null, data);
               }).error(function(data, status, headers, config) {
-                  console.log(data);
-                  console.log(status);
+                  //console.log(data);
+                  //console.log(status);
                   // called asynchronously if an error occurs
                   // or server returns response with an error status.
                   return cb(status, data);
@@ -88,7 +88,7 @@ angular.module('frontendApp')
                   //console.log('>> status:'+ status);
                   return cb(null, data);
               }).error(function(data, status, headers, config) {
-                  console.log('>> error data:'+ data);
+                  //console.log('>> error data:'+ data);
                   // called asynchronously if an error occurs
                   // or server returns response with an error status.
                   return cb(status, data);
@@ -102,7 +102,7 @@ angular.module('frontendApp')
                   //console.log('>> status:'+ status);
                   return cb(null, data);
               }).error(function(data, status, headers, config) {
-                  console.log('>> error data:'+ data);
+                  //console.log('>> error data:'+ data);
                   // called asynchronously if an error occurs
                   // or server returns response with an error status.
                   return cb(status, data);

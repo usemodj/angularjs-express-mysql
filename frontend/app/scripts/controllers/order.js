@@ -9,7 +9,7 @@ angular.module('frontendApp')
         orders.getOrders({page: $scope.page}, function(err, data){
             $scope.data.orders = data.orders;
             $scope.totalItems = data.count;
-            console.log(data);
+            //console.log(data);
         });
     };
 
@@ -20,7 +20,7 @@ angular.module('frontendApp')
     $scope.selectPage = function(page){
         $scope.page = page;
         //$scope.getOrders();
-        console.log('click selectPage')
+        //console.log('click selectPage')
     };
 
     $scope.getOrders();
@@ -37,7 +37,7 @@ angular.module('frontendApp')
     $scope.getOrder = function(){
         orders.get({id: $stateParams.id}, function(err, data){
             $scope.data.order = data;
-            console.log(data);
+            //console.log(data);
         });
     };
 

@@ -61,7 +61,7 @@ angular.module('frontendApp')
 
             forums.addForum($scope.newForum, function(err, data){
                 if(err){
-                    console.log(err);
+                    //console.log(err);
                     $scope.error = err;
                 } else {
                     $state.go('admin.forums.list', {page: $scope.page});
@@ -85,7 +85,7 @@ angular.module('frontendApp')
         $scope.updateForum = function(myform) {
             forums.update($scope.forum, function(err, data){
                 if(err){
-                    console.log(err);
+                    //console.log(err);
                     $scope.error = err;
                 } else {
                     $state.go('admin.forums.list', {page: $scope.page});

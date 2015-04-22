@@ -17,20 +17,20 @@ angular.module('frontendApp')
                 return item.id;
             }).join(',');
             beforeSort = entry;
-            console.log('>>beforeSort:'+beforeSort);
+            //console.log('>>beforeSort:'+beforeSort);
 
         },
         // called after a node is dropped
         stop: function(e, ui) {
-            console.log("stop");
+            //console.log("stop");
 
             var entry = $scope.data.optionTypes.map(function(item){
                 return item.id;
             }).join(',');
             sorted = entry != beforeSort;
-            console.log('>>beforeSort:'+ beforeSort);
-            console.log('>>entry:'+ entry);
-            console.log('>>sorted:'+ sorted);
+            //console.log('>>beforeSort:'+ beforeSort);
+            //console.log('>>entry:'+ entry);
+            //console.log('>>sorted:'+ sorted);
             // IF sorted == true, updatePosition()
             if(sorted){
                 $scope.updatePosition(entry);
@@ -58,7 +58,7 @@ angular.module('frontendApp')
     $scope.createOptionType = function(form){
         optionTypes.save($scope.newOptionType, function(err, opType){
             if(err){
-                console.log(err);
+                //console.log(err);
                 $scope.error = err.data;
                 return;
             }
@@ -82,7 +82,7 @@ angular.module('frontendApp')
     //$scope.optionType = optionType;
     optionTypes.get({id: $stateParams.id}, function(err, optionType){
         if(err) console.log(err);
-        console.log(optionType);
+        //console.log(optionType);
         $scope.optionType = optionType;
 
         if($scope.optionType.option_values){
@@ -140,7 +140,7 @@ angular.module('frontendApp')
     };
 
     $scope.updateOptionType = function(form){
-        console.log('>> optionType:'+ JSON.stringify($scope.optionType));
+        //console.log('>> optionType:'+ JSON.stringify($scope.optionType));
         optionTypes.update($scope.optionType
             , function(err, optionType){
                 if(err){

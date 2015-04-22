@@ -39,13 +39,13 @@ angular.module('frontendApp')
                     $scope.errors = {};
 
                     if (!err) {
-                        console.log('>>redirect: '+ $scope.redirect);
-                        console.log('>>redirectURL: '+  redirects.getRedirectURL());
+                        //console.log('>>redirect: '+ $scope.redirect);
+                        //console.log('>>redirectURL: '+  redirects.getRedirectURL());
                         $location.path( redirects.getRedirectURL()? redirects.getRedirectURL(): '/');
                         //$location.path( $scope.redirect ? $scope.redirect : '/');
                     } else {
-                        console.log('>>login controller error:'+ JSON.stringify(err));
-                        console.log(err);
+                        //console.log('>>login controller error:'+ JSON.stringify(err));
+                        //console.log(err);
                         angular.forEach(err.errors, function(error,
                             field) {
                             form[field].$setValidity('server', false);

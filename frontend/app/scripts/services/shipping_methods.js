@@ -40,14 +40,14 @@ angular.module('frontendApp')
         updatePosition: function(entry, callback){
             //entry: sorted ids = '3,1,2.4,5'
             var cb = callback || angular.noop;
-            console.log(entry);
+            //console.log(entry);
             $http.post('/admin/shipping_methods/', entry)
                 .success(function(data, status, headers, config){
-                    console.log('>> status:'+ status);
+                    //console.log('>> status:'+ status);
                     return cb(null, data);
                 }).error(function(data, status, headers, config) {
-                    console.log('>> error data:');
-                    console.log(data);
+                    //console.log('>> error data:');
+                    //console.log(data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
                     return cb(status, data);
@@ -55,14 +55,14 @@ angular.module('frontendApp')
         },
         searchShippingMethods: function(conditions, callback){
             var cb = callback || angular.noop;
-            console.log(conditions);
+            //console.log(conditions);
             $http.post('/admin/shipping_methods/search', conditions)
                 .success(function(data, status, headers, config){
-                    console.log('>> status:'+ status);
+                    //console.log('>> status:'+ status);
                     return cb(null, data);
                 }).error(function(data, status, headers, config) {
-                    console.log('>> error data:');
-                    console.log(data);
+                    //console.log('>> error data:');
+                    //console.log(data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
                     return cb(status, data);

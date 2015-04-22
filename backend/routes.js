@@ -395,13 +395,13 @@ var routes = [
         path: '/taxons',
         httpMethod: 'GET',
         middleware: [TaxonCtrl.index],
-        //accessLevel: accessLevels.public
+        accessLevel: accessLevels.public
     },
     {
         path: '/taxons/products',
         httpMethod: 'POST',
         middleware: [TaxonCtrl.products],
-        //accessLevel: accessLevels.public
+        accessLevel: accessLevels.public
     },
 
     //Shipping Method Resource

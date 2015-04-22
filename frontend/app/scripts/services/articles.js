@@ -55,10 +55,10 @@ angular.module('frontendApp')
         //console.log(conditions);
         $http.post('/articles/search', conditions)
           .success(function (data, status, headers, config) {
-            console.log('>> status:' + status);
+            //console.log('>> status:' + status);
             return cb(null, data);
           }).error(function (data, status, headers, config) {
-            console.log('>> error data:' + data);
+            //console.log('>> error data:' + data);
             // called asynchronously if an error occurs
             // or server returns response with an error status.
             return cb(status, data);

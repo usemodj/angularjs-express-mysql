@@ -40,7 +40,7 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                 },
 
                 login: function(provider, userinfo, callback) {
-                    console.log('>> auth login');
+                    //console.log('>> auth login');
                     var cb = callback || angular.noop;
                     SessionFactory.save({
                         provider: provider,
@@ -54,17 +54,17 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                         changeUser(user);
                         return cb();
                     }, function(err) {
-                        console.log('>>authfactory login error:'+ JSON.stringify(err));
+                        //console.log('>>authfactory login error:'+ JSON.stringify(err));
                         return cb(err.data);
                     });
                 },
 
                 logout: function(callback) {
-                    console.log("$cookieStore.get('user'): "); console.log( $cookieStore.get('user'));
+                    //console.log("$cookieStore.get('user'): "); console.log( $cookieStore.get('user'));
 
                     var cb = callback || angular.noop;
                     SessionFactory.remove( function(res) {
-                            console.log(res);
+                            //console.log(res);
                             $rootScope.currentUser = null;
                             $cookieStore.remove('user');
                             changeUser({
@@ -74,7 +74,7 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                             return cb();
                         },
                         function(err) {
-                            console.log(err);
+                            //console.log(err);
                             return cb(err.data);
                         });
                 },
@@ -103,14 +103,14 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                         role_id: user.role_id,
                         active: user.active
                     }, function(user) {
-                        console.log('updateUserRole changed');
-                        console.log('>> user: ' + user);
+                        //console.log('updateUserRole changed');
+                        //console.log('>> user: ' + user);
                         changeUser(user);
                         return cb(null);
 
                     }, function(err) {
-                        console.log('>> updateUserRole error: ');
-                        console.log(err);
+                        //console.log('>> updateUserRole error: ');
+                        //console.log(err);
                         return cb(err.data);
                     });
 
@@ -125,12 +125,12 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                         new_password: newPassword,
                         retype_password: retypePassword
                     }, function(user) {
-                        console.log('password changed');
-                        console.log('>> user: ' + user);
+                        //console.log('password changed');
+                        //console.log('>> user: ' + user);
                         return cb();
                     }, function(err) {
-                        console.log('>> authfactory changePassword: ');
-                        console.log(err);
+                        //console.log('>> authfactory changePassword: ');
+                        //console.log(err);
                         return cb(err.data);
                     });
                 },
@@ -141,7 +141,7 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                         email: email,
                         password: password
                     }, function(user) {
-                        console.log(user + 'removed');
+                        //console.log(user + 'removed');
                         return cb();
                     }, function(err) {
                         return cb(err.data);
@@ -151,11 +151,11 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                 passwordToken: function(email, callback) {
                   MailFactory.get({email: email},
                     function(user){
-                	  	console.log('>> passwordToken user:');
-                	  	console.log(user);
+                	  	//console.log('>> passwordToken user:');
+                	  	//console.log(user);
                       return callback(null, user);
                   }, function(err){
-                	  console.log('>> passwordToken error:');
+                	  //console.log('>> passwordToken error:');
                     return callback(err.data);
                   });
                 },
@@ -166,12 +166,12 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                         email: email,
                         message: message
                     }, function(mail) {
-                    		console.log('>> authfactory mailPassword success: ');
-                    		console.log(mail);
+                    		//console.log('>> authfactory mailPassword success: ');
+                    		//console.log(mail);
                         return cb();
                     }, function(err) {
-                        console.log('>> authfactory mailPassword err: ');
-                        console.log(err);
+                        //console.log('>> authfactory mailPassword err: ');
+                        //console.log(err);
                         return cb(err.data);
                     });
                 },
@@ -184,10 +184,10 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                 		password: password,
                 		retype_password: retypePassword
                 	}, function(user){
-                		console.log(user);
+                		//console.log(user);
                 		return cb();
                 	}, function(err){
-                		console.log(err);
+                		//console.log(err);
                 		return cb(err.data);
                 	});
                 }

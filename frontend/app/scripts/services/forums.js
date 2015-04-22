@@ -13,7 +13,7 @@ angular.module('frontendApp')
         get: function(data, callback){ //GET
             var cb = callback || angular.noop;
             resource.get(data, function(forum){
-                console.log(forum);
+                //console.log(forum);
                 return cb(null, forum);
             }, function(err){
                 return cb(err, null);
@@ -40,13 +40,13 @@ angular.module('frontendApp')
         },
         searchForums: function(conditions, callback){
             var cb = callback || angular.noop;
-            console.log(conditions);
+            //console.log(conditions);
             $http.post('/admin/forums/search', conditions)
                 .success(function(data, status, headers, config){
-                    console.log('>> status:'+ status);
+                    //console.log('>> status:'+ status);
                     return cb(null, data);
                 }).error(function(data, status, headers, config) {
-                    console.log('>> error data:'+ data);
+                    //console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
                     return cb(status, data);
@@ -57,37 +57,23 @@ angular.module('frontendApp')
             //console.log(conditions);
             $http.post('/admin/forums/add', conditions)
                 .success(function(data, status, headers, config){
-                    console.log('>> status:'+ status);
+                    //console.log('>> status:'+ status);
                     return cb(null, data);
                 }).error(function(data, status, headers, config) {
-                    console.log('>> error data:'+ data);
+                    //console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
                     return cb(status, data);
                 });
         },
-//        updateForum: function(conditions, callback){
-//            var cb = callback || angular.noop;
-//            //console.log(conditions);
-//            $http.post('/admin/forums/update', conditions)
-//                .success(function(data, status, headers, config){
-//                    console.log('>> status:'+ status);
-//                    return cb(null, data);
-//                }).error(function(data, status, headers, config) {
-//                    console.log('>> error data:'+ data);
-//                    // called asynchronously if an error occurs
-//                    // or server returns response with an error status.
-//                    return cb(status, data);
-//                });
-//        },
         rebuildTree: function(callback){
             var cb = callback || angular.noop;
             $http.get('/admin/forums/rebuild_tree')
                 .success(function(data, status, headers, config){
-                    console.log('>> status:'+ status);
+                    //console.log('>> status:'+ status);
                     return cb(null, data);
                 }).error(function(data, status, headers, config) {
-                    console.log('>> error data:'+ data);
+                    //console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
                     return cb(status, data);
@@ -97,10 +83,10 @@ angular.module('frontendApp')
             var cb = callback || angular.noop;
             $http.get('/admin/forums/create_root')
                 .success(function(data, status, headers, config){
-                    console.log('>> status:'+ status);
+                    //console.log('>> status:'+ status);
                     return cb(null, data);
                 }).error(function(data, status, headers, config) {
-                    console.log('>> error data:'+ data);
+                    //console.log('>> error data:'+ data);
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
                     return cb(status, data);

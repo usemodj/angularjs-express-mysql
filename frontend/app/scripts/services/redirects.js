@@ -9,9 +9,6 @@
  */
 angular.module('frontendApp')
   .factory('redirects', function () {
-    // Service logic
-    // ...
-
     var redirectURL = '';
 
     // Public API here

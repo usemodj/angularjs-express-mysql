@@ -46,7 +46,7 @@ angular.module('frontendApp')
         profiles.saveAddress($scope.profile, function(err, data){
           if(err) $scope.error = err;
           else {
-            console.log(data);
+            //console.log(data);
             $scope.profile = data;
             $scope.toggleAddress();
           }
@@ -71,8 +71,8 @@ angular.module('frontendApp')
           $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
         }).success(function (data, status, headers, config) {
           //console.log(config);
-          console.log('>>success data')
-          console.log(data);
+          //console.log('>>success data')
+          //console.log(data);
           $scope.profile = data;
           $scope.toggleBasicInfo();
           //$state.go('user.profile', {reload: true});

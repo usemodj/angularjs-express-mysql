@@ -8,12 +8,12 @@ angular.module('frontendApp')
     $scope.cart = function(){
       orders.getCart(function(err, order){
           $scope.data.order = order;
-          console.log(order);
+          //console.log(order);
       });
     };
 
     $scope.updateCart = function(){
-        console.log($scope.data.order);
+        //console.log($scope.data.order);
         orders.updateCart($scope.data.order, function(err, data){
             $scope.data.order = data;
             $state.go('carts.list', {}, {reload: true});
@@ -26,7 +26,7 @@ angular.module('frontendApp')
     };
 
     $scope.checkout = function(){
-        console.log('>> checkout');
+        //console.log('>> checkout');
         orders.updateAddressState(function(err, order){
           //console.log(order);
           $state.go('orders.address', {id: order.id});
