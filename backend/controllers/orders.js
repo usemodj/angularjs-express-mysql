@@ -840,6 +840,7 @@ module.exports = {
 
             Order.get(order_id, function (err, order) {
                 if (err || order == null) return next(err);
+                if(order.user_id !== user.id) return res.status(403).send('This order is not yours!');
 
                 //log.debug(JSON.stringify(order));
                 req.db.driver.execQuery(lineItemSql, [order.id], function(err, lineItems){
