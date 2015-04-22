@@ -20,10 +20,11 @@ angular.module('frontendApp')
     get: function (conditions, callback) { //GET
       var cb = callback || angular.noop;
       resource.get(conditions, function (data) {
-        console.log(data);
+        //console.log(data);
         return cb(null, data);
       }, function (err) {
-        return cb(err, null);
+        //console.log('>>error:');console.log(err);
+        return cb(err);
       });
     },
     update: function (conditions, callback) { //PUT
@@ -31,7 +32,7 @@ angular.module('frontendApp')
       resource.update(conditions, function (data) {
         return cb(null, data);
       }, function (err) {
-        return cb(err, null);
+        return cb(err);
       });
     },
     save: function (conditions, callback) { //POST
@@ -65,6 +66,7 @@ angular.module('frontendApp')
           return cb(status, data);
         });
     }
+
   };
 }]);
 

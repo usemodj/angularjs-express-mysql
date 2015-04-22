@@ -1,4 +1,5 @@
 var crypto = require('crypto');
+var log = require('log4js').getLogger('User');
 
 module.exports = function(orm, db) {
     var User = db.define('users', {
@@ -11,6 +12,9 @@ module.exports = function(orm, db) {
         role_id: {
             type: 'integer',
             required: true
+        },
+        profile_id: {
+          type: 'integer'
         },
         active: {
           type: 'boolean'
@@ -62,7 +66,7 @@ module.exports = function(orm, db) {
     }, {
         cache: false,
         autoFetch: true,
-        autoFetchLimit: 2,
+        autoFetchLimit: 1,
         methods: {
             serialize: function() {
                 return {
@@ -78,9 +82,9 @@ module.exports = function(orm, db) {
              */
 
             authenticate: function(plainText) {
-                console.log('>> plainText: '+ plainText);
-                console.log('>> this.encrypted_password: '+ this.encrypted_password);
-                console.log('>> this.encryptPassword(plainText): '+ this.encryptPassword(plainText));
+                log.debug('>> plainText: '+ plainText);
+                log.debug('>> this.encrypted_password: '+ this.encrypted_password);
+                log.debug('>> this.encryptPassword(plainText): '+ this.encryptPassword(plainText));
                 return this.encryptPassword(plainText) === this.encrypted_password;
             },
 
@@ -135,8 +139,8 @@ module.exports = function(orm, db) {
 
     });
     // creates column 'customer_id' in 'users' table
-    User.hasOne('profile', db.models.profiles, { });
-    User.hasOne('role', db.models.roles, { });
+    User.hasOne('role', db.models.roles);
+    User.hasOne('profile', db.models.profiles);
 
     User.makeSalt = function() {
         return crypto.randomBytes(16).toString('hex');
@@ -152,9 +156,9 @@ module.exports = function(orm, db) {
             if (err) {
                 callback(err);
             } else {
-                console.log('>> user.password: '+ user.password);
-                console.log('>> person.encrypted_password: '+ person.encrypted_password);
-                console.log('>> person.encryptPassword(user.password): '+ person.encryptPassword(user.password));
+                //console.log('>> user.password: '+ user.password);
+                //console.log('>> person.encrypted_password: '+ person.encrypted_password);
+                //console.log('>> person.encryptPassword(user.password): '+ person.encryptPassword(user.password));
                 //if (person.encrypted_password === person.encryptPassword(user.password)) {
                 if (person.authenticate(user.password)) {
                     callback(null, person);

@@ -9,14 +9,84 @@
       <td> Role</td><td> {{currentUser.role.title}}</td><td></td>
     </tr>
     <tr>
+      <td> Basic Info</td>
+      <td>
+        <div ng-hide="viewBasicInfo">
+          <div><span class="badge">Name</span>&nbsp;{{profile.first_name}} {{profile.last_name}}</div>
+          <div><span class="badge">Nickname</span>&nbsp;{{profile.nickname}}</div>
+          <div><span class="badge">Gender</span>&nbsp;{{profile.gender}}</div>
+          <div><span class="badge">Birth Day</span>&nbsp;{{profile.birth_year}}-{{profile.birth_month}}-{{profile.birth_day}}</div>
+          <div><img ng-if="profile.asset" ng-src="/uploads/images/{{profile.asset.attachment_file_path}}"></div>
+        </div>
+        <div class="well well-xs" ng-show="viewBasicInfo" id="input-profile" >
+          <table class="table">
+            <form name="myform1" ng-submit="saveProfile()" novalidate>
+              <tbody>
+              <tr>
+                <td class="col-md-2">Name</td>
+                <td class="col-md-3 form-group">
+                  <div class="col-md-5">
+                    <label>First Name</label><input style="width:120px" class="form-control" ng-model="profile.first_name">
+                  </div>
+                  <div class="col-md-5">
+                    <label>Last Name</label><input style="width:120px" class="form-control" ng-model="profile.last_name">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Nickname</td><td class="form-group"><input class="form-control" ng-model="profile.nickname"></td>
+              </tr>
+              <tr>
+                <td class="col-md-2">Gender</td><td class="col-md-3 form-group">
+                  <select style="width:120px" class="form-control" ng-model="profile.gender">
+                    <option class="form-control" ng-repeat="gender in ['Male','Female','Other']" >{{gender}}</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td class="col-md-2">Birth Day</td><td class="col-md-3 form-group">
+                  <div class="row">
+                    <div class="col-md-3"><label>Year</label><input style="width:80px" class="form-control" ng-model="profile.birth_year" placeholder="Year"></div>
+                    <div class="col-md-2"><label>Month</label><input style="width:50px" class="form-control" ng-model="profile.birth_month" placeholder="Month"></div>
+                    <div class="col-md-2"><label>Day</label><input style="width:50px" class="form-control" ng-model="profile.birth_day" placeholder="Day"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="col-md-2">Picture</td><td class="col-md-3 form-group">
+                <input class="form-control btn-xs" type="file" file-upload accept="image/*" >
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>
+                  <button type="submit" ng-click="saveProfile()" ng-disabled="myform.$invalid" class="btn btn-primary btn-sm" >
+                    <span class="glyphicon glyphicon-send"></span> Save </button>
+                  <button  class="btn btn-default btn-sm" ng-click="toggleBasicInfo()"> Cancel </button>
+                </td>
+              </tr>
+              </tbody>
+            </form>
+          </table>
+        </div>
+      </td>
+      <td><a ng-click="toggleBasicInfo()"><i class="fa fa-pencil"></i></a></td>
+    </tr>
+    <tr>
       <td> Address</td>
-      <td><div>&nbsp;{{currentUser.profile.address}}</div>
+      <td>
+        <div ng-hide="viewAddress">
+          <div><span class="badge">Address</span>&nbsp;{{profile.address.address1}}</div>
+          <div><span class="badge">Zipcode</span>&nbsp;{{profile.address.zipcode}}</div>
+          <div><span class="badge">Mobile</span>&nbsp;{{profile.address.mobile}}</div>
+          <div><span class="badge">Phone</span>&nbsp;{{profile.address.phone}}</div>
+        </div>
         <div class="well well-xs" ng-show="viewAddress" id="input-address" >
           <table class="table">
             <form name="myform1" ng-submit="saveAddress()" novalidate>
             <tbody>
             <tr>
-              <td class="col-md-2">Address</td><td class="col-md-3 form-group"><input class="form-control" ng-model="profile.address.address"></td>
+              <td class="col-md-2">Address</td><td class="col-md-3 form-group"><input class="form-control" ng-model="profile.address.address1"></td>
             </tr>
             <tr>
               <td class="col-md-2">Zipcode</td><td class="col-md-3 form-group"><input class="form-control" ng-model="profile.address.zipcode"></td>
@@ -45,7 +115,6 @@
     </tr>
     </tbody>
   </table>
-  <div>{{currentUser.profile}}</div>
 
 </div>
 

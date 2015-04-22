@@ -14,11 +14,14 @@ module.exports = function(orm, db) {
         gender: {
             type: 'enum', values:['Male', 'Female', 'Other']
         },
-        birth_day: {
-            type: 'date', time: false
+        birth_year: {
+            type: 'text', size:4
         },
-        picture_id: {
-            type: 'integer'
+        birth_month: {
+            type: 'text', size:2
+        },
+        birth_day: {
+            type: 'text', size:2
         },
         address_id: {
             type: 'integer'
@@ -34,8 +37,9 @@ module.exports = function(orm, db) {
         }
 
     }, {
+        cache: false,
         autoFetch: true,
-        autoFetchLimit: 2,
+        autoFetchLimit: 1,
         methods: {},
         validations: {},
         hooks: {
@@ -53,5 +57,4 @@ module.exports = function(orm, db) {
     //Profile.hasOne('user', db.models.users, {});
     Profile.hasOne('address', db.models.addresses, {});
     //Profile.hasMany('addresses', db.models.addresses, {}, {key: true});
-    Profile.hasOne('picture', db.models.assets); //picture path
 };

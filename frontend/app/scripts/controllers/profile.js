@@ -13,43 +13,57 @@ angular.module('frontendApp')
       $scope.profile = { address:{}};
       $scope.files = [];
       $scope.viewAddress = false;
+      $scope.viewBasicInfo = false;
+
+      //listen for the file selected event
+      $scope.$on("fileSelected", function (event, args) {
+        $scope.$apply(function () {
+          //add the file object to the scope's files collection
+          $scope.files.push(args.file);
+        });
+      });
 
       console.log($scope.currentUser)
-      if($scope.currentUser.profile) $scope.profile = $scope.currentUser.profile;
-      if(!$scope.profile.address) $scope.profile.address = {};
-      if($scope.currentUser.profile_id) {
-        profiles.get($scope.currentUser.profile_id, function(err, profile){
-          if(!err) $scope.profile = profile;
-        });
-      }
+      //if($scope.currentUser.profile) $scope.profile = $scope.currentUser.profile;
+      //if(!$scope.profile.address) $scope.profile.address = {};
+      profiles.get({},function(err, profile){
+        if(!err) $scope.profile = profile;
+        //else {console.log('>>error:');console.log(err);}
+      });
+
 
       $scope.toggleAddress = function(){
         $scope.viewAddress = !$scope.viewAddress;
         //console.log( $scope.viewAddress);
       };
+      $scope.toggleBasicInfo = function(){
+        $scope.viewBasicInfo = !$scope.viewBasicInfo;
+        //console.log( $scope.viewAddress);
+      };
 
       $scope.saveAddress = function(form){
-        console.log($scope.profile);
+        //console.log($scope.profile);
         profiles.saveAddress($scope.profile, function(err, data){
           if(err) $scope.error = err;
           else {
             console.log(data);
             $scope.profile = data;
+            $scope.toggleAddress();
           }
 
         });
       };
-    // Create topic with file attachment
-      $scope.uploadPicture = function(myform) {
+    // Create profile with file attachment
+      $scope.saveProfile = function(myform) {
         $scope.progress = 0;
         $scope.error = null;
         //console.log($scope.files);
         $scope.upload = $upload.upload({
-          url: '/profiles/',
+          url: '/profiles/save_profile',
           method: 'POST',
-          //data : {
-          //  profile : $scope.profile
-          //},
+          data : {
+            profile : $scope.profile
+          },
           file: ($scope.files != null)? $scope.files: null,
           fileFormDataName: 'file'
         }).progress(function (evt) {
@@ -59,7 +73,9 @@ angular.module('frontendApp')
           //console.log(config);
           console.log('>>success data')
           console.log(data);
-          $state.go('user.profile', {reload: true});
+          $scope.profile = data;
+          $scope.toggleBasicInfo();
+          //$state.go('user.profile', {reload: true});
         });
       };
   }]);

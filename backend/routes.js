@@ -119,7 +119,7 @@ var routes = [
 
     // Profile resource
     {
-        path: '/profiles/:id',
+        path: '/profiles/',
         httpMethod: 'GET',
         middleware: [ProfileCtrl.getProfile],
         accessLevel: accessLevels.user
@@ -128,6 +128,12 @@ var routes = [
         path: '/profiles/save_address',
         httpMethod: 'POST',
         middleware: [ProfileCtrl.saveAddress],
+        accessLevel: accessLevels.user
+    },
+    {   //save profile with ficture image
+        path: '/profiles/save_profile',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.saveProfile],
         accessLevel: accessLevels.user
     },
 
