@@ -139,8 +139,8 @@ module.exports = function(orm, db) {
 
     });
     // creates column 'customer_id' in 'users' table
-    User.hasOne('role', db.models.roles);
-    User.hasOne('profile', db.models.profiles);
+    //User.hasOne('role', db.models.roles);
+    //User.hasOne('profile', db.models.profiles);
 
     User.makeSalt = function() {
         return crypto.randomBytes(16).toString('hex');

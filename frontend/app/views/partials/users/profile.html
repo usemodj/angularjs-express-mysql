@@ -16,7 +16,7 @@
           <div><span class="badge">Nickname</span>&nbsp;{{profile.nickname}}</div>
           <div><span class="badge">Gender</span>&nbsp;{{profile.gender}}</div>
           <div><span class="badge">Birth Day</span>&nbsp;{{profile.birth_year}}-{{profile.birth_month}}-{{profile.birth_day}}</div>
-          <div><img ng-if="profile.asset" ng-src="/uploads/images/{{profile.asset.attachment_file_path}}"></div>
+          <div><span class="badge">Picture</span>&nbsp;<img ng-if="profile.asset" ng-src="/uploads/images/{{profile.asset.attachment_file_path}}"></div>
         </div>
         <div class="well well-xs" ng-show="viewBasicInfo" id="input-profile" >
           <table class="table">

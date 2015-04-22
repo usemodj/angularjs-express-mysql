@@ -1,3 +1,4 @@
+var log = require('log4js').getLogger('routes');
 var _ = require('underscore')
     , path = require('path')
     , userRoles = require('../frontend/app/scripts/common/routingConfig').userRoles
@@ -394,13 +395,13 @@ var routes = [
         path: '/taxons',
         httpMethod: 'GET',
         middleware: [TaxonCtrl.index],
-        accessLevel: accessLevels.public
+        //accessLevel: accessLevels.public
     },
     {
         path: '/taxons/products',
         httpMethod: 'POST',
         middleware: [TaxonCtrl.products],
-        accessLevel: accessLevels.public
+        //accessLevel: accessLevels.public
     },
 
     //Shipping Method Resource
@@ -745,14 +746,17 @@ module.exports = function(app) {
 }
 
 function ensureAuthorized(req, res, next) {
+    //log.debug('>> req.route.method: '+ req.route.method);
+    //log.debug('>> req.method: '+req.method);
     var role;
     //var accessLevel = _.findWhere(routes, { path: req.route.path, httpMethod: req.route.method.toUpperCase() }).accessLevel || accessLevels.public;
     var accessLevel = _.findWhere(routes, { path: req.route.path, httpMethod: req.method.toUpperCase() }).accessLevel || accessLevels.public;
     if(!req.user) role = userRoles.public;
     else if(req.user.role) role = req.user.role;
+    //log.debug('>> accessLevel: '+ accessLevel);
+    //log.debug('user role:'+ JSON.stringify(role));
     if(role) {
-        //console.log('>>ensureAuthorized req.user:');
-        //console.log(JSON.stringify(req.user));
+        //log.debug('>> ensureAuthorized req.user: '+ JSON.stringify(req.user));
         if (!(accessLevel.bit_mask & role.bit_mask)) return res.status(403).end();
         return next();
     } else if(req.user) {

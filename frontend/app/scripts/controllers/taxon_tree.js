@@ -23,9 +23,11 @@ angular.module('frontendApp')
 
     $scope.taxonTree = function(){
       taxons.list(function(err, data){
-        console.log(data);
-        $scope.data.taxonTree = makeTree({q: data});
-        console.log($scope.data.taxonTree);
+        if(!err && data){
+          //console.log(data);
+          $scope.data.taxonTree = makeTree({q: data});
+          //console.log($scope.data.taxonTree);
+        }
       });
     };
 

@@ -19,7 +19,6 @@ var models = require('./models/index');//index.js
 var mailer = require('./config/mailer');
 var log4js = require('log4js');
 
-//var log = log4js.getLogger("app");
 var app = express();
 //  Avoids DEPTH_ZERO_SELF_SIGNED_CERT error
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -75,24 +74,24 @@ app.use(methodOverride());
 app.use(multipart({
     uploadDir: settings.upload_path
 }));
+
 app.use(session({
-    secret: 'your secret here',
-    key: 'sid',
-    // cookie: {
-    //     maxAge: 3600000 * 24 * 7
-    // },
+    secret: 'your-secret-here',
+    name: 'connect.sid',
+    resave: false,
+    saveUninitialized: true,
+    secure: true,
+    // cookie:{maxAge: 3600000 * 24 * 7},
+    cookie: {
+        maxAge  : 3600000 //1 hours
+    },
     store: new SessionStore(settings.database)
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(csrf({cookie: true}));
-// error handler
-app.use(function (err, req, res, next) {
-    if (err.code !== 'EBADCSRFTOKEN') return next(err)
-     // handle CSRF token errors here
-    res.status(403).send('session has expired or form tampered with')
-});
 
+app.use(csrf({cookie: true}));
 app.use(function (req, res, next) {
     res.cookie('XSRF-TOKEN', req.csrfToken());
 //>>> IE brower cache problem >>>
@@ -100,13 +99,24 @@ app.use(function (req, res, next) {
     res.header('Cache-Control', 'max-age=0,no-cache,no-store,post-check=0,pre-check=0,must-revalidate');
     res.header('Expires', '-1');
 //>>>
-    next()
+    next();
 });
-
+// error handler
+app.use(function (err, req, res, next) {
+    if (err.code !== 'EBADCSRFTOKEN') return next(err)
+     // handle CSRF token errors here
+    res.status(403).send('session has expired or form tampered with')
+});
+// Allow CORS
+//app.all('*', function(req, res, next) {
+//    res.header('Access-Control-Allow-Origin', "*");
+//    res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
+//    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+//    next();
+//});
 // app.use(modRewrite([
 //                 '!\\.html|\\.js|\\.css|\\woff|\\ttf|\\swf$ /index.html [L]'
 //               ]));
-// app.use(express.static(path.join(__dirname, '../frontend/app')));
 
 if (app.get('env') === 'development') {
     app.use(express.static(path.join(__dirname, '../frontend/app/')));

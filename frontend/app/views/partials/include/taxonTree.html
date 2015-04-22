@@ -1,5 +1,5 @@
 <div  style="overflow-x:auto;overflow-y:hidden;white-space:nowrap; width:100%;" ng-controller="TaxonTreeCtrl">
-  <div style="display:inline-block;"
+  <div ng-if=" data.taxonTree" style="display:inline-block;"
       angular-treeview="true"
       data-tree-id="taxontree"
       data-tree-model="data.taxonTree"
