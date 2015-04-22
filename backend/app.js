@@ -1,7 +1,7 @@
 var express = require('express');
 var session = require('express-session');
 var path = require('path');
-var favicon = require('static-favicon');
+var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
@@ -48,7 +48,7 @@ app.use(function(req, res, next){
 	});
 });
 
-app.use(favicon());
+app.use(favicon(path.join(__dirname, '/../frontend/app/favicon.ico')));
 // replace this with the log4js connect-logger
 // app.use(logger('dev'));
 /**
@@ -62,10 +62,10 @@ try {
         process.exit(1);
     }
 }
-//log4js.configure(path.join(__dirname, './config/log4js.json'));
-app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'debug' }));
-//if(process.env.NODE_ENV === 'production') app.use(log4js.connectLogger(log4js.getLogger("production"), { level: 'ERROR' }));
-//else app.use(log4js.connectLogger(log4js.getLogger("development"), { level: 'DEBUG' }));
+//app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'debug' }));
+log4js.configure(path.join(__dirname, './config/log4js.json'));
+if(process.env.NODE_ENV === 'production') app.use(log4js.connectLogger(log4js.getLogger("production"), { level: 'ERROR' }));
+else app.use(log4js.connectLogger(log4js.getLogger("development"), { level: 'DEBUG' }));
 
 app.use(cookieParser());
 app.use(bodyParser.json());

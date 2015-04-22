@@ -85,7 +85,7 @@ module.exports = function(cb) {
         db.settings.set('instance.returnAllErrors', true);
         db.settings.set("connection.reconnect", true);
         db.settings.set("connection.pool", true);
-        db.settings.set("connection.debug", true);
+        db.settings.set("connection.debug", false);
 
         setup(db, cb);
     });
