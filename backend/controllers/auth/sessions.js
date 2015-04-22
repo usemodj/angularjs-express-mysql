@@ -72,7 +72,9 @@ module.exports = {
             req.logout();
             res.status(200).end();
         } else {
-            res.status(401).send('Not logged in');
+            req.session.destroy();
+            //res.status(401).send('Not logged in');
+            res.status(200).end();
         }
     }
 

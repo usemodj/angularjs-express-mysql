@@ -2,6 +2,23 @@ var log = require('log4js').getLogger("orders");
 var _ = require('underscore');
 var async = require('async');
 
+var lineItemSql = ' SELECT DISTINCT li.*, v1.options, va.attachment_file_path FROM  \n' +
+    '  (SELECT l.*, p.id AS product_id, p.name FROM line_items l,variants v, products p  \n' +
+    '   WHERE l.variant_id = v.id AND v.product_id = p.id AND l.order_id = ? \n' +
+    '  ) li   \n' +
+    '  INNER JOIN   \n' +
+    '  (SELECT sv.id, sv.product_id, GROUP_CONCAT(sv.options) AS options   \n' +
+    '   FROM (SELECT v.id, v.product_id, concat(t.presentation,":", o.presentation) AS options   \n' +
+    ' 		 FROM variants v, variants_option_values vo, option_values o, option_types t   \n' +
+    ' 		 WHERE v.id = vo.variants_id and vo.option_values_id = o.id and o.option_type_id = t.id  \n' +
+    ' 	   ) sv  GROUP BY sv.id  \n' +
+    '  ) v1 ON li.variant_id = v1.id  \n' +
+    '  LEFT JOIN  \n' +
+    '  (SELECT a1.* FROM   \n' +
+    ' 	(SELECT v.product_id, a.* FROM variants v, assets a WHERE v.id = a.viewable_id AND viewable_type = "Variant" ORDER BY a.position, a.id) a1  \n' +
+    '   GROUP BY a1.product_id  \n' +
+    '  ) va ON va.product_id = v1.product_id;';
+
 var getOrderItems = function(order_id, req, res, callback){
 
     var Order = req.models.orders;
@@ -18,34 +35,7 @@ var getOrderItems = function(order_id, req, res, callback){
         Order.get(order_id, function (err, order) {
             if (err || order == null) return callback(err);
 
-            var sql = 'SELECT DISTINCT li.*, sv1.options, a3.attachment_file_path FROM \n'+
-                ' (SELECT l.*, p.id AS product_id, p.name FROM line_items l,variants v, products p \n'+
-                ' WHERE l.variant_id = v.id AND v.product_id = p.id AND l.order_id = ? \n'+
-                ' ) li \n'+
-                ' INNER JOIN \n'+
-                ' (SELECT sv.id, sv.product_id, GROUP_CONCAT(sv.options) AS options \n'+
-                ' FROM (SELECT v.id, v.product_id, concat(t.presentation,":", o.presentation) AS options \n'+
-                ' FROM variants v, variants_option_values vo, option_values o, option_types t \n'+
-                ' WHERE v.id = vo.variants_id and vo.option_values_id = o.id and o.option_type_id = t.id) sv \n'+
-                ' GROUP BY sv.id) sv1 \n'+
-                ' ON li.variant_id = sv1.id \n'+
-                ' INNER JOIN \n'+
-                ' (SELECT a2.*, p.id AS product_id FROM \n'+
-                ' (SELECT a1.* FROM \n'+
-                ' (SELECT a.viewable_id, min(a.id) as min_id \n'+
-                ' FROM assets a, variants v WHERE a.viewable_id = v.id \n'+
-                ' GROUP BY v.product_id \n'+
-                ' ) a \n'+
-                ' INNER JOIN assets a1 ON a1.viewable_id = a.viewable_id AND a1.id = a.min_id \n'+
-                ' ) a2 \n'+
-                ' INNER JOIN variants v \n'+
-                ' ON v.id = a2.viewable_id \n'+
-                ' INNER JOIN products p \n'+
-                ' ON p.id = v.product_id \n'+
-                ' ) a3 \n'+
-                ' ON a3.product_id = sv1.product_id;';
-
-            req.db.driver.execQuery(sql, [order.id], function(err, lineItems){
+            req.db.driver.execQuery(lineItemSql, [order.id], function(err, lineItems){
                 if(err) return callback(err);
                 order.line_items = lineItems;
 
@@ -257,6 +247,7 @@ module.exports = {
 
     },
 
+    //TODO: debuging cart item list and function of button
     getCart: function(req, res, next) {
         var Order = req.models.orders;
         var LineItem = req.models.line_items;
@@ -273,36 +264,8 @@ module.exports = {
             Order.one({user_id: user.id, completed_at: null}, function (err, order) {
                 if (err || order == null) return next(err);
 
-                var sql = 'SELECT DISTINCT li.*, sv1.options, a3.attachment_file_path FROM \n'+
-                    ' (SELECT l.*, p.id AS product_id, p.name FROM line_items l,variants v, products p \n'+
-                    ' WHERE l.variant_id = v.id AND v.product_id = p.id AND l.order_id = ? \n'+
-                    ' ) li \n'+
-                    ' INNER JOIN \n'+
-                    ' (SELECT sv.id, sv.product_id, GROUP_CONCAT(sv.options) AS options \n'+
-                    ' FROM (SELECT v.id, v.product_id, concat(t.presentation,":", o.presentation) AS options \n'+
-                    ' FROM variants v, variants_option_values vo, option_values o, option_types t \n'+
-                    ' WHERE v.id = vo.variants_id and vo.option_values_id = o.id and o.option_type_id = t.id) sv \n'+
-                    ' GROUP BY sv.id) sv1 \n'+
-                    ' ON li.variant_id = sv1.id \n'+
-                    ' INNER JOIN \n'+
-                    ' (SELECT a2.*, p.id AS product_id FROM \n'+
-                    ' (SELECT a1.* FROM \n'+
-                    ' (SELECT a.viewable_id, min(a.id) as min_id \n'+
-                    ' FROM assets a, variants v WHERE a.viewable_id = v.id \n'+
-                    ' GROUP BY v.product_id \n'+
-                    ' ) a \n'+
-                    ' INNER JOIN assets a1 ON a1.viewable_id = a.viewable_id AND a1.id = a.min_id \n'+
-                    ' ) a2 \n'+
-                    ' INNER JOIN variants v \n'+
-                    ' ON v.id = a2.viewable_id \n'+
-                    ' INNER JOIN products p \n'+
-                    ' ON p.id = v.product_id \n'+
-                    ' ) a3 \n'+
-                    ' ON a3.product_id = sv1.product_id;';
-
-
                 log.debug(JSON.stringify(order));
-                req.db.driver.execQuery(sql, [order.id], function(err, lineItems){
+                req.db.driver.execQuery(lineItemSql, [order.id], function(err, lineItems){
                     order.line_items = lineItems;
 
                     res.json(order);
@@ -878,35 +841,8 @@ module.exports = {
             Order.get(order_id, function (err, order) {
                 if (err || order == null) return next(err);
 
-                var sql = 'SELECT DISTINCT li.*, sv1.options, a3.attachment_file_path FROM \n'+
-                    ' (SELECT l.*, p.id AS product_id, p.name FROM line_items l,variants v, products p \n'+
-                    ' WHERE l.variant_id = v.id AND v.product_id = p.id AND l.order_id = ? \n'+
-                    ' ) li \n'+
-                    ' INNER JOIN \n'+
-                    ' (SELECT sv.id, sv.product_id, GROUP_CONCAT(sv.options) AS options \n'+
-                    ' FROM (SELECT v.id, v.product_id, concat(t.presentation,":", o.presentation) AS options \n'+
-                    ' FROM variants v, variants_option_values vo, option_values o, option_types t \n'+
-                    ' WHERE v.id = vo.variants_id and vo.option_values_id = o.id and o.option_type_id = t.id) sv \n'+
-                    ' GROUP BY sv.id) sv1 \n'+
-                    ' ON li.variant_id = sv1.id \n'+
-                    ' INNER JOIN \n'+
-                    ' (SELECT a2.*, p.id AS product_id FROM \n'+
-                    ' (SELECT a1.* FROM \n'+
-                    ' (SELECT a.viewable_id, min(a.id) as min_id \n'+
-                    ' FROM assets a, variants v WHERE a.viewable_id = v.id \n'+
-                    ' GROUP BY v.product_id \n'+
-                    ' ) a \n'+
-                    ' INNER JOIN assets a1 ON a1.viewable_id = a.viewable_id AND a1.id = a.min_id \n'+
-                    ' ) a2 \n'+
-                    ' INNER JOIN variants v \n'+
-                    ' ON v.id = a2.viewable_id \n'+
-                    ' INNER JOIN products p \n'+
-                    ' ON p.id = v.product_id \n'+
-                    ' ) a3 \n'+
-                    ' ON a3.product_id = sv1.product_id;';
-
                 //log.debug(JSON.stringify(order));
-                req.db.driver.execQuery(sql, [order.id], function(err, lineItems){
+                req.db.driver.execQuery(lineItemSql, [order.id], function(err, lineItems){
                     order.line_items = lineItems;
                     Shipment.one({order_id: order.id}, function(err, ship){
                         //log.debug('>>shipment:'+ JSON.stringify(ship));

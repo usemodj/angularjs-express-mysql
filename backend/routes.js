@@ -409,7 +409,7 @@ var routes = [
         path: '/shipping_methods',
         httpMethod: 'GET',
         middleware: [ShippingMethodCtrl.index],
-        accessLevel: accessLevels.admin
+        accessLevel: accessLevels.public
     },
     {
         path: '/shipping_methods',
@@ -421,7 +421,7 @@ var routes = [
         path: '/shipping_methods/:id',
         httpMethod: 'GET',
         middleware: [ShippingMethodCtrl.shippingMethod],
-        accessLevel: accessLevels.admin
+        accessLevel: accessLevels.public
     },
     {
         path: '/shipping_methods/:id',
