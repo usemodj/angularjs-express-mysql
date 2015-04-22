@@ -454,6 +454,7 @@ module.exports = {
         var Forum = req.models.forums;
         var Topic = req.models.topics;
         var Post = req.models.posts;
+        var User = req.models.users;
         var Asset = req.models.assets;
         var topic_id = req.params.id;
         var forum_id = req.params.forum_id;
@@ -467,9 +468,12 @@ module.exports = {
                     if(err) return next(err);
                     topic.save({views: topic.views + 1, updated_at: topic.updated_at}, function(err){});
                     async.each(posts, function( post, callback){
-                        Asset.find({viewable_id: post.id, viewable_type:'Post'}, function(err, assets){
-                            if(!err) post.assets = assets;
-                            callback();
+                        User.one({id:post.user_id}, function(err, user){
+                            if(!err) post.user = user.serialize();
+                            Asset.find({viewable_id: post.id, viewable_type:'Post'}, function(err, assets){
+                                if(!err) post.assets = assets;
+                                callback();
+                            });
                         });
                     }, function(err){
                         log.debug('>>post: '+ JSON.stringify(posts));

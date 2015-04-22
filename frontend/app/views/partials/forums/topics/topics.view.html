@@ -19,6 +19,7 @@
     </div>
     <div class="panel panel-default col-md-10 col-md-offset-1" ng-repeat="item in data.posts">
         <div class="panel-heading">{{item.name}}</div>
+        <div>Written by {{item.email}} {{item.updated_at}}</div>
         <div class="panel-body" ng-bind-html="item.content | markdown"></div>
         <div class="btn-group" ng-repeat="file in item.assets | orderBy:'position' ">
             <a class="btn btn-default btn-sm" ng-href="/uploads/images/{{file.attachment_file_path}}" alt="{{file.attachment_file_name}}" target="attachment">
@@ -26,8 +27,8 @@
             </a>
         </div>
         <div class="well well-sm text-right">
-            <a class="btn btn-default btn-xs" ng-show="Auth.authorize('editor') || currentUser.email == item.email" ng-click="editPost(item)">Edit</a>
-            <a ng-hide="item.root" class="btn btn-default btn-xs" ng-confirm-click="Are you sure?" ng-click="deletePost(item)">Delete</a>
+            <a class="btn btn-default btn-xs" ng-show="Auth.authorize('editor') || currentUser.email === item.user.email" ng-click="editPost(item)">Edit</a>
+            <a ng-show="Auth.authorize('editor') || currentUser.email === item.user.email" class="btn btn-default btn-xs" ng-confirm-click="Are you sure?" ng-click="deletePost(item)">Delete</a>
         </div>
     </div>
 
