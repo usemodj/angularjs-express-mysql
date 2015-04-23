@@ -505,6 +505,16 @@ angular.module('frontendApp.router', ['ui.router'])
                 templateUrl: 'views/partials/admin/orders/orders.list.html',
                 controller: 'AdminOrderCtrl'
             })
+            .state('admin.orders.edit', {
+              url: ':id',
+              templateUrl: 'views/partials/admin/orders/orders.edit.html',
+              controller: 'EditOrderCtrl'
+            })
+            .state('admin.orders.state_changes', {
+              url: ':id/state_changes',
+              templateUrl: 'views/partials/admin/orders/orders.state_changes.html',
+              controller: 'StateChangeCtrl'
+            })
 
             .state('admin.forums', {
                 abstract: true,

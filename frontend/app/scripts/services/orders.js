@@ -181,6 +181,75 @@ angular.module('frontendApp')
                     // or server returns response with an error status.
                     return cb( data);
                 });
+        },
+        getOrderById: function(orderId, callback){
+          var cb = callback || angular.noop;
+          $http.get('/admin/orders/' + orderId)
+            .success(function(data, status, headers, config){
+              //console.log('>> status:'+ status);
+              return cb(null, data);
+            }).error(function(data, status, headers, config) {
+              //console.log('>> error data:'+ data);
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              return cb( data);
+            });
+        },
+        setPaid: function(conditions, callback){
+          var cb = callback || angular.noop;
+          //console.log(conditions);
+          $http.post('/admin/orders/paid', conditions)
+            .success(function(data, status, headers, config){
+              //console.log('>> status:'+ status);
+              return cb(null, data);
+            }).error(function(data, status, headers, config) {
+              //console.log('>> error data:'+ data);
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              return cb( data);
+            });
+        },
+        setShipped: function(conditions, callback){
+          var cb = callback || angular.noop;
+          //console.log(conditions);
+          $http.post('/admin/orders/shipped', conditions)
+            .success(function(data, status, headers, config){
+              //console.log('>> status:'+ status);
+              return cb(null, data);
+            }).error(function(data, status, headers, config) {
+              //console.log('>> error data:'+ data);
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              return cb( data);
+            });
+        },
+        setOrderState: function(conditions, callback){
+          var cb = callback || angular.noop;
+          //console.log(conditions);
+          $http.post('/admin/orders/order_state', conditions)
+            .success(function(data, status, headers, config){
+              //console.log('>> status:'+ status);
+              return cb(null, data);
+            }).error(function(data, status, headers, config) {
+              //console.log('>> error data:'+ data);
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              return cb( data);
+            });
+        },
+
+        getStateChanges: function(orderId, callback){
+          var cb = callback || angular.noop;
+          $http.get('/admin/orders/' + orderId + '/state_changes')
+            .success(function(data, status, headers, config){
+              //console.log('>> status:'+ status);
+              return cb(null, data);
+            }).error(function(data, status, headers, config) {
+              //console.log('>> error data:'+ data);
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              return cb( data);
+            });
         }
 
     };

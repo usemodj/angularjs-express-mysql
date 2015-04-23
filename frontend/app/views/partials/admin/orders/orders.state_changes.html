@@ -1,0 +1,43 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3 col-md-push-9">
+      <div class="list-group" >
+        <div class="list-group-item">
+          <strong>Menu</strong>
+          <ul class="list-unstyled">
+            <li><a ng-class="{active: $state.includes('admin.orders.list')}" ui-sref="admin.orders.list"> Orders List</a>
+            </li><li><a ng-class="{active: $state.includes('admin.orders.edit')}" ui-sref="admin.orders.edit({id: $stateParams.id})"> Edit Order</a>
+          </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-9 col-md-pull-3">
+
+      <div class="well well-xs">
+        <table class="table">
+          <thead>
+          <tr>
+            <th class="col-md-2">Name</th>
+            <th class="col-md-2">Previous State</th>
+            <th class="col-md-2">Next State</th>
+            <th class="col-md-2">By User</th>
+            <th class="col-md-2">Created At</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="change in data.order.stateChanges">
+            <td>{{change.name}}</td>
+            <td>{{change.previous_state}}</td>
+            <td>{{change.next_state}}</td>
+            <td>{{change.user.email}}</td>
+            <td>{{change.created_at}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div><!--/col-md-9 -->
+  </div>
+
+</div>

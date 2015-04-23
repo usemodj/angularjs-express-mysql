@@ -197,7 +197,7 @@ module.exports = {
                 var shipment_total = body.shipment_cost || 0;
                 if(order == null){
                     Order.create({// create order and lineItem
-                        number: Order.makeNumber(),
+                        //number: Order.makeNumber(),
                         item_total: item_total,
                         total: item_total + shipment_total,
                         state: 'cart',
@@ -713,7 +713,7 @@ module.exports = {
                             var msg = err ? err: 'There is no user confirm order!'
                             return callback(msg);
                         }
-
+                        order.number = Order.makeNumber();
                         order.state = 'complete';
                         order.completed_at = new Date();
                         order.save(function (err, order) {
@@ -823,7 +823,8 @@ module.exports = {
         });
     },
 
-    getOrderById: function(req, res, next){
+    // if the order is not yours, return 403 error
+    getUserOrderById: function(req, res, next){
         var Order = req.models.orders;
         var User = req.models.users;
         var Shipment = req.models.shipments;
@@ -863,5 +864,207 @@ module.exports = {
                 })
             });
         });
+    },
+
+    getOrderById: function(req, res, next){
+        var Order = req.models.orders;
+        var User = req.models.users;
+        var Shipment = req.models.shipments;
+        var Payment = req.models.payments;
+
+        var user = JSON.parse(req.cookies.user);
+        var order_id = req.params.id || req.body.id;
+
+        User.one({email: user.email}, function(err, user) {
+            if (err || user == null) {
+                log.err('Login required!');
+                return next(new Error('Login required!'));
+            }
+
+            Order.get(order_id, function (err, order) {
+                if (err || order == null) return next(err);
+                //if(order.user_id !== user.id) return res.status(403).send('This order is not yours!');
+
+                //log.debug(JSON.stringify(order));
+                req.db.driver.execQuery(lineItemSql, [order.id], function(err, lineItems){
+                    if(err) return next(err);
+                    order.line_items = lineItems;
+                    async.waterfall([
+                        function(callback){
+                            Shipment.one({order_id: order.id}, function(err, ship){
+                                if(err || !ship) return callback(null, order);
+                                //log.debug('>>shipment:'+ JSON.stringify(ship));
+                                ship.getShipping_method(function(err, data){
+                                    order.shipping_method = data;
+                                    return callback(null, order);
+                                });
+                            });
+                        },
+                        function(order, callback){
+                            Payment.one({order_id: order.id}, function(err, pay){
+                                if(err || !pay) return callback(null, order);
+                                //log.debug('>>payment:'+ JSON.stringify(pay));
+                                pay.getPayment_method(function(err, data){
+                                    order.payment_method = data;
+                                    return callback(null, order);
+                                });
+                            });
+                        }
+                    ], function(err, results){
+                        return res.status(200).json(results);
+
+                    });
+
+                })
+            });
+        });
+    },
+
+    setPaid: function(req, res, next){
+        var Order = req.models.orders;
+        var User = req.models.users;
+        var StateChange = req.models.state_changes;
+
+        var userData = JSON.parse(req.cookies.user);
+        var orderId = req.params.id || req.body.id;
+
+        User.one({email: userData.email}, function(err, user) {
+            if (err || user == null) {
+                log.err('Login required!');
+                return next(new Error('Login required!'));
+            }
+
+            Order.get(orderId, function (err, order) {
+                if (err || order == null) return next(err);
+                order.payment_state = "paid";
+                order.shipment_state = "ready";
+                order.save(function(err){
+                    if(err) return next(err);
+                    StateChange.create([{
+                        name: 'payment',
+                        previous_state: 'balance_due',
+                        next_state: order.payment_state,
+                        order_id: order.id,
+                        user_id: user.id
+                    },{
+                        name: 'shipment',
+                        previous_state: 'pending',
+                        next_state: order.shipment_state,
+                        order_id: order.id,
+                        user_id: user.id
+                    }], function(err){
+                        if(err) log.error(err);
+                        return res.status(200).json(order);
+                    });
+                });
+            });
+        });
+    },
+
+    setShipped: function(req, res, next){
+        var Order = req.models.orders;
+        var User = req.models.users;
+        var StateChange = req.models.state_changes;
+
+        var userData = JSON.parse(req.cookies.user);
+        var orderId = req.params.id || req.body.id;
+
+        User.one({email: userData.email}, function(err, user) {
+            if (err || user == null) {
+                log.err('Login required!');
+                return next(new Error('Login required!'));
+            }
+
+            Order.get(orderId, function (err, order) {
+                if (err || order == null) return next(err);
+                if(order.shipment_state !== 'ready') return res.status(500).send('Shipment state must be "ready"!');
+
+                order.shipment_state = "shipped";
+                order.save(function(err){
+                    if(err) return next(err);
+                    StateChange.create({
+                        name: 'shipment',
+                        previous_state: 'ready',
+                        next_state: order.shipment_state,
+                        order_id: order.id,
+                        user_id: user.id
+                    }, function(err){
+                        if(err) log.error(err);
+                        return res.status(200).json(order);
+                    });
+                });
+            });
+        });
+    },
+
+    setOrderState: function(req, res, next){
+        var Order = req.models.orders;
+        var User = req.models.users;
+        var StateChange = req.models.state_changes;
+
+        var userData = JSON.parse(req.cookies.user);
+        var orderId = req.params.id || req.body.id;
+        var orderState = req.body.state;
+
+        User.one({email: userData.email}, function(err, user) {
+            if (err || user == null) {
+                log.err('Login required!');
+                return next(new Error('Login required!'));
+            }
+
+            Order.get(orderId, function (err, order) {
+                if (err || order == null) return next(err);
+                var previousState = order.state;
+
+                order.state = orderState;
+                order.save(function(err){
+                    if(err) return next(err);
+                    StateChange.create({
+                        name: 'order',
+                        previous_state: previousState,
+                        next_state: order.state,
+                        order_id: order.id,
+                        user_id: user.id
+                    }, function(err){
+                        if(err) log.error(err);
+                        return res.status(200).json(order);
+                    });
+                });
+            });
+        });
+    },
+
+    getStateChanges: function(req, res, next){
+        var Order = req.models.orders;
+        var User = req.models.users;
+        var StateChange = req.models.state_changes;
+
+        var userData = JSON.parse(req.cookies.user);
+        var orderId = req.params.id || req.body.id;
+
+        User.one({email: userData.email}, function(err, user) {
+            if (err || user == null) {
+                log.err('Login required!');
+                return next(new Error('Login required!'));
+            }
+
+            Order.get(orderId, function (err, order) {
+                if (err || order == null) return next(err);
+                var previousState = order.state;
+
+                StateChange.find({order_id: order.id}).order('-created_at').run(function(err, changes){
+                    if(!err) order.stateChanges = changes;
+                    async.each(order.stateChanges, function(change, callback){
+                        User.get(change.user_id, function(err, user){
+                            if(!err) change.user = user;
+                            callback();
+                        })
+                    }, function(err){
+                        return res.status(200).json(order);
+                    });
+                });
+            });
+        });
     }
+
 };

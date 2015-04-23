@@ -265,7 +265,7 @@ var routes = [
     {
         path: '/orders/:id(\\d+)',
         httpMethod: 'GET',
-        middleware: [OrderCtrl.getOrderById],
+        middleware: [OrderCtrl.getUserOrderById],
         accessLevel: accessLevels.user
     },
     {
@@ -278,6 +278,36 @@ var routes = [
         path: '/admin/orders/search',
         httpMethod: 'POST',
         middleware: [OrderCtrl.searchOrders],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/orders/:id(\\d+)',
+        httpMethod: 'GET',
+        middleware: [OrderCtrl.getOrderById],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/orders/paid',
+        httpMethod: 'POST',
+        middleware: [OrderCtrl.setPaid],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/orders/shipped',
+        httpMethod: 'POST',
+        middleware: [OrderCtrl.setShipped],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/orders/order_state',
+        httpMethod: 'POST',
+        middleware: [OrderCtrl.setOrderState],
+        accessLevel: accessLevels.admin
+    },
+    {
+        path: '/admin/orders/:id(\\d+)/state_changes',
+        httpMethod: 'GET',
+        middleware: [OrderCtrl.getStateChanges],
         accessLevel: accessLevels.admin
     },
 

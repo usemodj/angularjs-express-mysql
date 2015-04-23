@@ -50,6 +50,7 @@
                         <option>canceled</option>
                         <option>awaiting return</option>
                         <option>returned</option>
+                        <option>refund</option>
                     </select>
                 </div>
                 <div class="form-group col-xs-3 col-md-3">
@@ -83,7 +84,7 @@
                     <tbody>
                     <tr ng-repeat="item in data.orders">
                         <td>{{item.completed_at}}</td>
-                        <td>{{item.number}}</td>
+                        <td><a ui-sref="admin.orders.edit({id: item.id})">{{item.number}}</a></td>
                         <td>{{item.state}}</td>
                         <td>{{item.payment_state}}</td>
                         <td>{{item.shipment_state}}</td>
@@ -91,7 +92,7 @@
                         <td>{{item.name}}</td>
                         <td>{{item.total | currency}}</td>
                         <td class="text-center">
-                            <a ng-hide="item.deleted_at != null" ui-sref="admin.orders.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a ng-hide="item.deleted_at != null || !item.number" ui-sref="admin.orders.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         </td>
                     </tr>
                     </tbody>

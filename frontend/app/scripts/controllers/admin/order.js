@@ -37,54 +37,71 @@ angular.module('frontendApp')
         $scope.searchOrders();
     }])
 .controller('EditOrderCtrl', ['$scope', '$state', '$stateParams', 'orders',
-    'optionTypes', "taxons", 'product','optionTypesData', 'taxonsData',
-    function ($scope, $state, $stateParams, orders, optionTypes, taxons, product, optionTypesData, taxonsData) {
+    function ($scope, $state, $stateParams, orders) {
         $scope.error = '';
         $scope.message = '';
+        $scope.data = {};
 
-        $scope.option_types = optionTypesData; //optionTypes.index();
-        $scope.taxons = taxonsData; //taxons.index();
-        $scope.page = $stateParams.page;
-
-        orders.get({id: $stateParams.id}, function(err, data){
-            $scope.currentOrder = data;
-            //console.log($scope.currentOrder.taxons);
-            if($scope.currentOrder.option_types){
-                $scope.currentOrder.option_type_ids = $scope.currentOrder.option_types.map(function(item){
-                    return item.id;
-                });
-            }
-            if($scope.currentOrder.taxons){
-                $scope.currentOrder.taxon_ids = $scope.currentOrder.taxons.map(function(item){
-                    return item.id;
-                });
-            }
+        orders.getOrderById($stateParams.id, function(err, data){
+            if(!err) $scope.data.order = data;
+            console.log($scope.data.order);
         });
 
+        $scope.setPaid = function(){
+          orders.setPaid({id: $scope.data.order.id}, function(err, data){
+            if(err) $scope.error = err;
+            $scope.data.order.payment_state = data.payment_state;
+            $scope.data.order.shipment_state = data.shipment_state;
+          });
+        };
 
-        $scope.updateOrder = function(){
-            //console.log('>> currentOrder:');
-            //console.log($scope.currentOrder)
-            orders.update($scope.currentOrder
-                , function(err, product){
+        $scope.setShipped = function(){
+          orders.setShipped({id: $scope.data.order.id}, function(err, data){
+            if(err) $scope.error = err;
+            $scope.data.order.shipment_state = data.shipment_state;
+          });
+        };
+
+        $scope.setOrderState = function(){
+          if(!$scope.data.order.newState) return;
+          orders.setOrderState({id: $scope.data.order.id, state: $scope.data.order.newState}, function(err, data){
+            if(err) $scope.error = err;
+            $scope.data.order.state = data.state;
+          });
+        };
+
+      $scope.updateOrder = function(){
+            //console.log('>> data.order:');
+            //console.log($scope.data.order)
+            orders.update($scope.data.order
+                , function(err, order){
                     if(err){
                         $scope.error = err.data;
                         return;
                     }
-                    //console.log('>> updated product:');
-                    //console.log(product);
+                    //console.log('>> updated order:');
+                    //console.log(order);
                 });
         };
 
         $scope.cancelEdit = function(){
-            if($scope.currentOrder && $scope.currentOrder.$get){
-                $scope.currentOrder.$get();
+            if($scope.data.order && $scope.data.order.$get){
+                $scope.data.order.$get();
             }
             //$scope.currentUser = {};
-            $state.go('admin.orders.edit',{id: $scope.currentOrder.id});
+            $state.go('admin.orders.edit',{id: $scope.data.order.id});
         };
 
-        $scope.getOptionTypes = function(){
-            $scope.option_types = optionTypes.index();
-        };
-    }])
+     }])
+  .controller('StateChangeCtrl', ['$scope', '$state', '$stateParams', 'orders',
+    function ($scope, $state, $stateParams, orders) {
+      $scope.error = '';
+      $scope.message = '';
+      $scope.data = {};
+
+      orders.getStateChanges($stateParams.id, function (err, data) {
+        if (!err) $scope.data.order = data;
+        console.log($scope.data.order);
+      });
+
+    }]);
