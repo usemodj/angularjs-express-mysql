@@ -92,7 +92,7 @@
                         <td>{{item.name}}</td>
                         <td>{{item.total | currency}}</td>
                         <td class="text-center">
-                            <a ng-hide="item.deleted_at != null || !item.number" ui-sref="admin.orders.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a ng-hide="item.deleted_at != null" ui-sref="admin.orders.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         </td>
                     </tr>
                     </tbody>
