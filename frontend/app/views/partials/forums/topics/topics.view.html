@@ -28,7 +28,7 @@
         </div>
         <div class="well well-sm text-right">
             <a class="btn btn-default btn-xs" ng-show="Auth.authorize('editor') || currentUser.email === item.user.email" ng-click="editPost(item)">Edit</a>
-            <a ng-show="Auth.authorize('editor') || currentUser.email === item.user.email" class="btn btn-default btn-xs" ng-confirm-click="Are you sure?" ng-click="deletePost(item)">Delete</a>
+            <a ng-show="!item.root && (Auth.authorize('editor') || currentUser.email === item.user.email)" class="btn btn-default btn-xs" ng-confirm-click="Are you sure?" ng-click="deletePost(item)">Delete</a>
         </div>
     </div>
 
