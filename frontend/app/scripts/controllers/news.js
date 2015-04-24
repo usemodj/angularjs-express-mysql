@@ -87,6 +87,9 @@ angular.module('frontendApp')
           //console.log('>>success data')
           //console.log(data);
           $state.go('news.view',{id: data.id}, {reload: true});
+        }).error(function (data, status, headers, config){
+          console.log(data);
+          $scope.error = data;
         });
       };
       $scope.cancelEdit = function(){
@@ -169,6 +172,9 @@ angular.module('frontendApp')
           //console.log('>>success data')
           //console.log(data); //article with assets
           $state.go('news.view',{id: $stateParams.id}, {reload: true});
+        }).error(function (data, status, headers, config){
+          console.log(data);
+          $scope.error = data;
         });
       };
 

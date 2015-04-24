@@ -15,7 +15,7 @@
            <h2>{{data.article.name}}</h2>
         </div>
         <div class="panel panel-default">
-            <div><img ng-show="data.article.img_url"><img width="100%" ng-src="{{data.article.img_url}}"></div>
+            <div ng-show="data.article.img_url"><img width="100%" ng-src="{{data.article.img_url}}"></div>
             <div>Written by {{data.article.user.email}} {{data.article.updated_at}}</div>
             <div class="panel-body" ng-bind-html="data.article.content | markdown"></div>
             <div class="btn-group" ng-repeat="file in data.article.assets | orderBy:'position' ">

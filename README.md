@@ -1,8 +1,10 @@
 ## Install Backend Express module
+Ubuntu:
+$ sudo ln -s /usr/bin/nodejs /usr/bin/node
 
 ```
 $ cd backend
-$ npm install
+$ backend> npm install
 ```
 
 ## Install Frontend AngularJS module
@@ -10,9 +12,21 @@ $ npm install
  $ npm install -g bower
 ```
 $ cd ../frontend
-$ npm install 
-$ bower install
+$ frontend> npm install
+$ frontend> bower install
+$ frontend> mkdir app/uploads
 ```
+
+## Run server to backgroud
+- Install pm2, production process manager for NodeJS applications:
+
+$ npm install -g pm2
+
+$ backend> pm2 start ./bin/forever
+
+- Run production mode:
+
+$ backend> NODE_ENV=production pm2 start ./bin/forever
 
 ----------
 

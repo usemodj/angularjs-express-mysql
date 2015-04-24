@@ -34,5 +34,10 @@ $ npm install crypto --save
 $ npm install connect-multiparty --save
 
 ## GraphicMagick
-First install either GraphicsMagick or ImageMagick. Then:
+First install either GraphicsMagick or ImageMagick.
+
+$ sudo apt-get install libmagickwand-dev imagemagick
+
+Then:
+
 $ npm install gm --save

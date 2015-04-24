@@ -785,6 +785,7 @@ function ensureAuthorized(req, res, next) {
     else if(req.user.role) role = req.user.role;
     //log.debug('>> accessLevel: '+ accessLevel);
     //log.debug('user role:'+ JSON.stringify(role));
+
     if(role) {
         //log.debug('>> ensureAuthorized req.user: '+ JSON.stringify(req.user));
         if (!(accessLevel.bit_mask & role.bit_mask)) return res.status(403).end();
