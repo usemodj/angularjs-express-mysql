@@ -26,45 +26,10 @@ $ backend> pm2 start ./bin/forever
 
 - Run production mode:
 
+// ngminify
+$ frontend> grunt build
+
 $ backend> NODE_ENV=production pm2 start ./bin/forever
-
-----------
-
-Running "karma:unit" (karma) task
-Warning: No provider for "framework:jasmine"! (Resolving: framework:jasmine) Use --force to continue.
-
->> $ npm install karma-jasmine --save-dev
-
-
-Warning: Task "express:test" not found. Use --force to continue.
-
-Running "serve" task
-Warning: Task "express:livereload" not found. Use --force to continue.
-
->> $ npm install grunt-express-server --save-dev
-
-Running "express-server:test" (express-server) task
-Fatal error: Server should provide a function called "listen" that acts as http.Server.listen
-
->> install grunt-express with a "npm install grunt-express --save-dev"
-add a module.exports to your app.js. This is required by grunt-express if you want to avoid a "Fatal error: Server should provide a function called "listen" that acts as http.Server.listen"
- ref. http://davidemoro.blogspot.kr/2013/08/yeoman-express-and-angularjs.html
-
->> vi backend/bin/www
-
-```
-var debug = require('debug')('my-application');
-var app = require('../app');
-
-app.set('port', process.env.PORT || 3000);
-
-var server = app.listen(app.get('port'), function() {
-  //debug('Express server listening on port ' + server.address().port);
-  console.log('Express server listening on port %d in %s mode', server.address().port, app.get('env'));
-});
-
-module.exports = app;
-```
 
 ---------------------
 On Windows:

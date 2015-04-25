@@ -161,7 +161,10 @@ module.exports = {
                     }
                 }
             ], function(err, results){
-                if(err) return res.status(500).json(err);
+                if(err) {
+                    log.error(err);
+                    return res.status(500).json(err);
+                }
                 log.debug('>>results: '+ JSON.stringify(results));
                 Address.get(results.address_id, function(err, address){
                     if(!err) results.address = address;
@@ -169,15 +172,14 @@ module.exports = {
                         if(!err) results.asset = asset;
                         return res.status(200).json(results); //profile
                     });
-
-                })
-
+                });
             });
         });
     },
 
     saveProfile: function(req, res, next){
         var Profile = req.models.profiles;
+        var Address = req.models.addresses;
         var Asset = req.models.assets;
         var User = req.models.users;
 
@@ -249,10 +251,8 @@ module.exports = {
                                     //log.debug(JSON.stringify(profile2));
                                     return callback(null, profile2);
                                 });
-
                             }
-                        })
-
+                        });
                     }
                 },
                 function(profile, callback) {
@@ -286,8 +286,14 @@ module.exports = {
                 }
             ], function(err, results){
                 //log.info('>> completed task');
-                if(err) return res.status(500).json(err);
-                return res.status(200).json(results); //profile
+                if(err) {
+                    log.error(err);
+                    return res.status(500).json(err);
+                }
+                Address.get(results.address_id, function(err, address) {
+                    if (!err) results.address = address;
+                    return res.status(200).json(results); //profile
+                });
             });
         });
     },
@@ -313,7 +319,7 @@ module.exports = {
                 var thumbPath = (dot > -1)? destPath.substring(0, dot)+ '-th'+ destPath.substring(dot)
                     : destPath + '-th';
 
-                gm(readStream, 'img.jpg').options({imageMagick: true}).resize(thumnailWidth)
+                gm(readStream, 'img.png').options({imageMagick: true}).resize(thumnailWidth)
                     .write(thumbPath, function(err){
                         if(err) {
                             log.error( err);

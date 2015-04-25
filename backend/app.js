@@ -62,10 +62,10 @@ try {
         process.exit(1);
     }
 }
-//app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'debug' }));
-log4js.configure(path.join(__dirname, './config/log4js.json'));
-if(process.env.NODE_ENV === 'production') app.use(log4js.connectLogger(log4js.getLogger("production"), { level: 'ERROR' }));
-else app.use(log4js.connectLogger(log4js.getLogger("development"), { level: 'DEBUG' }));
+app.use(log4js.connectLogger(log4js.getLogger("http"), { level: (app.get('env') === 'production')? 'error':'debug' }));
+//log4js.configure(path.join(__dirname, './config/log4js.json'));
+//if(process.env.NODE_ENV === 'production') app.use(log4js.connectLogger(log4js.getLogger("production"), { level: 'ERROR' }));
+//else app.use(log4js.connectLogger(log4js.getLogger("development"), { level: 'DEBUG' }));
 
 app.use(cookieParser());
 app.use(bodyParser.json());
