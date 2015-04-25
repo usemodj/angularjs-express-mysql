@@ -1,6 +1,7 @@
 <div  style="overflow-x:auto;overflow-y:hidden;white-space:nowrap; width:100%;" ng-controller="TaxonTreeCtrl">
-  <div ng-if=" data.taxonTree" style="display:inline-block;"
-      angular-treeview="true"
+  <div ng-if="data.taxonTree" style="display:inline-block;"
+      data-ng-click="selectNode(this.taxontree.currentNode)"
+      data-angular-treeview="true"
       data-tree-id="taxontree"
       data-tree-model="data.taxonTree"
       data-node-id="id"

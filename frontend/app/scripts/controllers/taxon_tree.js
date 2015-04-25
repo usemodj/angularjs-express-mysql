@@ -12,9 +12,18 @@ angular.module('frontendApp')
     $scope.data = {};
     $scope.page = $stateParams.page;
 
-    $scope.$watch( 'taxontree.currentNode', function( newObj, oldObj ) {
+    $scope.selectNode=function(val){
+      //console.log(val);
+      if( angular.isObject(val)){
+        var taxon = val;
+        $state.go('taxons.products', {id: taxon.id});
+      }
+    };
+
+    $scope.$watch('taxontree.currentNode', function( newObj, oldObj ) {
+      //console.log( 'Node Selected!!' );
+      //console.log($scope.taxontree);
       if( $scope.taxontree && angular.isObject($scope.taxontree.currentNode) ) {
-        console.log( 'Node Selected!!' );
         //console.log( $scope.taxontree.currentNode );
         var taxon = $scope.taxontree.currentNode;
         $state.go('taxons.products', {id: taxon.id});
