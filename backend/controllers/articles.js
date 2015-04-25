@@ -196,7 +196,7 @@ module.exports = {
                             ipaddress: ip
                         }, function (err, article2) {
                             if (err) {
-                                log.warn(err);
+                                log.error(err);
                                 return callback(err);
                             }
                             return callback(null, article2);
@@ -268,7 +268,10 @@ module.exports = {
                     });
                 }
             ], function(err, results){
-                if(err) return res.status(500).json(err);
+                if(err) {
+                    log.error(err);
+                    return res.status(500).json(err);
+                }
                 log.debug('>> updated article: '+ JSON.stringify(results));
                 return res.status(200).json(results); //article
             });

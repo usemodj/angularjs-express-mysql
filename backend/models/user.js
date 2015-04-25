@@ -10,8 +10,7 @@ module.exports = function(orm, db) {
             unique: true
         },
         role_id: {
-            type: 'integer',
-            required: true
+            type: 'integer'
         },
         profile_id: {
           type: 'integer'
@@ -74,7 +73,7 @@ module.exports = function(orm, db) {
                     email: this.email,
                     profile_id: this.profile_id,
                     role: this.role,
-                    profile: this.profile
+                    //profile: this.profile
                 };
             },
             /**

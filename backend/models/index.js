@@ -82,7 +82,7 @@ module.exports = function(cb) {
         db.use(transaction);
 
         connection = db;
-        db.settings.set('instance.returnAllErrors', true);
+        db.settings.set('instance.returnAllErrors', false);
         db.settings.set("connection.reconnect", true);
         db.settings.set("connection.pool", true);
         db.settings.set("connection.debug", false);

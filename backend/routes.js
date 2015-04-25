@@ -559,7 +559,7 @@ var routes = [
         path: '/assets/:id',
         httpMethod: 'DELETE',
         middleware: [AssetCtrl.deleteAsset],
-        accessLevel: accessLevels.admin
+        accessLevel: accessLevels.editor
     },
     {
         path: '/admin/products/:product_id/assets/',
@@ -781,6 +781,8 @@ function ensureAuthorized(req, res, next) {
     var role;
     //var accessLevel = _.findWhere(routes, { path: req.route.path, httpMethod: req.route.method.toUpperCase() }).accessLevel || accessLevels.public;
     var accessLevel = _.findWhere(routes, { path: req.route.path, httpMethod: req.method.toUpperCase() }).accessLevel || accessLevels.public;
+
+    log.debug('>>req.user: '+ JSON.stringify(req.user));
     if(!req.user) role = userRoles.public;
     else if(req.user.role) role = req.user.role;
     //log.debug('>> accessLevel: '+ accessLevel);
