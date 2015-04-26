@@ -126,10 +126,13 @@ angular.module('frontendApp',
 
     }])
     .run(['$interval', '$cookieStore','AuthFactory', function($interval, $cookieStore, AuthFactory) {
+      var isLogout = false;
       $interval(function() {
-        if (!$cookieStore.get('user')) {/* session does not exists */
+        if (!$cookieStore.get('user') && !isLogout) {/* session does not exists */
           // log out of client
-          AuthFactory.logout(function(err){});
+          AuthFactory.logout(function(err){
+            isLogout = true;
+          });
         }
       }, 1000);
     }]);
