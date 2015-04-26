@@ -50,6 +50,7 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                         $rootScope.currentUser= user;
                         $cookieStore.put('user', user);
                         changeUser(user);
+                      $rootScope.$broadcast('SignedIn', user);
                         return cb();
                     }, function(err) {
                         //console.log('>>authfactory login error:'+ JSON.stringify(err));
@@ -69,6 +70,7 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                                 email:'',
                                 role: userRoles.public
                             });
+                            $rootScope.$broadcast('SignedOut');
                             return cb();
                         },
                         function(err) {

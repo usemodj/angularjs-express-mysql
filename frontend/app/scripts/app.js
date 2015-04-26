@@ -2,7 +2,7 @@
 
 angular.module('frontendApp',
 	['ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.bootstrap','ui.select2','ui.sortable','ui.tree',
-     'frontendApp.router', 'angularFileUpload', 'gettext', 'ngClipboard','markdown','angularTreeview'])
+     'frontendApp.router', 'angularFileUpload', 'gettext', 'ngClipboard','markdown','angularTreeview','ngIdle'])
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', '$logProvider','ngClipProvider',
         function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $logProvider, ngClipProvider) {
             $logProvider.debugEnabled = true;

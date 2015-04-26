@@ -28,7 +28,7 @@
     <!-- endbuild -->
   </head>
   <body ng-app="frontendApp" style="padding:0;margin:0;padding-top: 55px;">
-    <div class="container">
+    <div class="container" ng-controller="EventsCtrl" >
       <!--[if lt IE 7]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
@@ -37,6 +37,7 @@
       <div ng-include="" src="'views/partials/include/navbar.html'"></div>
       <div ui-view></div>
       <div ng-include="" src="'views/partials/include/footer.html'"></div>
+      <div ng-include="" src="'views/partials/include/idle_dialog.html'"></div>
     </div>
 
     <!-- build:js scripts/vendor.js -->
@@ -71,6 +72,7 @@
     <script src="bower_components/angular-treeview/angular.treeview.js"></script>
     <script src="bower_components/jquery-ui/ui/i18n/datepicker-ko.js"></script>
     <script src="bower_components/angular-i18n/angular-locale_ko.js"></script>
+    <script src="bower_components/ng-idle/angular-idle.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -146,6 +148,7 @@
     <script src="scripts/filters/todate.js"></script>
     <script src="scripts/controllers/profile.js"></script>
     <script src="scripts/services/profiles.js"></script>
+    <script src="scripts/controllers/events.js"></script>
     <!-- endbuild -->
 </body>
 </html>

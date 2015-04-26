@@ -27,7 +27,8 @@
     "zeroclipboard": "~2.1.6",
     "ng-clip": "~0.2.5",
     "angular-markdown-filter": "~1.1.0",
-    "angular-treeview": "*"
+    "angular-treeview": "*",
+    "ng-idle": "~1.0.4"
   },
   "devDependencies": {
     "angular-mocks": "^1.2.16",
