@@ -45,6 +45,7 @@ $ backend> vim config/settings.js
 $ sudo npm install -g pm2 grunt grunt-cli
 
 $ backend> pm2 start ./bin/forever
+```
 
 - Run production mode:
 ```
