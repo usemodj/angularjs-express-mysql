@@ -1,6 +1,10 @@
 ## Install Backend Express module
 Ubuntu:
+```
+$ sudo apt-get install nodejs npm imagemagick
+
 $ sudo ln -s /usr/bin/nodejs /usr/bin/node
+```
 
 ```
 $ cd backend
@@ -9,7 +13,9 @@ $ backend> npm install
 
 ## Install Frontend AngularJS module
 - Install bower:
- $ npm install -g bower
+
+ $ sudo npm install -g bower
+
 ```
 $ cd ../frontend
 $ frontend> npm install
@@ -19,21 +25,24 @@ $ frontend> mkdir app/uploads
 
 ## Run server to backgroud
 - Install pm2, production process manager for NodeJS applications:
-
-$ npm install -g pm2
+```
+$ sudo npm install -g pm2 grunt grunt-cli
 
 $ backend> pm2 start ./bin/forever
 
 - Run production mode:
-
-// ngminify
+```
+// ngminify:
 $ frontend> grunt build
+$ frontend> mkdir dist/uploads
 
 $ backend> NODE_ENV=production pm2 start ./bin/forever
-
+```
 ---------------------
 On Windows:
+
  - Install grunt-cli instead of grunt
+
  $ npm install -g grunt-cli
 
 ## Grunt test
@@ -49,6 +58,7 @@ $ grunt serve
 ```
 
 Browser connection
+
  http://localhost:9000
 
 

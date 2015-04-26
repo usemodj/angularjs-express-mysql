@@ -465,10 +465,15 @@ module.exports = function (grunt) {
       }
   });
 
-    grunt.loadNpmTasks('grunt-angular-gettext');
+  grunt.loadNpmTasks('grunt-angular-gettext');
 
-    grunt.registerTask('extract', ['nggettext_extract']);
-    grunt.registerTask('compile', ['nggettext_compile']);
+  grunt.registerTask('extract', ['nggettext_extract']);
+  grunt.registerTask('compile', ['nggettext_compile']);
+
+  grunt.registerTask('mkdir', function(){
+    var path = require('path');
+    grunt.file.mkdir( path.join(__dirname, 'dist/uploads'));
+  });
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
@@ -508,6 +513,7 @@ module.exports = function (grunt) {
     'concat',
     'ngmin',
     'copy:dist',
+    'mkdir',
     'cdnify',
     'cssmin',
     'uglify',
