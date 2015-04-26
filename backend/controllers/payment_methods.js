@@ -5,7 +5,7 @@ module.exports = {
         var PaymentMethod = req.models.payment_methods;
         PaymentMethod.find({deleted_at : null, active: true}).order('position').run(function (err, paymentMethod) {
             if(err) return next(err);
-            res.json(paymentMethod);
+            res.status(200).json(paymentMethod);
         });
     },
 
@@ -17,7 +17,7 @@ module.exports = {
 
         PaymentMethod.get(id, function(err, paymentMethod){
             if(err) return next(err);
-            res.json(paymentMethod);
+            res.status(200).json(paymentMethod);
         });
 
     },
@@ -30,7 +30,7 @@ module.exports = {
             paymentMethod.save({id: data.id, name: data.name, description: data.description, active: data.active}, function (err) {
                 if (err) return next(err);
                 console.log('Payment Method updated!');
-                res.json(200, 'Payment Method updated!');
+                res.status(200).json('Payment Method updated!');
             });
         });
     },
@@ -43,7 +43,7 @@ module.exports = {
             if(err) return next(err);
             paymentMethod.save({deleted_at: new Date()}, function(err){
                 console.log('>> Payment Method removed!');
-                res.json(200, 'Payment Method removed!');
+                resv.json('Payment Method removed!');
             });
        });
     },
@@ -54,7 +54,7 @@ module.exports = {
         var PaymentMethod = req.models.payment_methods;
         PaymentMethod.create(paymentMethod, function(err, data){
            if(err) return next(err);
-           res.json(200, data);
+           res.status(200).json(data);
         });
     },
 
@@ -79,7 +79,7 @@ module.exports = {
             })
         }, function(err){
             if(err) return next(err);
-            res.json(200, 'The positions of payment method updated!');
+            res.status(200).json('The positions of payment method updated!');
         });
     }
 

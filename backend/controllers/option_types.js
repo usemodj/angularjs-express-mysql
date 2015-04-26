@@ -5,7 +5,7 @@ module.exports = {
         var OptionType = req.models.option_types;
         OptionType.find().order('position').all(function (err, optionTypes) {
             if(err) return next(err);
-            res.json(optionTypes);
+            res.status(200).json(optionTypes);
         });
     },
 
@@ -39,7 +39,7 @@ module.exports = {
             optionType.save({id: data.id, name: data.name, presentation: data.presentation}, function (err) {
                 if (err) return next(err);
                 console.log('OptionType updated!');
-                res.json(200, 'Option type updated!');
+                res.status(200).json('Option type updated!');
             });
         });
     },
@@ -64,7 +64,7 @@ module.exports = {
                 if(err) return next(err);
                 optionType.remove(function(err){
                     console.log('>> Option type removed!');
-                    res.json(200, 'Option type removed!');
+                    res.status(200).json('Option type removed!');
                 });
             });
 
@@ -77,7 +77,7 @@ module.exports = {
         var OptionType = req.models.option_types;
         OptionType.create(optionType, function(err, opType){
            if(err) return next(err);
-           res.json(200, opType);
+           res.status(200).json(opType);
         });
     },
 
@@ -102,8 +102,8 @@ module.exports = {
             })
         }, function(err){
             if(err) return next(err);
-            res.json(200, 'The positions of option types updated!');
+            res.status(200).json('The positions of option types updated!');
         });
     }
 
-}
+};

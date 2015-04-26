@@ -172,7 +172,7 @@ module.exports = {
                 user.role = role;
                 console.log('>>get /users/' + req.params.id);
                 console.log(JSON.stringify(user));
-                res.json(user);
+                res.status(200).json(user);
             });
         });
     },
@@ -200,7 +200,7 @@ module.exports = {
                 if (err) {
                     console.log('>> User.create err: ');
                     console.log(err);
-                    return res.json(400, err);
+                    return res.status(500).json( err);
                 }
                 user.encrypted_password = user.encryptPassword(password);
                 user.save( function(err) {
@@ -208,7 +208,7 @@ module.exports = {
                         user.remove(function(err) {
                             console.log("removed!");
                         });
-                        return res.json(400, err);
+                        return res.status(500).json(err);
                     }
                     Role.get(user.role_id, function(err, role){
                         if(err) throw err;
@@ -219,7 +219,7 @@ module.exports = {
 //                            console.log('>>createUser user.serialize:'+ JSON.stringify(user.serialize()));
 //                            res.json(200, user.serialize());
 //                        });
-                        res.json(200, user.serialize());
+                        res.status(200).json(user.serialize());
                     });
 
                 });
@@ -230,7 +230,7 @@ module.exports = {
 
 	//put Change Password
     changePassword: function(req, res, next) {
-        if (!req.user) return res.json(400, 'Login is required.');
+        if (!req.user) return res.status(500).json('Login is required.');
         var password = req.body.password;
         var new_password = req.body.new_password;
         var retype_password = req.body.retype_password;
@@ -244,7 +244,7 @@ module.exports = {
             if (err) {
                 //console.log('>> users findOne err:');
                 console.log(err);
-                return res.json(400, err);
+                return res.status(500).json(err);
             }
             //console.log('>>/users put');
             //console.log(JSON.stringify(user));
@@ -254,10 +254,10 @@ module.exports = {
             }, function(err) {
                 if (!err) {
                     console.log('Password is updated!');
-                    return res.json(200, 'Password is updated!');
+                    return res.status(200).json('Password is updated!');
                 } else {
                     console.log(err);
-                    return res.json(400, err);
+                    return res.status(500).json(err);
                 }
             });
         });
@@ -277,10 +277,10 @@ module.exports = {
                     if (!err) {
                         console.log('Role is updated!');
                         console.log('>>changeRole user:'+ JSON.stringify(user));
-                        return res.json(200, 'Role is updated!');
+                        return res.status(200).json('Role is updated!');
                     } else {
                         console.log(err);
-                        return res.json(400, err);
+                        return res.status(500).json(err);
                     }
                 });
             });

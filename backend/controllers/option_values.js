@@ -20,7 +20,7 @@ module.exports = {
             })
         }, function(err){
             if(err) return next(err);
-            res.json(200, 'The positions of option values updated!');
+            res.status(200).json('The positions of option values updated!');
         });
     },
 
@@ -30,7 +30,7 @@ module.exports = {
         OptionValue.get(id, function(err, optionValue){
            optionValue.remove(function(err){
               console.log('>> Option value removed!');
-              res.json(200, 'Option value removed!');
+              res.status(200).json('Option value removed!');
            });
         });
     },
@@ -71,7 +71,7 @@ module.exports = {
             else createOptionValue(value, optionType.id, pos++, callback);
         }, function(err){
             if(err) return next(err);
-            res.json(200, 'Option values changed!');
+            res.status(200).json('Option values changed!');
         });
 
     }

@@ -5,7 +5,7 @@ module.exports = {
         var ShippingMethod = req.models.shipping_methods;
         ShippingMethod.find({deleted_at : null}).order('position').run(function (err, shippingMethod) {
             if(err) return next(err);
-            res.json(shippingMethod);
+            res.status(200).json(shippingMethod);
         });
     },
 
@@ -17,7 +17,7 @@ module.exports = {
 
         ShippingMethod.get(id, function(err, shippingMethod){
             if(err) return next(err);
-            res.json(shippingMethod);
+            res.status(200).json(shippingMethod);
         });
 
     },
@@ -30,7 +30,7 @@ module.exports = {
             shippingMethod.save({id: data.id, name: data.name, amount: data.amount, currency: data.currency}, function (err) {
                 if (err) return next(err);
                 console.log('Shipping Method updated!');
-                res.json(200, 'Shipping Method updated!');
+                res.status(200).json('Shipping Method updated!');
             });
         });
     },
@@ -43,7 +43,7 @@ module.exports = {
             if(err) return next(err);
             shippingMethod.save({deleted_at: new Date()}, function(err){
                 console.log('>> Shipping Method removed!');
-                res.json(200, 'Shipping Method removed!');
+                res.status(200).json('Shipping Method removed!');
             });
        });
     },
@@ -54,7 +54,7 @@ module.exports = {
         var ShippingMethod = req.models.shipping_methods;
         ShippingMethod.create(shippingMethod, function(err, data){
            if(err) return next(err);
-           res.json(200, data);
+           res.status(200).json(data);
         });
     },
 
@@ -79,8 +79,8 @@ module.exports = {
             })
         }, function(err){
             if(err) return next(err);
-            res.json(200, 'The positions of shipping method updated!');
+            res.status(200).json('The positions of shipping method updated!');
         });
     }
 
-}
+};
