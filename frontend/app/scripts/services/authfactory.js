@@ -8,8 +8,6 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                 userRoles = routingConfig.userRoles,
                 currentUser = $cookieStore.get('user') || {email:'', role: userRoles.public};
 
-            //$cookieStore.remove('user');
-
             function changeUser(user){
                 angular.extend(currentUser, user);
             }

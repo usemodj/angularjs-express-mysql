@@ -124,4 +124,12 @@ angular.module('frontendApp',
             }
         });
 
+    }])
+    .run(['$interval', '$cookieStore','AuthFactory', function($interval, $cookieStore, AuthFactory) {
+      $interval(function() {
+        if (!$cookieStore.get('user')) {/* session does not exists */
+          // log out of client
+          AuthFactory.logout(function(err){});
+        }
+      }, 1000);
     }]);
