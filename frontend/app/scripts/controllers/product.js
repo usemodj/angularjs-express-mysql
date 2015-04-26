@@ -25,7 +25,7 @@ angular.module('frontendApp')
 
     $scope.listProducts();
 }])
-.controller('ViewProductCtrl', ['$scope', '$state', '$stateParams', '$filter', 'products', function ($scope, $state, $stateParams, $filter, products) {
+.controller('ViewProductCtrl', ['$scope', '$state', '$stateParams', '$filter','AuthFactory', 'products', function ($scope, $state, $stateParams, $filter, AuthFactory, products) {
     $scope.data = {};
     $scope.product = {
         quantity: 1
@@ -44,9 +44,10 @@ angular.module('frontendApp')
 
     $scope.addToCart = function(){
         //console.log($scope.product);
-        products.addToCart($scope.product, function(err, data){
+        if(!AuthFactory.authorize('user')) return $state.go('anon.login');
 
-        $state.go('carts.list');
+        products.addToCart($scope.product, function(err, data){
+          $state.go('carts.list');
         });
     };
 
