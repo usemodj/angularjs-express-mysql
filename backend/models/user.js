@@ -145,6 +145,31 @@ module.exports = function(orm, db) {
         return crypto.randomBytes(16).toString('hex');
     };
 
+    User.createAdminUser = function(email, password, callback){
+        var Role = db.models.roles;
+        var user = this;
+        //log.debug(this);
+        user.count(function(err, count){
+            if(count == 0) {
+                Role.one({title:'admin'}, function(err, role){
+                    if(err || !role) return callback(err || 'role is empty');
+                    User.create({
+                        email: email,
+                        role_id: role.id,
+                        active: true,
+                        password_salt: user.makeSalt()
+                    }, function(err, user) {
+                        if (err) return callback(err);
+                        user.encrypted_password = user.encryptPassword(password);
+                        user.save(function(err, user){
+                            return callback(null, user);
+                        });
+                    });
+                });
+            }
+        })
+    };
+
     User.findOne = function(user, callback) {
         //console.log('>> findOne user:' + JSON.stringify(user));
         // Model.find([ conditions ] [, options ] [, limit ] [, order ] [, cb ])

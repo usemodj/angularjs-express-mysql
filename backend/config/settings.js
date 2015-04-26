@@ -13,9 +13,9 @@ var settings = {
         },
         host: "127.0.0.1",
         port: 3306,
-        database: "nodestore2",
+        database: "nodesoft2",
         user: "root",
-        password: "root",
+        password: "",
         timezone: "Asia/Seoul"
     }
 };

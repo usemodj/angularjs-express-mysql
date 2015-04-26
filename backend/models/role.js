@@ -23,9 +23,10 @@ module.exports = function(orm, db) {
         }
     });
 
-    Role.loadRoles = function(){
+    Role.loadRoles = function( callback){
         Role.count(function(err, number){
-            if(err || number) return;
+            if(err) return callback(err);
+            else if(number !== 0) return callback();
 
             //for(var title in userRoles) {
             //    log.info('>> title: '+ title + ', userRoles[title][bit_mask]: '+ userRoles[title]['bit_mask'])
@@ -40,16 +41,25 @@ module.exports = function(orm, db) {
             for(var title in userRoles) {
                 keys.push(title);
             }
-            async.eachSeries(keys, function( title, callback){
+            async.eachSeries(keys, function( title, cb){
                 Role.create([{
                     title: title,
                     bit_mask: userRoles[title]['bit_mask']
                 }], function(err, item){
-                    if(err) log.error(err);
-                    callback();
+                    if(err) {
+                        log.error(err);
+                        return cb(err);
+                    }
+                    return cb();
                 });
             }, function(err){
-                log.info('>> Roles data created!');
+                if(err){
+                    log.error(err);
+                    return callback(err);
+                } else {
+                    log.info('>> Roles data created!');
+                    return callback()
+                }
             });
         });
     }

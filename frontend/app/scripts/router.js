@@ -291,7 +291,7 @@ angular.module('frontendApp.router', ['ui.router'])
                 templateUrl: 'views/partials/admin/users/layout.html'
             })
             .state('admin.users.list', {
-                url: 'page/:page',
+                url: 'list/:page?',
                 templateUrl: 'views/partials/admin/users/users.list.html',
                 controller: 'AdminUserCtrl'
             })

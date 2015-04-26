@@ -18,6 +18,7 @@ var settings = require('./config/settings');
 var models = require('./models/index');//index.js
 var mailer = require('./config/mailer');
 var log4js = require('log4js');
+var log = log4js.getLogger('app');
 
 var app = express();
 //  Avoids DEPTH_ZERO_SELF_SIGNED_CERT error
@@ -35,8 +36,11 @@ app.use(function(req, res, next) {
         //passport-local strategy
         require('./config/passport')(db);
         // load roles data into database
-        req.models.roles.loadRoles();
-
+        req.models.roles.loadRoles(function(err){
+           if(!err) req.models.users.createAdminUser('admin@nodesoft.co.kr', 'admin', function(err){
+               log.error(err);
+           });
+        });
         return next();
     });
 });
