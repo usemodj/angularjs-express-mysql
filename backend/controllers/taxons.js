@@ -27,30 +27,13 @@ module.exports = {
             log.error(err);
         }
 
-        /*
-         //  SELECT p.id, p.name, p.available_on, va.price, va.asset_id, va.file_path, va.alt
-         //  FROM products_taxons pt, products p LEFT JOIN
-         //  	(SELECT v.*, a.id AS asset_id, a.attachment_file_path AS file_path, a.alt
-         //  	FROM variants v INNER JOIN
-         //  		(SELECT a.* FROM
-         //  			(SELECT * FROM assets ORDER BY position, id DESC) a
-         //  		GROUP BY a.viewable_id
-         //  		) a ON v.id = a.viewable_id
-         //  	WHERE v.deleted_at IS NULL
-         //  	) va ON va.product_id = p.id
-         //  WHERE pt.taxons_id = '1' AND pt.products_id = p.id
-         //    AND p.deleted_at IS NULL AND (p.deleted_at IS NULL OR p.deleted_at >= NOW())
-         //    AND p.available_on <= NOW() AND va.price IS NOT NULL
-         //    AND (LOWER(p.name) LIKE '%%' OR LOWER(p.description) LIKE '%%')
-         //  ORDER BY p.available_on DESC  LIMIT 10 OFFSET 0;
-         */
         var sql = ' SELECT p.id, p.name, p.available_on, va.price, va.file_path, va.alt \n'+
             ' FROM products_taxons pt, products p LEFT JOIN \n'+
             ' 	(SELECT v.*, a.id AS asset_id, a.attachment_file_path AS file_path, a.alt \n'+
             ' 	FROM variants v INNER JOIN \n'+
             ' 	    (SELECT a.* FROM \n'+
             '           (SELECT * FROM assets ORDER BY position, id) a \n' +
-            '        GROUP BY a.viewable_id \n'+
+            '        GROUP BY a.viewable_id, a.viewable_type \n'+
             ' 		) a ON v.id = a.viewable_id AND a.viewable_type ="Variant" \n'+
             ' 	WHERE v.deleted_at IS NULL \n'+
             ' 	) va ON va.product_id = p.id \n'+

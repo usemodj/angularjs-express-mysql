@@ -4,6 +4,7 @@ angular.module('frontendApp.router', ['ui.router'])
     function ($stateProvider,   $urlRouterProvider) {
         var access = routingConfig.accessLevels;
         $urlRouterProvider.when('/', '/news/');
+      $urlRouterProvider.when('/#', '/news/');
         $urlRouterProvider.otherwise('/404');
 
         // Public controllers

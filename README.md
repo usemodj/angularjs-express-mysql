@@ -28,16 +28,17 @@ $ frontend> mkdir app/uploads
 ```
 CREATE DATABASE nodesoft2 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 ```
+
 -- Setting Database Info:
 ```
 $ backend> vim config/settings.js
-...
+   ...
     database: {
         database: "nodesoft2",
         user: "root",
         password: "",
     }
-...
+   ...
 ```
 
 - Install pm2, production process manager for NodeJS applications:
@@ -57,6 +58,7 @@ $ backend> NODE_ENV=production pm2 start ./bin/forever
 ```
 
 ## Login web server
+
 ```
 URL:  http://localhost:3000
 Login Email: admin@nodesoft.co.kr

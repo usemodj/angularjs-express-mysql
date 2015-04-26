@@ -477,7 +477,7 @@ module.exports = {
         ' 	FROM variants v INNER JOIN  \n'+
         ' 	    (SELECT a.* FROM \n'+
         '           (SELECT * FROM assets WHERE viewable_type = "Variant" ORDER BY position, id) a \n'+
-        ' 		GROUP BY a.viewable_id \n'+
+        ' 		GROUP BY a.viewable_id, a.viewable_type \n'+
         '       ) a ON v.id = a.viewable_id \n'+
         '   WHERE v.deleted_at IS NULL \n'+
         '   ) va ON va.product_id = p.id \n'+

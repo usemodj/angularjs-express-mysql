@@ -472,6 +472,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('mkdir', function(){
     var path = require('path');
+    grunt.file.mkdir( path.join(__dirname, 'app/uploads'));
     grunt.file.mkdir( path.join(__dirname, 'dist/uploads'));
   });
 
