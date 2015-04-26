@@ -37,17 +37,6 @@ module.exports = {
                 if (err) return next(err);
             });
 
-//            user.getRole(function(err, role){
-//                console.log('>>login user role_id:'+ user.role_id);
-//                console.log('>> login role:'+ JSON.stringify(role));
-//                user.role = role;
-//                req.logIn(user, function(err) {
-//                    if (err) return next(err);
-//                    if (req.body.rememberMe) req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7;
-//                    console.log(req.user.serialize());
-//                    res.json(200, req.user.serialize());
-//                });
-//            });
             Role.get(user.role_id, function(err, role){
                 if(err) return next(err);
 

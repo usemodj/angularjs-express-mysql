@@ -784,7 +784,7 @@ function ensureAuthorized(req, res, next) {
 
     log.debug('>>req.user: '+ JSON.stringify(req.user));
     if(!req.user) {
-        req.session.destroy();
+        res.clearCookie('user');
         role = userRoles.public;
     }
     else if(req.user.role) role = req.user.role;
@@ -803,5 +803,7 @@ function ensureAuthorized(req, res, next) {
             if (!(accessLevel.bit_mask & role.bit_mask)) return res.status(403).end();
             return next();
         });
+    } else {
+        return next();
     }
 }
