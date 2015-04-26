@@ -18,13 +18,15 @@
         </div>
 
         <div class="form-group">
-          <label><i class="fa fa-unlock-alt"></i> Locked:</label>
-          <input type="checkbox" ng-model="newTopic.locked"> {{newTopic.locked}}
+          <label><i class="fa fa-unlock-alt"></i> Locked:
+          <input class="form-control" type="checkbox" ng-model="newTopic.locked"> {{newTopic.locked}}
+          </label>
         </div>
 
-        <div class="form-group">
-          <label><i class="fa fa-flag"></i> Sticky:</label>
-          <input type="checkbox" ng-model="newTopic.sticky"> {{newTopic.sticky}}
+        <div class="form-group" ng-show="Auth.authorize('editor')">
+          <label><i class="fa fa-flag"></i> Sticky:
+          <input class="form-control" type="checkbox" ng-model="newTopic.sticky"> {{newTopic.sticky}}
+          </label>
         </div>
         <div ng-include="" src="'views/partials/include/input_file.html'"></div>
 

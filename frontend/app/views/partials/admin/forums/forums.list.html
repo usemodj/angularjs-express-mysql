@@ -47,10 +47,10 @@
                     <tbody>
                     <tr ng-repeat="item in data.forums">
                         <td>{{item.id}}</td>
-                        <td><a ui-sref="forums.topics.list({forum_id: item.id})" >{{"&nbsp;&nbsp;&nbsp;".repeat(item.level)}}{{item.name}}</a>
+                        <td><a ui-sref="forums.topics.list({forum_id: item.id})" >{{"&nbsp;&nbsp;&nbsp;".repeat(item.level)}}{{item.name}} </a> <i ng-if="item.locked" class="fa fa-thumb-tack"></i>
                           <br/><small>{{item.description}}</small></td>
                         <td>Topics: {{item.topic_count}}, Posts: {{item.post_count}}<br/>
-                          <i ng-if="item.locked" class="fa fa-unlock-alt"></i> Updated at: {{item.updated_at}}</td>
+                          Updated at: {{item.updated_at}}</td>
                         <td class="text-center">
                             <a ui-sref="admin.forums.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Edit Forum"><span class="glyphicon glyphicon-edit"></span></a>
                             <a ui-sref="admin.forums.new({id: item.id})" class="btn btn-xs btn-primary" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="New Child Forum"><span class="glyphicon glyphicon-pencil"></span></a>

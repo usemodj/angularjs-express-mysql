@@ -150,8 +150,8 @@ module.exports = function(orm, db) {
                 if(err){
                     return callback(err);
                 }
-                db.driver.execQuery('INSERT INTO forums (parent_id, name, description, lft, rgt, created_at, updated_at) VALUES (?,?,?,?,?, now(), now());',
-                    [node.id, node.name, node.description, node.rgt, node.rgt + 1], function(err, forum){
+                db.driver.execQuery('INSERT INTO forums (parent_id, name, description, locked, lft, rgt, created_at, updated_at) VALUES (?,?,?,?,?,?, now(), now());',
+                    [node.id, node.name, node.description, node.locked, node.rgt, node.rgt + 1], function(err, forum){
 
                         if(err){
                             log.warn(err);

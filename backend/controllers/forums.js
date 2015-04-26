@@ -98,6 +98,8 @@ module.exports = {
             if(err) return next(err);
             data.name = body.name;
             data.description = body.description;
+            data.locked = body.locked;
+
             log.debug(JSON.stringify(data));
             Forum.insertNode(data, function(err, data){
                 if(err){

@@ -9,6 +9,11 @@
         <label>Description:</label>
         <textarea  class="form-control" rows="5" ng-model="newForum.description"></textarea>
     </div>
+      <div class="form-group">
+        <label> <i class="fa fa-thumb-tack"></i> Locked: (Topic Read Only)
+          <input type="checkbox" class="form-control"  ng-model="newForum.locked">
+        </label>
+      </div>
     <div class="form-group has-error" ng-show="error">
         <p class="help-block">{{ error }}</p>
     </div>
