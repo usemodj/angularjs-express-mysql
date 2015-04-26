@@ -783,7 +783,10 @@ function ensureAuthorized(req, res, next) {
     var accessLevel = _.findWhere(routes, { path: req.route.path, httpMethod: req.method.toUpperCase() }).accessLevel || accessLevels.public;
 
     log.debug('>>req.user: '+ JSON.stringify(req.user));
-    if(!req.user) role = userRoles.public;
+    if(!req.user) {
+        req.session.destroy();
+        role = userRoles.public;
+    }
     else if(req.user.role) role = req.user.role;
     //log.debug('>> accessLevel: '+ accessLevel);
     //log.debug('user role:'+ JSON.stringify(role));
