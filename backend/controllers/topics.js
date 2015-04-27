@@ -220,6 +220,7 @@ module.exports = {
                         var viewable_type = 'Post';
                         var content_type = file.type;
                         var file_name = file.name;
+                        var file_size = file.size;
                         var file_path = path.join('forums', path.basename(file.path));
                         var destPath = uploadPath + file_path;
 
@@ -229,33 +230,62 @@ module.exports = {
                                 return cb();
                             }
                             else {
-                                gm(destPath).options({imageMagick: true})
-                                    .identify(function(err, data){
-                                        if(!err) {
-                                            var conditions = {
-                                                attachment_width: data.size.width,
-                                                attachment_height: data.size.height,
-                                                attachment_file_size: data.Filesize,
-                                                position: index++,
-                                                attachment_content_type: content_type,
-                                                attachment_file_name: file_name,
-                                                attachment_file_path: file_path,
-                                                //alt: file_alt,
-                                                viewable_id: viewable_id,
-                                                viewable_type: viewable_type
-                                            };
-                                            Asset.create(conditions, function( err, asset){
-                                                if(!err) {
-                                                    log.info('Asset created!');
-                                                    if(!post.assets) post.assets = [];
-                                                    post.assets.push(asset);
-                                                }
+                                if(content_type.indexOf('image') !== -1){
+                                    gm(destPath).options({imageMagick: true})
+                                        .identify(function (err, data) {
+                                            if (!err) {
+                                                var conditions = {
+                                                    attachment_width: data.size.width,
+                                                    attachment_height: data.size.height,
+                                                    attachment_file_size: data.Filesize,
+                                                    position: index++,
+                                                    attachment_content_type: content_type,
+                                                    attachment_file_name: file_name,
+                                                    attachment_file_path: file_path,
+                                                    //alt: file_alt,
+                                                    viewable_id: viewable_id,
+                                                    viewable_type: viewable_type
+                                                };
+                                                Asset.create(conditions, function (err, asset) {
+                                                    if (!err) {
+                                                        log.info('Asset created!');
+                                                        if (!post.assets) post.assets = [];
+                                                        post.assets.push(asset);
+                                                    } else {
+                                                        log.error(err);
+                                                        return cb();
+                                                    }
+
+                                                });
+                                            } else {
+                                                log.error(err);
                                                 return cb();
-                                            });
+                                            }
+                                        });
+
+                                }else {
+                                    var conditions = {
+                                        attachment_file_size: file_size,
+                                        position: index++,
+                                        attachment_content_type: content_type,
+                                        attachment_file_name: file_name,
+                                        attachment_file_path: file_path,
+                                        //alt: file_alt,
+                                        viewable_id: viewable_id,
+                                        viewable_type: viewable_type
+                                    };
+                                    Asset.create(conditions, function (err, asset) {
+                                        if (!err) {
+                                            log.info('Asset created!');
+                                            if (!post.assets) post.assets = [];
+                                            post.assets.push(asset);
                                         } else {
+                                            log.error(err);
                                             return cb();
                                         }
+
                                     });
+                                }
                             }
 
                         });
@@ -272,6 +302,7 @@ module.exports = {
         });
     },
 
+    // update post with file attachment
     savePost: function(req, res, next){
         var Topic = req.models.topics;
         var Post = req.models.posts;
@@ -331,6 +362,7 @@ module.exports = {
                         var viewable_type = 'Post';
                         var content_type = file.type;
                         var file_name = file.name;
+                        var file_size = file.size;
                         var file_path = path.join('forums', path.basename(file.path));
                         var destPath = uploadPath + file_path;
 
@@ -340,33 +372,62 @@ module.exports = {
                                 return cb();
                             }
                             else {
-                                gm(destPath).options({imageMagick: true})
-                                    .identify(function(err, data){
-                                        if(!err) {
-                                            var conditions = {
-                                                attachment_width: data.size.width,
-                                                attachment_height: data.size.height,
-                                                attachment_file_size: data.Filesize,
-                                                position: index++,
-                                                attachment_content_type: content_type,
-                                                attachment_file_name: file_name,
-                                                attachment_file_path: file_path,
-                                                //alt: file_alt,
-                                                viewable_id: viewable_id,
-                                                viewable_type: viewable_type
-                                            };
-                                            Asset.create(conditions, function( err, asset){
-                                                if(!err) {
-                                                    log.info('Asset created!');
-                                                    if(!post.assets) post.assets = [];
-                                                    post.assets.push(asset);
-                                                }
+                                if(content_type.indexOf('image') !== -1){
+                                    gm(destPath).options({imageMagick: true})
+                                        .identify(function (err, data) {
+                                            if (!err) {
+                                                var conditions = {
+                                                    attachment_width: data.size.width,
+                                                    attachment_height: data.size.height,
+                                                    attachment_file_size: data.Filesize,
+                                                    position: index++,
+                                                    attachment_content_type: content_type,
+                                                    attachment_file_name: file_name,
+                                                    attachment_file_path: file_path,
+                                                    //alt: file_alt,
+                                                    viewable_id: viewable_id,
+                                                    viewable_type: viewable_type
+                                                };
+                                                Asset.create(conditions, function (err, asset) {
+                                                    if (!err) {
+                                                        log.info('Asset created!');
+                                                        if (!post.assets) post.assets = [];
+                                                        post.assets.push(asset);
+                                                    } else {
+                                                        log.error(err);
+                                                        return cb();
+                                                    }
+
+                                                });
+                                            } else {
+                                                log.error(err);
                                                 return cb();
-                                            });
+                                            }
+                                        });
+
+                                }else {
+                                    var conditions = {
+                                        attachment_file_size: file_size,
+                                        position: index++,
+                                        attachment_content_type: content_type,
+                                        attachment_file_name: file_name,
+                                        attachment_file_path: file_path,
+                                        //alt: file_alt,
+                                        viewable_id: viewable_id,
+                                        viewable_type: viewable_type
+                                    };
+                                    Asset.create(conditions, function (err, asset) {
+                                        if (!err) {
+                                            log.info('Asset created!');
+                                            if (!post.assets) post.assets = [];
+                                            post.assets.push(asset);
                                         } else {
+                                            log.error(err);
                                             return cb();
                                         }
+
                                     });
+                                }
                             }
 
                         });
@@ -376,7 +437,10 @@ module.exports = {
                     });
                 }
             ], function(err, results){
-                if(err) return res.status(500).json(err);
+                if(err) {
+                    log.error(err);
+                    return res.status(500).json(err);
+                }
                 log.debug('>> updated post: '+ JSON.stringify(post));
                 return res.status(200).json(results); //post
             });

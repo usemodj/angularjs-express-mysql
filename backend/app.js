@@ -72,8 +72,8 @@ app.use(log4js.connectLogger(log4js.getLogger("http"), { level: (app.get('env') 
 //else app.use(log4js.connectLogger(log4js.getLogger("development"), { level: 'DEBUG' }));
 
 app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json({limit:"50mb"}));
+app.use(bodyParser.urlencoded({limit:"50mb", extended: true}));
 app.use(methodOverride());
 app.use(multipart({
     uploadDir: settings.upload_path
