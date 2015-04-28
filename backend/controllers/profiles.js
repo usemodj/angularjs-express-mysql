@@ -290,10 +290,14 @@ module.exports = {
                     log.error(err);
                     return res.status(500).json(err);
                 }
-                Address.get(results.address_id, function(err, address) {
-                    if (!err) results.address = address;
+                if(results.address_id) {
+                    Address.get(results.address_id, function (err, address) {
+                        if (!err) results.address = address;
+                        return res.status(200).json(results); //profile
+                    });
+                } else {
                     return res.status(200).json(results); //profile
-                });
+                }
             });
         });
     },

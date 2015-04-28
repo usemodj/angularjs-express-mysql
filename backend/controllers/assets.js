@@ -128,8 +128,8 @@ module.exports = {
         mkdirp(path.dirname(destPath), function(err){
             if(err) return next(err);
             var readStream = fs.createReadStream(file.path);
-            var imageMagic = (asset.resize)? gm(readStream, 'img.jpg').options({imageMagick: true}).resize(imageWidth, imageHeight)
-                : gm(readStream, 'img.jpg').options({imageMagick: true});
+            var imageMagic = (asset.resize)? gm(readStream, 'img.png').options({imageMagick: true}).resize(imageWidth, imageHeight)
+                : gm(readStream, 'img.png').options({imageMagick: true});
                 //.
              imageMagic.write(destPath, function(err){
                     rimraf(file.path, function(err){
@@ -226,7 +226,7 @@ module.exports = {
         var file_alt = asset.alt;
         if(!file){ // update assets table only
             Asset.get(asset.id, function(err, data){
-                //log.debug('>> variant_id:'+ variant_id);
+                if(err) return res.status(500).json(err);
                 Variant.get(variant_id, function(err, variant){
                     //log.debug('>> variant: '+ JSON.stringify(variant));
                     data.alt = file_alt;
@@ -236,63 +236,68 @@ module.exports = {
                             log.error(err);
                             return res.status(500).json(err);
                         }
-                        res.status(200).json(data);
+                        return res.status(200).json(data);
                     })
                 });
             });
-            return;
-        }
+        } else {
+            Asset.get(asset.id, function(err, asset){
+                if(err) return res.status(500).json(err);
+                // delete image file and asset
+                Asset.deleteAssetAndFile(asset, function (err, asset) {
+                    if (err) log.error(err);
 
-        // delete image file and asset
-        Asset.deleteAssetAndFile(asset, function(err, asset){
-            if(err) log.error(err);
-
-            var content_type = file.type;
-            var file_name = file.name;
-            var file_path = path.basename(file.path);
-            var destPath = path.join(uploadPath, 'variants', file_path);
-            log.debug(variant_id);
-            log.debug(destPath);
-            // create image file asset
-            mkdirp(uploadPath, function(err){
-                if(err) return next(err);
-                var readStream = fs.createReadStream(file.path);
-                var imageMagic = (asset.resize)? gm(readStream, 'img.jpg').options({imageMagick: true}).resize(imageWidth, imageHeight)
-                    : gm(readStream, 'img.jpg').options({imageMagick: true});
-                //.
-                imageMagic.write(destPath, function(err){
-                    rimraf(file.path, function(err){
-                        if(!err) log.info('Temp image removed!');
-                    });
-                    if(err) {
-                        log.error( err);
-                        return res.status(500).json(JSON.stringify(err));
-                    }
-                    //else log.info('Image resizing done!');
-                    gm(destPath).options({imageMagick: true})
-                        .identify(function(err, data){
-                            if(!err) {
-                                var conditions = {
-                                    attachment_width: data.size.width,
-                                    attachment_height: data.size.height,
-                                    attachment_file_size: data.Filesize,
-                                    position: 0,
-                                    attachment_content_type: content_type,
-                                    attachment_file_name: file_name,
-                                    attachment_file_path: file_path,
-                                    alt: file_alt,
-                                    viewable_id: variant_id,
-                                    viewable_type: 'variant'
-                                };
-                                Asset.create(conditions, function( err, asset){
-                                    log.info('Asset created!');
-                                    res.status(200).json(asset);
-                                });
+                    var content_type = file.type;
+                    var file_name = file.name;
+                    var file_path = path.join('variants', path.basename(file.path));
+                    var destPath = path.join(uploadPath, file_path);
+                    log.debug(destPath);
+                    // create image file asset
+                    mkdirp(path.dirname(destPath), function (err) {
+                        if (err) return next(err);
+                        var readStream = fs.createReadStream(file.path);
+                        var imageMagic = (asset.resize) ? gm(readStream, 'img.png').options({imageMagick: true}).resize(imageWidth, imageHeight)
+                            : gm(readStream, 'img.png').options({imageMagick: true});
+                        //.
+                        imageMagic.write(destPath, function (err) {
+                            rimraf(file.path, function (err) {
+                                if (!err) log.info('Temp image removed!');
+                            });
+                            if (err) {
+                                log.error(err);
+                                return res.status(500).json(JSON.stringify(err));
                             }
+                            //else log.info('Image resizing done!');
+                            gm(destPath).options({imageMagick: true})
+                                .identify(function (err, data) {
+                                    if (!err) {
+                                        var conditions = {
+                                            attachment_width: data.size.width,
+                                            attachment_height: data.size.height,
+                                            attachment_file_size: data.Filesize,
+                                            position: 0,
+                                            attachment_content_type: content_type,
+                                            attachment_file_name: file_name,
+                                            attachment_file_path: file_path,
+                                            alt: file_alt,
+                                            viewable_id: variant_id,
+                                            viewable_type: 'variant'
+                                        };
+                                        Asset.create(conditions, function (err, asset) {
+                                            if(err){
+                                                log.error(err);
+                                                return res.status(500).json(err);
+                                            }
+                                            log.info('Asset created!');
+                                            return res.status(200).json(asset);
+                                        });
+                                    }
+                                });
                         });
+                    });
                 });
             });
-        });
+        }
     },
 
     deleteAsset: function(req, res, next){
@@ -304,7 +309,7 @@ module.exports = {
             if(err) return res.status(500).json(err);
             Asset.deleteAssetAndFile(asset, function(err){
                 if(err) return res.status(500).json(err);
-                res.status(200).json('Asset removed!');
+                return res.status(200).json('Asset removed!');
             });
         });
     }

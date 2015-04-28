@@ -8,8 +8,8 @@
  * Controller of the frontendApp
  */
 angular.module('frontendApp')
-  .controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$window', '$upload', 'profiles',
-    function ($scope, $state, $stateParams, $timeout, $window, $upload, profiles) {
+  .controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$window', 'Upload', 'profiles',
+    function ($scope, $state, $stateParams, $timeout, $window, Upload, profiles) {
       $scope.profile = { address:{}};
       $scope.files = [];
       $scope.viewAddress = false;
@@ -58,10 +58,10 @@ angular.module('frontendApp')
         $scope.progress = 0;
         $scope.error = null;
         //console.log($scope.files);
-        $scope.upload = $upload.upload({
+        $scope.upload = Upload.upload({
           url: '/profiles/save_profile',
           method: 'POST',
-          data : {
+          fields : {
             profile : $scope.profile
           },
           file: ($scope.files != null)? $scope.files: null,

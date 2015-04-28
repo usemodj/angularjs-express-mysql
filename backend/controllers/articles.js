@@ -99,6 +99,7 @@ module.exports = {
                         var viewable_type = 'Article';
                         var content_type = file.type;
                         var file_name = file.name;
+                        var file_size = file.size;
                         var file_path = path.join('articles', path.basename(file.path));
                         var destPath = uploadPath + file_path;
 
@@ -108,46 +109,59 @@ module.exports = {
                                 return cb();
                             }
                             else {
-                                gm(destPath).options({imageMagick: true})
-                                    .identify(function(err, data){
-                                        if(!err) {
-                                            var conditions = {
-                                                attachment_width: data.size.width,
-                                                attachment_height: data.size.height,
-                                                attachment_file_size: data.Filesize,
-                                                position: index++,
-                                                attachment_content_type: content_type,
-                                                attachment_file_name: file_name,
-                                                attachment_file_path: file_path,
-                                                //alt: file_alt,
-                                                viewable_id: viewable_id,
-                                                viewable_type: viewable_type
-                                            };
-                                            Asset.create(conditions, function( err, asset){
-                                                if(!err) {
-                                                    log.info('Asset created!');
-                                                    if(!article.assets) article.assets = [];
-                                                    article.assets.push(asset);
-                                                }
-                                                // Create thumnail
-                                                var readStream = fs.createReadStream(destPath);
-                                                var dot = destPath.lastIndexOf('.');
-                                                var thumbPath = (dot > -1)? destPath.substring(0, dot)+ '-th'+ destPath.substring(dot)
-                                                                : destPath + '-th';
-
-                                                gm(readStream, 'img.jpg').options({imageMagick: true}).resize(thumnailWidth)
-                                                    .write(thumbPath, function(err){
-                                                        if(err) log.error( err);
-                                                        return cb();
-                                                    });
-
-                                            });
+                                if(content_type.indexOf('image') !== -1) {
+                                    gm(destPath).options({imageMagick: true})
+                                        .identify(function (err, data) {
+                                            if (!err) {
+                                                var conditions = {
+                                                    attachment_width: data.size.width,
+                                                    attachment_height: data.size.height,
+                                                    attachment_file_size: data.Filesize,
+                                                    position: index++,
+                                                    attachment_content_type: content_type,
+                                                    attachment_file_name: file_name,
+                                                    attachment_file_path: file_path,
+                                                    //alt: file_alt,
+                                                    viewable_id: viewable_id,
+                                                    viewable_type: viewable_type
+                                                };
+                                                Asset.create(conditions, function (err, asset) {
+                                                    if (err) {
+                                                        log.error(err);
+                                                    } else {
+                                                        log.info('Asset created!');
+                                                        if (!article.assets) article.assets = [];
+                                                        article.assets.push(asset);
+                                                    }
+                                                    return cb();
+                                                });
+                                            } else {
+                                                log.error(err);
+                                                return cb();
+                                            }
+                                        });
+                                } else {
+                                    var conditions = {
+                                        attachment_file_size: file_size,
+                                        position: index++,
+                                        attachment_content_type: content_type,
+                                        attachment_file_name: file_name,
+                                        attachment_file_path: file_path,
+                                        //alt: file_alt,
+                                        viewable_id: viewable_id,
+                                        viewable_type: viewable_type
+                                    };
+                                    Asset.create(conditions, function (err, asset) {
+                                        if (err) {
+                                            log.error(err);
                                         } else {
-                                            return cb();
+                                            log.info('Asset created!');
+                                            if (!article.assets) article.assets = [];
+                                            article.assets.push(asset);
                                         }
-                                    });
+                                        return cb();
+                                    });                                }
                             }
-
                         });
                     }, function(err){
                         if(err) log.error(err);
@@ -213,6 +227,7 @@ module.exports = {
                         var viewable_type = 'Article';
                         var content_type = file.type;
                         var file_name = file.name;
+                        var file_size = file.size;
                         var file_path = path.join('articles', path.basename(file.path));
                         var destPath = uploadPath + file_path;
 
@@ -222,45 +237,59 @@ module.exports = {
                                 return cb();
                             }
                             else {
-                                gm(destPath).options({imageMagick: true})
-                                    .identify(function(err, data){
-                                        if(!err) {
-                                            var conditions = {
-                                                attachment_width: data.size.width,
-                                                attachment_height: data.size.height,
-                                                attachment_file_size: data.Filesize,
-                                                position: index++,
-                                                attachment_content_type: content_type,
-                                                attachment_file_name: file_name,
-                                                attachment_file_path: file_path,
-                                                //alt: file_alt,
-                                                viewable_id: viewable_id,
-                                                viewable_type: viewable_type
-                                            };
-                                            Asset.create(conditions, function( err, asset){
-                                                if(!err) {
-                                                    log.info('Asset created!');
-                                                    if(!article.assets) article.assets = [];
-                                                    article.assets.push(asset);
-                                                }
-                                                // Create thumnail
-                                                var readStream = fs.createReadStream(destPath);
-                                                var dot = destPath.lastIndexOf('.');
-                                                var thumbPath = (dot > -1)? destPath.substring(0, dot)+ '-th'+ destPath.substring(dot)
-                                                    : destPath + '-th';
-
-                                                gm(readStream, 'img.jpg').options({imageMagick: true}).resize(thumnailWidth)
-                                                    .write(thumbPath, function(err){
-                                                        if(err) log.error( err);
-                                                        return cb();
-                                                    });
-                                            });
+                                if(content_type.indexOf('image') !== -1) {
+                                    gm(destPath).options({imageMagick: true})
+                                        .identify(function (err, data) {
+                                            if (!err) {
+                                                var conditions = {
+                                                    attachment_width: data.size.width,
+                                                    attachment_height: data.size.height,
+                                                    attachment_file_size: data.Filesize,
+                                                    position: index++,
+                                                    attachment_content_type: content_type,
+                                                    attachment_file_name: file_name,
+                                                    attachment_file_path: file_path,
+                                                    //alt: file_alt,
+                                                    viewable_id: viewable_id,
+                                                    viewable_type: viewable_type
+                                                };
+                                                Asset.create(conditions, function (err, asset) {
+                                                    if (err) {
+                                                        log.error(err);
+                                                    } else {
+                                                        log.info('Asset created!');
+                                                        if (!article.assets) article.assets = [];
+                                                        article.assets.push(asset);
+                                                    }
+                                                    return cb();
+                                                });
+                                            } else {
+                                                log.error(err);
+                                                return cb();
+                                            }
+                                        });
+                                } else {
+                                    var conditions = {
+                                        attachment_file_size: file_size,
+                                        position: index++,
+                                        attachment_content_type: content_type,
+                                        attachment_file_name: file_name,
+                                        attachment_file_path: file_path,
+                                        //alt: file_alt,
+                                        viewable_id: viewable_id,
+                                        viewable_type: viewable_type
+                                    };
+                                    Asset.create(conditions, function (err, asset) {
+                                        if (err) {
+                                            log.error(err);
                                         } else {
-                                            return cb();
+                                            log.info('Asset created!');
+                                            if (!article.assets) article.assets = [];
+                                            article.assets.push(asset);
                                         }
-                                    });
+                                        return cb();
+                                    });                                }
                             }
-
                         });
                     }, function(err){
                         if(err) log.error(err);

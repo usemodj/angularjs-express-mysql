@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('frontendApp')
-  .controller('AdminAssetCtrl',  [ '$scope', '$http', '$timeout', '$upload', '$state', '$stateParams','$location', '$filter', 'assets',
-        function($scope, $http, $timeout, $upload, $state, $stateParams, $location, $filter, assets) {
+  .controller('AdminAssetCtrl',  [ '$scope', '$http', '$timeout', 'Upload', '$state', '$stateParams','$location', '$filter', 'assets',
+        function($scope, $http, $timeout, Upload, $state, $stateParams, $location, $filter, assets) {
         $scope.fileReaderSupported = window.FileReader != null && (window.FileAPI == null || FileAPI.html5 != false);
         $scope.error = '';
         $scope.message = '';
@@ -86,11 +86,11 @@ angular.module('frontendApp')
         $scope.start = function(index) {
             $scope.progress[index] = 0;
             $scope.error = null;
-            $scope.upload[index] = $upload.upload({
+            $scope.upload[index] = Upload.upload({
                 url: '/admin/products/'+$scope.product_id + '/assets/',
                 method: 'POST',
                 headers: {'my-header': 'my-header-value'},
-                data : {
+                fields : {
                     asset : $scope.asset
                 },
                 file: $scope.selectedFiles[index],
@@ -144,7 +144,8 @@ angular.module('frontendApp')
 
         $scope.searchAssets();
     }])
-    .controller('EditAssetCtrl',  [ '$scope', '$http', '$timeout', '$upload', '$state', '$stateParams', 'assets', function($scope, $http, $timeout, $upload, $state, $stateParams, assets) {
+    .controller('EditAssetCtrl',  [ '$scope', '$http', '$timeout', 'Upload', '$state', '$stateParams', 'assets',
+    function($scope, $http, $timeout, Upload, $state, $stateParams, assets) {
         $scope.data ={};
         $scope.asset = {
             master_variant: {},
@@ -168,30 +169,24 @@ angular.module('frontendApp')
             $scope.error = null;
             //console.log('>>selectedFiles:');
             //console.log($scope.selectedFiles);
-            $scope.upload = $upload.upload({
+            $scope.upload = Upload.upload({
                 url: '/admin/products/'+$stateParams.product_id + '/assets/'+ $stateParams.id,
                 method: 'POST',
-                headers: {'my-header': 'my-header-value'},
-                data : {
+                fields : {
                     asset : $scope.asset
                 },
                  file: ($scope.selectedFiles != null)? $scope.selectedFiles[0]: null,
                 fileFormDataName: 'file'
-            });
-            $scope.upload.then(function(response) {//resolve
-                $timeout(function() {
-                    //console.log(response);
-                    $scope.uploadResult = response.data;
-                });
-                //$state.go('admin.products.assets.list',{product_id: $stateParams.product_id}, {reload:true});
-            }, function(response) { //reject
-                if (response.status > 0) $scope.error = response.status + ': ' + response.data;
-            }, function(evt) {//notify
-                // Math.min is to fix IE which reports 200% sometimes
-                $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-            });
-            $scope.upload.xhr(function(xhr){
-                //xhr.upload.addEventListener('abort', function() {console.log('abort complete')}, false);
+            }).progress(function (evt) {
+              // Math.min is to fix IE which reports 200% sometimes
+              $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            }).success(function (data, status, headers, config) {
+              //console.log(config);
+              //console.log('>>success data')
+              //console.log(data); //post with assets
+              $state.go('admin.products.assets.list',{product_id: $stateParams.product_id}, {reload:true});
+            }).error(function (data, status, headers, config) {
+                $scope.error = JSON.stringify(data);
             });
         };
 

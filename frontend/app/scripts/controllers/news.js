@@ -48,8 +48,8 @@ angular.module('frontendApp')
 
     $scope.searchArticles();
   }])
-  .controller('NewNewsCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$window', '$upload', 'AuthFactory', 'articles',
-    function ($scope, $state, $stateParams, $timeout, $window, $upload, AuthFactory, articles) {
+  .controller('NewNewsCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$window', 'Upload', 'AuthFactory', 'articles',
+    function ($scope, $state, $stateParams, $timeout, $window, Upload, AuthFactory, articles) {
       $scope.article = {};
       $scope.files = [];
 
@@ -71,10 +71,10 @@ angular.module('frontendApp')
         $scope.progress = 0;
         $scope.error = null;
         //console.log($scope.files);
-        $scope.upload = $upload.upload({
+        $scope.upload = Upload.upload({
           url: '/articles/upload',
           method: 'POST',
-          data : {
+          fields : {
             article : $scope.article
           },
           file: ($scope.files != null)? $scope.files: null,
@@ -97,8 +97,8 @@ angular.module('frontendApp')
       };
 
     }])
-  .controller('ViewNewsCtrl', ['$scope', '$state', '$stateParams', '$modal', '$upload', 'articles',
-    function ($scope, $state, $stateParams, $modal, $upload, articles) {
+  .controller('ViewNewsCtrl', ['$scope', '$state', '$stateParams', '$modal', 'Upload', 'articles',
+    function ($scope, $state, $stateParams, $modal, Upload, articles) {
       $scope.data = {};
 
       $scope.delete = function(article){
@@ -156,10 +156,10 @@ angular.module('frontendApp')
         $scope.progress = 0;
         $scope.error = null;
         //console.log($scope.files);
-        $scope.upload = $upload.upload({
+        $scope.upload = Upload.upload({
           url: '/articles/save_article',
           method: 'POST',
-          data : {
+          fields : {
             article: article
           },
           file: (article.files != null)? article.files: null,

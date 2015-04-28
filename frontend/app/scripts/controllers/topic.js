@@ -62,8 +62,8 @@ angular.module('frontendApp')
 
         $scope.searchTopics();
     }])
-    .controller('NewTopicCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$window', '$upload', 'AuthFactory', 'topics',
-    function ($scope, $state, $stateParams, $timeout, $window, $upload, AuthFactory, topics) {
+    .controller('NewTopicCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$window', 'Upload', 'AuthFactory', 'topics',
+    function ($scope, $state, $stateParams, $timeout, $window, Upload, AuthFactory, topics) {
         $scope.newTopic = {};
         $scope.files = [];
 
@@ -101,31 +101,40 @@ angular.module('frontendApp')
             $scope.progress = 0;
             $scope.error = null;
             //console.log($scope.files);
-            $scope.upload = $upload.upload({
+            $scope.upload = Upload.upload({
                 url: '/forums/topics/upload',
                 method: 'POST',
-                 data : {
+                 fields : {
                     topic : $scope.newTopic
                 },
                 file: ($scope.files != null)? $scope.files: null,
                 fileFormDataName: 'file'
             }).progress(function (evt) {
                 // Math.min is to fix IE which reports 200% sometimes
-                $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                var uploading =  parseInt(100.0 * evt.loaded / evt.total);
+                $scope.progress = Math.min(100, uploading);
             }).success(function (data, status, headers, config) {
                 //console.log(config);
                 //console.log('>>success data')
                 //console.log(data);
-                $state.go('forums.topics.view',{forum_id: $stateParams.forum_id, id: data.id}, {reload: true});
+                return $state.go('forums.topics.view',{forum_id: $stateParams.forum_id, id: data.id}, {reload: true});
+            }).error(function (data, status, headers, config) {
+              //console.log(config);
+              //console.log('>>success data')
+              console.log(data);
+              $scope.error = data;
+              //return $state.go('forums.topics.view',{forum_id: $stateParams.forum_id, id: data.id}, {reload: true});
             });
+
         };
+
         $scope.cancelEdit = function(){
             $state.go('forums.topics.list', {forum_id: $stateParams.forum_id});
         };
 
     }])
-    .controller('ViewTopicCtrl', ['$scope', '$state', '$stateParams', '$modal', '$upload', 'topics', '$rootScope',
-        function ($scope, $state, $stateParams, $modal, $upload, topics, $rootScope) {
+    .controller('ViewTopicCtrl', ['$scope', '$state', '$stateParams', '$modal', 'Upload', 'topics', '$rootScope',
+        function ($scope, $state, $stateParams, $modal, Upload, topics, $rootScope) {
         $scope.data = {};
 
         $scope.delete = function(topic){
@@ -225,10 +234,10 @@ angular.module('frontendApp')
             $scope.progress = 0;
             $scope.error = null;
             //console.log($scope.files);
-            $scope.upload = $upload.upload({
+            $scope.upload = Upload.upload({
                 url: '/forums/topics/save_post',
                 method: 'POST',
-                data : {
+                fields : {
                     post : post
                 },
                 file: (post.files != null)? post.files: null,

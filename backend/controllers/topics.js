@@ -251,6 +251,7 @@ module.exports = {
                                                         log.info('Asset created!');
                                                         if (!post.assets) post.assets = [];
                                                         post.assets.push(asset);
+                                                        return cb();
                                                     } else {
                                                         log.error(err);
                                                         return cb();
@@ -279,6 +280,7 @@ module.exports = {
                                             log.info('Asset created!');
                                             if (!post.assets) post.assets = [];
                                             post.assets.push(asset);
+                                            return cb();
                                         } else {
                                             log.error(err);
                                             return cb();
@@ -295,8 +297,10 @@ module.exports = {
                     });
                 }
             ], function(err, results){
-                //log.info('>> completed task');
-                if(err) return res.status(500).json(err);
+                if(err) {
+                    log.error(err);
+                    return res.status(500).json(err);
+                }
                 return res.status(200).json(results); //topic
             });
         });
@@ -393,6 +397,7 @@ module.exports = {
                                                         log.info('Asset created!');
                                                         if (!post.assets) post.assets = [];
                                                         post.assets.push(asset);
+                                                        return cb();
                                                     } else {
                                                         log.error(err);
                                                         return cb();
@@ -421,6 +426,7 @@ module.exports = {
                                             log.info('Asset created!');
                                             if (!post.assets) post.assets = [];
                                             post.assets.push(asset);
+                                            return cb();
                                         } else {
                                             log.error(err);
                                             return cb();
