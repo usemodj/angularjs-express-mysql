@@ -167,7 +167,7 @@ angular.module('frontendApp')
                 var topic = data.topic;
                 if(topic.locked){
                   if(!$rootScope.currentUser || ($rootScope.currentUser.id != topic.user_id
-                    && $rootScope.currentUser.role.title != 'admin')) {
+                    &&  !AuthFactory.authorize('editor'))) {
                     $scope.error = 'Locked Page!';
                     $state.go('forums.topics.list', {forum_id: $stateParams.forum_id});
                   }
