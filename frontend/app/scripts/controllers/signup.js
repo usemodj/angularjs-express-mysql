@@ -14,7 +14,8 @@ angular.module('frontendApp')
                         $scope.errors = {};
 
                         if(errors) {
-
+                            //console.log(errors);
+                            if(!angular.isArray(errors)) errors = [errors];
                              angular.forEach(errors, function(error) {
                                 var msg = error.msg;
                                 var field = error.property;
