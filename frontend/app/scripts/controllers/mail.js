@@ -1,6 +1,6 @@
 'use strict';
-var resetPasswordUrl = 'http://localhost:3000/#/resetPassword';
-var resetPasswordFrom = 'NodeSoft.co.kr <postmaster@nodesoft.co.kr>';
+//var resetPasswordUrl = 'http://localhost:3000/#/resetPassword';
+//var resetPasswordFromEmail = 'NodeSoft.co.kr <postmaster@nodesoft.co.kr>';
 angular
     .module('frontendApp')
     .controller(
@@ -16,7 +16,7 @@ angular
                 var htmlContent = '<p>패스워드를 재설정하기 위해 아래의 주소를 클릭하세요.</p><br/>';
                 var message = {
                     // sender info
-                    from: resetPasswordFrom,
+                    from: settings.resetPasswordFromEmail,
                     // Comma separated list of recipients
                     // to: '"Receiver Name"
                     // <nodemailer@disposebox.com>',
@@ -53,11 +53,11 @@ angular
                         } else {
                             //console.log(user);
                             htmlContent += '<a href="'
-                                + resetPasswordUrl
+                                + settings.resetPasswordUrl
                                 + '/'
                                 + encodeURIComponent(user.reset_password_token)
                                 + '">'
-                                + resetPasswordUrl
+                                + settings.resetPasswordUrl
                                 + '/'
                                 + encodeURIComponent(user.reset_password_token)
                                 + '</a>';

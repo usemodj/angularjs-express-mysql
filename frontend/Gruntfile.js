@@ -239,6 +239,13 @@ module.exports = function (grunt) {
       }
     },
 
+    wiredep: {
+      app: {
+        src: ['<%= yeoman.app %>/index.html'],
+        ignorePath: '<%= yeoman.app %>/'
+      }
+    },
+
     // Renames files for browser caching purposes
     rev: {
       dist: {
@@ -332,6 +339,24 @@ module.exports = function (grunt) {
     // things like resolve or inject so those have to be done manually.
     ngmin: {
       dist: {
+        files: [{
+          expand: true,
+          cwd: '.tmp/concat/scripts',
+          src: '*.js',
+          dest: '.tmp/concat/scripts'
+        }]
+      }
+    },
+
+    ngAnnotate: {
+      options: {
+      },
+      dist: {
+        options: {
+          singleQuotes: true,
+          add: true,
+          remove: false
+        },
         files: [{
           expand: true,
           cwd: '.tmp/concat/scripts',
@@ -466,6 +491,8 @@ module.exports = function (grunt) {
   });
 
   grunt.loadNpmTasks('grunt-angular-gettext');
+  grunt.loadNpmTasks('grunt-ng-annotate');
+  grunt.loadNpmTasks('grunt-wiredep');
 
   grunt.registerTask('extract', ['nggettext_extract']);
   grunt.registerTask('compile', ['nggettext_compile']);
@@ -507,12 +534,14 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'bowerInstall',
+//    'bowerInstall',
+    'wiredep',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
     'concat',
-    'ngmin',
+//    'ngmin',
+    'ngAnnotate',
     'copy:dist',
     'mkdir',
     'cdnify',

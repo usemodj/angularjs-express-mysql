@@ -14,7 +14,7 @@
         </div>
         <div class="form-group">
             <label>Message:</label>
-            <textarea  class="form-control" rows="15" ng-model="newTopic.content" markdown-editor></textarea>
+            <textarea id="topic-editor" class="form-control" rows="15" ng-model="newTopic.content" markdown-editor></textarea>
         </div>
 
         <div class="form-group">
@@ -45,3 +45,6 @@
         </form>
     </div>
 </div>
+<script type="application/javascript">
+  //$('#topic-editor').markdown({language: 'kr'});
+</script>

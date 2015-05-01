@@ -6,7 +6,9 @@ angular.module('frontendApp')
       restrict: 'A',
       link: function postLink(scope, element, attrs) {
         var hiddenButtons = attrs.mdHiddenButtons ? attrs.mdHiddenButtons.split(","): new Array();
-        element.markdown({hiddenButtons: hiddenButtons,
+        element.markdown({
+            language: settings.markdownEditor.language,
+            hiddenButtons: hiddenButtons,
             additionalButtons: [
                 [{
                     name:"groupCustom",
