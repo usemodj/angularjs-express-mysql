@@ -37,7 +37,7 @@ app.use(function(req, res, next) {
         require('./config/passport')(db);
         // load roles data into database
         req.models.roles.loadRoles(function(err){
-           if(!err) req.models.users.createAdminUser('admin@nodesoft.co.kr', 'admin', function(err){
+           if(!err) req.models.users.createAdminUser('admin@example.com', 'admin', function(err){
                log.error(err);
            });
         });

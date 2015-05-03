@@ -1,8 +1,12 @@
 var log = require('log4js').getLogger("orders");
 var _ = require('underscore');
 var async = require('async');
+var hogan = require('hogan');
+var fs = require('fs');
+var path = require('path');
+var settings = require('../config/settings');
 
-var lineItemSql = ' SELECT DISTINCT li.*, v1.options, va.attachment_file_path FROM  \n' +
+var lineItemSql = ' SELECT DISTINCT li.*, (li.price * li.quantity) AS subtotal, v1.options, va.attachment_file_path FROM  \n' +
     '  (SELECT l.*, p.id AS product_id, p.name FROM line_items l,variants v, products p  \n' +
     '   WHERE l.variant_id = v.id AND v.product_id = p.id AND l.order_id = ? \n' +
     '  ) li   \n' +
@@ -46,30 +50,38 @@ var getOrderItems = function(order_id, req, res, callback){
 };
 
 var sendConfirmationMail = function(order, transport, callback){
-    var html = '<ul>';
-    _.each(order.line_items, function(item){
-        //log.debug('>>line_item:' + JSON.stringify(item));
-        html += '<li>'+ item.name + ': '+ item.price + ' x '+ item.quantity+'('+item.options+') </li>'
-    });
-    html += '<p>Total: '+ order.item_total + ' + ' + order.shipment_total + '(Shipment) = <b>';
-    html += (order.item_total + order.shipment_total) +'</b></p>';
+    //var html = '<ul>';
+    //_.each(order.line_items, function(item){
+    //    //log.debug('>>line_item:' + JSON.stringify(item));
+    //    html += '<li>'+ item.name + ': '+ item.price + ' x '+ item.quantity+'('+item.options+') </li>'
+    //});
+    //html += '<p>Total: '+ order.item_total + ' + ' + order.shipment_total + '(Shipment) = <b>';
+    //html += (order.item_total + order.shipment_total) +'</b></p>';
+    var filename = path.join(__dirname, '../template/order_confirm_mail.hogan.html');
+    fs.readFile(filename, function(err, contents){
+        if(err) return callback(err);
 
-    //var transport = req.transport;
-    var message = {};
-    message.to = order.email;
-    message.subject = 'Order Confirmation Mail';
-    message.html = html;
-
-    transport.sendMail(message, function (err) {
-        if (err) {
-            log.error(err.message);
-            return callback(err);
-        }
-        log.info('Confirm Mail sent successfully!');
-        //log.debug(message);
-        // if you don't want to use this transport object anymore, uncomment following line
-        //transport.close(); // close the connection pool
-        return callback(null, message);
+        var template = hogan.compile(contents.toString());
+        //order.subTotal = function(price, qty){ return price * qty};
+        var html = template.render({order: order, site_url: settings.site_url});
+        //var transport = req.transport;
+        var message = {};
+        message.from = settings.postmailer;
+        message.to = order.email;
+        message.subject = 'Order Confirmation Mail';
+        message.html = html;
+        log.debug(message);
+        transport.sendMail(message, function (err) {
+            if (err) {
+                log.error(err.message);
+                return callback(err);
+            }
+            log.info('Confirm Mail sent successfully!');
+            //log.debug(message);
+            // if you don't want to use this transport object anymore, uncomment following line
+            //transport.close(); // close the connection pool
+            return callback(null, message);
+        });
     });
 };
 

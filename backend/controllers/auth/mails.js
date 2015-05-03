@@ -1,18 +1,21 @@
+var log = require('log4js').getLogger('auth/mail');
+
 module.exports = {
     //get reset_password_token
     //app.get('/auth/mail',
     reset_password_token: function (req, res, next) {
+        var User = req.models.users;
         //console.log(req.body);
         //console.log(req.query);
         var email = req.query.email;
-        req.models.users.one({email: email}, function (err, user) {
+        User.one({email: email}, function (err, user) {
             if (err) {
                 //console.log('>> get /auth/mail error:');
-                console.log(err);
+                log.error(err);
                 return next(err);
             }
             //console.log('>> get /auth/email user:');
-            console.log(user);
+            log.debug(user);
             if (!user) {
                 var errors = [
                     {
@@ -21,7 +24,7 @@ module.exports = {
                     }
                 ];
 
-                return res.json(400, errors);
+                return res.status(500).json( errors);
             }
             user.save({
                 //email: email,
@@ -29,10 +32,10 @@ module.exports = {
             }, function (err, user) {
                 if (!err) {
                     //console.log('Reset password token!');
-                    return res.json(200, user);
+                    return res.status(200).json(user);
                 } else {
-                    console.log(err);
-                    return res.json(400, err);
+                    log.error(err);
+                    return res.status(500).json(err);
                 }
             });
         });
@@ -42,21 +45,20 @@ module.exports = {
     //app.post('/auth/mail',
     mail_password: function (req, res, next) {
         var transport = req.transport;
-        //console.log(req.body);
+        log.debug(req.body);
         var message = {};
         //message.to = req.body.email;
         message = req.body.message;
         transport.sendMail(message, function (error) {
             if (error) {
-                console.log('Error occured');
-                console.log(error);
-                return next(error);
+                log.error(error);
+                return res.status(500).json(error);
             }
-            console.log('Message sent successfully!');
+            log.info('Mail sent successfully!');
 
             // if you don't want to use this transport object anymore, uncomment following line
             //transport.close(); // close the connection pool
-            return res.json(200, 'Message sent successfully!');
+            return res.status(200).send('Mail sent successfully!');
         });
 
     },
@@ -76,21 +78,20 @@ module.exports = {
         }, function(err, user) {
             if (err) {
                 //console.log('>> users findOne err:');
-                console.log(err);
+                log.error(err);
                 return res.json(400, err);
             }
-            console.log('>>/users put');
-            console.log(JSON.stringify(user));
+            log.debug('>> user: '+ JSON.stringify(user));
             user.save({
                 encrypted_password: user.encryptPassword( password),
                 reset_password_token: user.encryptPassword(user.makeSalt())
             }, function(err) {
                 if (!err) {
-                    console.log('Password is updated!');
-                    return res.json(200, 'Password is updated!');
+                    log.info('Password is updated!');
+                    return res.status(200).json('Password is updated!');
                 } else {
-                    console.log(err);
-                    return res.json(400, err);
+                    log.error(err);
+                    return res.status(500).json(err);
                 }
             });
         });

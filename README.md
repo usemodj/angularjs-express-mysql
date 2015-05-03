@@ -61,7 +61,7 @@ $ backend> NODE_ENV=production pm2 start ./bin/forever
 
 ```
 URL:  http://localhost:3000
-Login Email: admin@nodesoft.co.kr
+Login Email: admin@example.com
 Login Password: admin
 ```
 

@@ -57,7 +57,7 @@
             <td style="width:100px" class="col-md-4"><span class="glyphicon glyphicon-list"></span> <img  height="50" ng-src="/uploads/images/{{item.attachment_file_path}}"/>
                 <input style="width:90px" ng-model="copy[$index]"><button class="btn btn-default btn-sm" clip-copy="copy[$index]">Copy</button>
             </td>
-            <td style="width:300px" class="col-md-3"> {{item.viewable_id == asset.master_variant.id ? 'All': item.options}}</td>
+            <td style="width:300px" class="col-md-3"> {{item.viewable_id == asset.master_variant.id ? 'All': item.options}}<br/>{{item.price | currency}}</td>
             <td style="width:300px" class="col-md-4">{{item.alt}} </td>
             <td class="col-md-2 text-center">
                 <a ui-sref="admin.products.assets.edit({product_id: $stateParams.product_id, id: item.id})" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></a>

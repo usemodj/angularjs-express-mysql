@@ -455,36 +455,19 @@ module.exports = {
         } catch(err){
             log.error(err);
         }
-        /*
-        // SELECT p.id, p.name, p.available_on, va.price, va.asset_id, va.file_path, va.alt
-        // FROM products p LEFT JOIN
-        // 	(SELECT v.*, a.id AS asset_id, a.attachment_file_path AS file_path, a.alt
-        // 	FROM variants v INNER JOIN
-        // 		(SELECT a.* FROM
-        // 			(SELECT * FROM assets WHERE viewable_type = "Variant" ORDER BY position, id) a
-        // 		GROUP BY a.viewable_id
-        // 		) a ON v.id = a.viewable_id
-        // 	WHERE v.deleted_at IS NULL
-        // 	) va ON va.product_id = p.id
-        // WHERE p.deleted_at IS NULL AND (p.deleted_at IS NULL OR p.deleted_at >= NOW())
-        // 	AND p.available_on <= NOW() AND va.price IS NOT NULL
-        // 	AND (LOWER(p.name) LIKE '%%' OR LOWER(p.description) LIKE '%%')
-        // ORDER BY p.available_on DESC  LIMIT 10 OFFSET 0;
-        */
         var sql = 'SELECT p.id, p.name, p.available_on, va.price, va.asset_id, va.file_path, va.alt \n'+
-        ' FROM products p LEFT JOIN \n'+
-        ' 	(SELECT v.*, a.id AS asset_id, a.attachment_file_path AS file_path, a.alt \n'+
-        ' 	FROM variants v INNER JOIN  \n'+
-        ' 	    (SELECT a.* FROM \n'+
-        '           (SELECT * FROM assets WHERE viewable_type = "Variant" ORDER BY position, id) a \n'+
-        ' 		GROUP BY a.viewable_id, a.viewable_type \n'+
-        '       ) a ON v.id = a.viewable_id \n'+
-        '   WHERE v.deleted_at IS NULL \n'+
-        '   ) va ON va.product_id = p.id \n'+
-        ' WHERE (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
-        '   AND p.available_on <= NOW() AND va.price IS NOT NULL \n'+
-        '   AND (LOWER(p.name) LIKE ? OR LOWER(p.description) LIKE ?) \n'+
-        ' ORDER BY p.available_on DESC ';
+            ' FROM products p LEFT JOIN \n'+
+            '         (SELECT va.* \n'+
+            '          FROM (SELECT v.*, a.id AS asset_id, a.viewable_type, a.attachment_file_path AS file_path, a.alt \n'+
+            '                FROM variants v, assets a WHERE a.viewable_type = "Variant" AND v.id = a.viewable_id AND v.deleted_at IS NULL \n'+
+            '                GROUP BY v.product_id, a.position ORDER BY a.position, a.id \n'+
+            '               ) va \n'+
+            '         GROUP BY va.product_id, va.viewable_type \n'+
+            '         ) va ON va.product_id = p.id \n'+
+            ' WHERE (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
+            '   AND p.available_on <= NOW() AND va.price IS NOT NULL \n'+
+            '   AND (LOWER(p.name) LIKE ? OR LOWER(p.description) LIKE ?) \n'+
+            ' ORDER BY p.available_on DESC ';
         //log.debug(sql);
         req.db.driver.execQuery( sql + ' LIMIT ? OFFSET ?;',[name, name, perPages, (page - 1)* perPages], function(err, products){
             if(err) return next(err);

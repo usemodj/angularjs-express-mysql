@@ -1,0 +1,22 @@
+    <table class="table">
+        <tbody>
+        {{#order.line_items}}
+        <tr>
+            <td><img width="110" src="{{site_url}}/uploads/images/{{attachment_file_path}}"></td>
+            <td><a href="{{site_url}}/#/products/{{product_id}}">{{name}}<br/>{{options}}</a></td>
+            <td>{{price}} x {{quantity}}</td>
+            <td>{{subtotal}}</td>
+        </tr>
+        {{/order.line_items}}
+        <tr>
+            <td></td>
+            <td></td>
+            <td>Shipment:<br/>
+                Total:
+            </td>
+            <td>{{order.shipment_total}}<br/>
+                {{order.total}}
+            </td>
+        </tr>
+        </tbody>
+    </table>

@@ -71,7 +71,7 @@ angular.module('frontendApp',
                     if (status === 401 || status === 403) {
                         //console.log('>>location url: '+ $location.url());
                         $rootScope.redirect = $location.url(); // save the current url so we can redirect the user back
-                        redirects.setRedirectURL($location.url());
+                        if($location.path() != '/login/') redirects.setRedirectURL($location.url());
                         $rootScope.currentUser = null;
                         $location.path('/login');
 
@@ -99,8 +99,8 @@ angular.module('frontendApp',
         //$http.defaults.headers.post['X-XSRF-TOKEN'] = $cookies['XSRF-TOKEN'];
         //$http.defaults.headers.post['_csrf'] = $cookies._csrf;
 
-        gettextCatalog.currentLanguage = 'ko';
-        gettextCatalog.debug = true;
+        gettextCatalog.currentLanguage = settings.gettext.language;
+        gettextCatalog.debug = settings.gettext.debug;
 
         $rootScope.$on('$stateChangeError',
           function (event, toState, toParams, fromState, fromParams, error) {
@@ -124,15 +124,4 @@ angular.module('frontendApp',
             }
         });
 
-    }])
-    .run(['$interval', '$cookieStore','AuthFactory', function($interval, $cookieStore, AuthFactory) {
-      var isLogout = false;
-      $interval(function() {
-        if (!$cookieStore.get('user') && !isLogout) {/* session does not exists */
-          // log out of client
-          AuthFactory.logout(function(err){
-            isLogout = true;
-          });
-        }
-      }, 1000);
     }]);

@@ -2,16 +2,9 @@
 //var resetPasswordUrl = 'http://localhost:3000/#/resetPassword';
 //var resetPasswordFromEmail = 'NodeSoft.co.kr <postmaster@nodesoft.co.kr>';
 angular
-    .module('frontendApp')
-    .controller(
-    'MailCtrl',
-    [
-        '$scope', '$stateParams',
-        'AuthFactory',
+    .module('frontendApp').controller('MailCtrl',['$scope', '$stateParams', 'AuthFactory',
         function ($scope, $stateParams, AuthFactory) {
-
-            $scope.mailPassword = function (form) {
-
+           $scope.mailPassword = function (form) {
                 var email = $scope.user.email;
                 var htmlContent = '<p>패스워드를 재설정하기 위해 아래의 주소를 클릭하세요.</p><br/>';
                 var message = {
@@ -30,28 +23,22 @@ angular
                     //    + '<p>Here\'s a nyan cat for you as an embedded attachment:<br/><img src="cid:nyan@node"/></p>',
                 };
 
-                AuthFactory
-                    .passwordToken(
-                    email,
+                AuthFactory.passwordToken(email,
                     function (errors, user) {
                         $scope.errors = {};
                         $scope.success = {};
                         if (errors) {
                             //console.log(errors);
-                            angular
-                                .forEach(
-                                errors,
+                            if(!angular.isArray(errors)) errors = [errors];
+                            angular.forEach(errors,
                                 function (error) {
                                     var msg = error.msg;
                                     var field = error.property;
-                                    form[field]
-                                        .$setValidity(
-                                        'server',
-                                        false);
+                                    form[field].$setValidity('server', false);
                                     $scope.errors[field] = msg;
                                 });
                         } else {
-                            //console.log(user);
+                            console.log(user);
                             htmlContent += '<a href="'
                                 + settings.resetPasswordUrl
                                 + '/'
@@ -65,30 +52,20 @@ angular
                             message.to = email;
                             message.html = htmlContent;
 
-                            AuthFactory
-                                .mailResetPassword(
-                                email,
-                                message,
+                            AuthFactory.mailResetPassword(email,message,
                                 function (errors) {
                                     if (!errors) {
-                                        form['email']
-                                            .$setValidity(
-                                            'server',
-                                            true);
+                                        form['email'].$setValidity('server', true);
                                         $scope.success['email'] = 'Mail Sent for resetting Password to '+ email;
                                         // $location.path('/');
                                     } else {
-                                        // console.log(errors);
-                                        angular
-                                            .forEach(
-                                            errors,
+                                        //console.log(errors);
+                                        if(!angular.isArray(errors)) errors = [errors];
+                                        angular.forEach( errors,
                                             function (error) {
                                                 var msg = error.msg;
                                                 var field = error.property;
-                                                form[field]
-                                                    .$setValidity(
-                                                    'server',
-                                                    false);
+                                                form[field].$setValidity('server', false);
                                                 $scope.errors[field] = msg;
                                             });
                                     }
@@ -100,8 +77,7 @@ angular
 
             $scope.resetPassword = function (form) {
                 //console.log('>> passwordToken: ' + $stateParams.passwordToken);
-                AuthFactory
-                    .resetPasswordByToken(
+                AuthFactory.resetPasswordByToken(
                     $scope.user.email,
                     $stateParams.passwordToken,
                     $scope.user.password,
@@ -113,18 +89,14 @@ angular
                         if (!errors) {
                             $scope.success['password'] = 'Password resetted successfully.';
                         } else {
-                            angular
-                                .forEach(
-                                errors,
+                            if(!angular.isArray(errors)) errors = [errors];
+                            angular.forEach(errors,
                                 function (error) {
                                     var msg = error.msg;
                                     var field = error.property;
                                     if (field === 'encrypted_password')
                                         field = 'new_password';
-                                    form[field]
-                                        .$setValidity(
-                                        'server',
-                                        false);
+                                    form[field].$setValidity('server', false);
                                     $scope.errors[field] = msg;
                                 });
                         }

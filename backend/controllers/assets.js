@@ -75,7 +75,7 @@ module.exports = {
                 ' ON va.id = r.id WHERE va.deleted_at IS NULL AND va.product_id = ? ORDER BY position, id DESC;';
             req.db.driver.execQuery(variantSql, [product_id], function(err, variants){
                 if(!err) product.variants = variants;
-                var assetSql = 'SELECT a.*, v.sku, v.options FROM assets a INNER JOIN ' +
+                var assetSql = 'SELECT a.*, v.sku, v.options, v.price FROM assets a INNER JOIN ' +
                 ' (SELECT va.id, va.price, va.sku, va.product_id, va.position, va.is_master, va.deleted_at, r.options ' +
                 ' FROM variants va LEFT JOIN ' +
                 ' (SELECT o.id, o.product_id, GROUP_CONCAT(o.options) AS options ' +
@@ -230,7 +230,7 @@ module.exports = {
                 Variant.get(variant_id, function(err, variant){
                     //log.debug('>> variant: '+ JSON.stringify(variant));
                     data.alt = file_alt;
-                    data.variant = variant;
+                    data.viewable_id = variant.id;
                     data.save(function(err){
                         if(err) {
                             log.error(err);

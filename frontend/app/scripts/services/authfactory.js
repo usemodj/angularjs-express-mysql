@@ -167,11 +167,11 @@ services.factory('AuthFactory', ['$cookies','$location', '$rootScope','$cookieSt
                         message: message
                     }, function(mail) {
                     		//console.log('>> authfactory mailPassword success: ');
-                    		//console.log(mail);
-                        return cb();
+                    		console.log(mail);
+                        return cb(null, mail);
                     }, function(err) {
                         //console.log('>> authfactory mailPassword err: ');
-                        //console.log(err);
+                        console.log(err);
                         return cb(err.data);
                     });
                 },

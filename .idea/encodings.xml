@@ -13,10 +13,14 @@
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/signup.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/controllers/topic.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/directives/markdowneditor.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/scripts/router.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/scripts/services/assets.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/scripts/services/authfactory.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/admin/assets/assets.edit.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/admin/assets/assets.list.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/views/partials/admin/assets/layout.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/admin/products/products.edit.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/frontend/app/views/partials/admin/variants/layout.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/resetPasswordMail.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/bower.json" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/package.json" charset="UTF-8" />
