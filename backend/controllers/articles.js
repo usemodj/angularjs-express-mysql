@@ -24,8 +24,7 @@ module.exports = {
         var body = req.body;
         var page = body.page || 1;
         if( isNaN(page) || page < 1) page = 1;
-        console.log('>>req.body:'+ JSON.stringify(req.body));
-        //console.log('>> page:'+ page);
+        log.debug('>>req.body:'+ JSON.stringify(req.body));
         var name = body.name || "";
         name = '%'+Query.escape(name)+'%';
 

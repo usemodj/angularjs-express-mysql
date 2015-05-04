@@ -66,11 +66,11 @@ try {
         process.exit(1);
     }
 }
-app.use(log4js.connectLogger(log4js.getLogger("http"), { level: (app.get('env') === 'production')? 'error':'debug' }));
-//log4js.configure(path.join(__dirname, './config/log4js.json'));
-//if(process.env.NODE_ENV === 'production') app.use(log4js.connectLogger(log4js.getLogger("production"), { level: 'ERROR' }));
-//else app.use(log4js.connectLogger(log4js.getLogger("development"), { level: 'DEBUG' }));
 
+log4js.configure(path.join(__dirname, './config/log4js.json'));
+log4js.setGlobalLogLevel((app.get('env') === 'production')? log4js.levels.ERROR: log4js.levels.DEBUG);
+
+app.use(log4js.connectLogger(log4js.getLogger('http'), { level: 'auto' }));
 app.use(cookieParser());
 app.use(bodyParser.json({limit:"50mb"}));
 app.use(bodyParser.urlencoded({limit:"50mb", extended: true}));
@@ -98,11 +98,11 @@ app.use(passport.session());
 app.use(csrf({cookie: true}));
 app.use(function (req, res, next) {
     res.cookie('XSRF-TOKEN', req.csrfToken());
-//>>> IE brower cache problem >>>
+    //>>> IE brower cache problem >>>
     res.header('Access-Control-Max-Age', 0);
     res.header('Cache-Control', 'max-age=0,no-cache,no-store,post-check=0,pre-check=0,must-revalidate');
     res.header('Expires', '-1');
-//>>>
+    //>>>
     next();
 });
 // error handler
@@ -118,9 +118,6 @@ app.use(function (err, req, res, next) {
 //    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
 //    next();
 //});
-// app.use(modRewrite([
-//                 '!\\.html|\\.js|\\.css|\\woff|\\ttf|\\swf$ /index.html [L]'
-//               ]));
 
 if (app.get('env') === 'development') {
     app.use(express.static(path.join(__dirname, '../frontend/app/')));

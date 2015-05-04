@@ -96,8 +96,7 @@ module.exports = {
         var perPages = 10;
         var page = parseInt(body.page) || 1;
         if( isNaN(page) || page < 1) page = 1;
-        console.log('>>req.body:'+ JSON.stringify(req.body));
-        console.log('>> page:'+ page);
+        log.debug('>>req.body:'+ JSON.stringify(req.body));
 
         var from = body.from;
         var to = body.to;
@@ -181,9 +180,6 @@ module.exports = {
     },
 
     addCart: function(req, res, next){
-        //console.log(req);
-        //log.debug('>>remoteAddress:'+ req.connection.remoteAddress);
-
         var Order = req.models.orders;
         var LineItem = req.models.line_items;
         var User = req.models.users;

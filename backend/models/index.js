@@ -31,10 +31,9 @@
     afterRemove : (bool success) Right after removing an instance;
     beforeValidation : (no parameters) Before all validations and prior to beforeCreate and beforeSave;
  */
-
+var log =  require('log4js').getLogger('models');
 var orm = require('orm');
 var transaction = require("orm-transaction");
-
 var settings = require('../config/settings');
 
 var connection = null;
@@ -65,8 +64,8 @@ function setup(db, cb) {
     require('./article')(orm, db);
 
     db.sync(function(err){
-        if(err) console.log(err);
-        else console.log('Tables created!')
+        if(err) log.error(err);
+        else log.info('Tables created!')
     }); //create tables
     return cb(null, db);
 }
@@ -82,10 +81,10 @@ module.exports = function(cb) {
         db.use(transaction);
 
         connection = db;
-        db.settings.set('instance.returnAllErrors', false);
+        db.settings.set('instance.returnAllErrors', true);
         db.settings.set("connection.reconnect", true);
         db.settings.set("connection.pool", true);
-        db.settings.set("connection.debug", false);
+        //db.settings.set("connection.debug", false);
 
         setup(db, cb);
     });

@@ -1,4 +1,4 @@
-var log = require('log4js').getLogger("forums");
+var log = require('log4js').getLogger('forums');
 var _ = require('underscore');
 var async = require('async');
 
