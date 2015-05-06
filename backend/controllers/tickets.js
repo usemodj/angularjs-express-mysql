@@ -534,7 +534,8 @@ module.exports = {
                         ticket_id: message.ticket_id,
                         content: message.content,
                         user_id:user.id,
-                        ipaddress: ip
+                        ipaddress: ip,
+                        created_at: new Date()
                     }, function (err, message2) {
                         if (err) {
                             log.warn(err);

@@ -19,7 +19,7 @@ var settings = {
         database: "nodesoft2",
         user: "root",
         password: "",
-        timezone: "Asia/Seoul"
+        timezone: "+09:00" //'Asia/Seoul'
     }
 };
 
