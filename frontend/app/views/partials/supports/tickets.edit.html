@@ -1,0 +1,29 @@
+﻿
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h2>Edit Message</h2>
+        <form class="myform" name="form" ng-submit="updateMessage(myform)"  novalidate>
+        <div class="form-group">
+            <label>Message:</label>
+            <textarea  class="form-control" rows="12" ng-model="data.message.content" markdown-editor></textarea>
+            <div class="btn-group" ng-repeat="file in data.message.assets | orderBy:'position' ">
+                <div>
+                    <a class="btn btn-default btn-xs" ng-href="/uploads/images/{{file.attachment_file_path}}" alt="{{file.attachment_file_name}}" target="attachment">{{file.attachment_file_name}} ({{file.attachment_file_size}})</a>
+                    <a class="btn btn-default btn-xs" ng-click="removeFile(file)" data-toggle="tooltip" data-placement="top" title="Remove '{{file.attachment_file_name}}' "><i class="fa fa-trash-o"></i></a>
+                </div>
+            </div>
+        </div>
+        <div ng-include="" src="'views/partials/include/input_file.html'"></div>
+
+        <div class="form-group has-error" ng-show="error">
+            <p class="help-block">{{ error }}</p>
+        </div>
+        <div class="form-group has-success" ng-show="success">
+            <p class="help-block">{{ message }}</p>
+        </div>
+
+            <button class="btn btn-primary" ng-click="save()" ng-disabled="form.$invalid">Save</button>
+        <button class="btn btn-primary" ng-click="cancel()">Cancel</button>
+        </form>
+    </div>
+</div>

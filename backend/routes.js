@@ -22,6 +22,7 @@ var _ = require('underscore')
     , ForumCtrl =  require('./controllers/forums')
     , TopicCtrl =  require('./controllers/topics')
     , ArticleCtrl =  require('./controllers/articles')
+    , TicketCtrl =  require('./controllers/tickets')
     ;
 
 var routes = [
@@ -559,7 +560,7 @@ var routes = [
         path: '/assets/:id',
         httpMethod: 'DELETE',
         middleware: [AssetCtrl.deleteAsset],
-        accessLevel: accessLevels.editor
+        accessLevel: accessLevels.user
     },
     {
         path: '/admin/products/:product_id/assets/',
@@ -729,6 +730,45 @@ var routes = [
         accessLevel: accessLevels.editor
     },
 
+    //Support Ticket Resource
+    {
+        path: '/tickets/search',
+        httpMethod: 'POST',
+        middleware: [TicketCtrl.index],
+        accessLevel: accessLevels.user
+    },
+    {//create ticket with file attachment
+        path: '/tickets/upload',
+        httpMethod: 'POST',
+        middleware: [TicketCtrl.uploadTicket],
+        accessLevel: accessLevels.user
+    },
+    {//view ticket
+        path: '/tickets/:id(\\d+)',
+        httpMethod: 'GET',
+        middleware: [TicketCtrl.viewTicket],
+        accessLevel: accessLevels.user
+    },
+    {//reply ticket message
+        path: '/tickets/reply',
+        httpMethod: 'POST',
+        middleware: [TicketCtrl.replyMessage],
+        accessLevel: accessLevels.user
+    },
+    {//update ticket message
+        path: '/tickets/update_message',
+        httpMethod: 'POST',
+        middleware: [TicketCtrl.updateMessage],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/admin/tickets/search',
+        httpMethod: 'POST',
+        middleware: [TicketCtrl.adminSearch],
+        accessLevel: accessLevels.editor
+    },
+
+
     // All other get requests should be handled by AngularJS's client-side routing system
     {
         path: '/*',
@@ -773,7 +813,7 @@ module.exports = function(app) {
                 break;
         }
     });
-}
+};
 
 function ensureAuthorized(req, res, next) {
     //log.debug('>> req.route.method: '+ req.route.method);

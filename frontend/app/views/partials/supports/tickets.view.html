@@ -1,0 +1,66 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 text-right">
+            <span class="badge"><a class=" btn btn-default btn-xs" ui-sref="supports.list"><i class="fa fa-arrow-left"></i> Back </a></span>
+            <span class="badge" style="color:#666666;"><a ng-show="Auth.authorize('user')" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Request Support"
+                                   class=" btn btn-default btn-xs" ui-sref="supports.new"><i class="fa fa-edit"></i> New Ticket</a></span>
+        </div>
+    </div>
+
+    <div class="col-md-10 col-md-offset-1">
+       <h2><span class="badge">{{data.ticket.status}}</span> {{data.ticket.subject}}</h2>
+    </div>
+    <div class="panel panel-default col-md-10 col-md-offset-1" ng-repeat="item in data.ticket.messages | orderBy:'-created_at' ">
+      <div class="col-md-3 bg-info text-primary">
+        <div>Written by {{item.user.email}} </div>
+        <div>{{item.created_at}}</div>
+        <div>({{item.created_at | relativeDate}})</div>
+      </div>
+      <div class="col-md-9">
+        <div class="panel-body" ng-bind-html="item.content | markdown"></div>
+        <div class="btn-group" ng-repeat="file in item.assets | orderBy:'position' ">
+            <a class="btn btn-default btn-sm" ng-href="/uploads/images/{{file.attachment_file_path}}" alt="{{file.attachment_file_name}}" target="attachment">
+                <i class="fa fa-file"></i> {{file.attachment_file_name}} ({{file.attachment_file_size}})
+            </a>
+        </div>
+        <div class="well well-sm text-right">
+            <a class="btn btn-default btn-xs" ng-show="currentUser.email === item.user.email" ng-click="editMessage(item)">Edit</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default col-md-10 col-md-offset-1">
+        <div class="panel-body">
+            <h2>Reply
+              <span ng-show="data.ticket.user_id != currentUser.id" class="label label-info label-lg">
+                You are not allowed to reply. Use admin page.
+              </span>
+            </h2>
+            <form ng-hide="data.ticket.user_id != currentUser.id" class="myform" name="form" ng-submit="replyMessage(myform)"  novalidate>
+            <div class="form-group">
+                <label>Message *:</label>
+                <textarea  class="form-control" rows="9" ng-model="newMessage.content" markdown-editor required></textarea>
+            </div>
+            <div ng-include="" src="'views/partials/include/input_file.html'"></div>
+            <div class="form-group has-info" ng-show="progress">
+              <p class="help-block">Progress... {{ progress }}%</p>
+            </div>
+
+            <div class="form-group has-error" ng-show="error">
+                <p class="help-block">{{error}}</p>
+            </div>
+            <div class="form-group has-success" ng-show="success">
+                <p class="help-block">{{message}}</p>
+            </div>
+
+            <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">Save</button>
+            <button class="btn btn-primary" ng-click="cancelEdit()">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+  $(function(){
+    $('[data-toggle="popover"]').popover();
+  })
+</script>

@@ -276,6 +276,40 @@ angular.module('frontendApp.router', ['ui.router'])
             access: access.editor
           }
         });
+      //Support Controllers
+      $stateProvider
+        .state('supports', {
+          abstract: true,
+          url: '/supports/',
+          // Example of loading a template from a file. This is also a top level state,
+          // so this template file will be loaded and then inserted into the ui-view
+          // within index.html.
+          template: '<ui-view/>',
+          //templateUrl: 'views/partials/news/layout.html',
+          data: {
+            access: access.user
+          }
+        })
+        .state('supports.list', {
+          url: '',
+          templateUrl: 'views/partials/supports/tickets.list.html',
+          controller: 'SupportCtrl'
+        })
+        .state('supports.new', {
+          url: 'new',
+          templateUrl: 'views/partials/supports/tickets.new.html',
+          controller: 'NewSupportCtrl'
+        })
+        .state('supports.view', {
+          url: ':id/',
+          templateUrl: 'views/partials/supports/tickets.view.html',
+          controller: 'ViewSupportCtrl'
+        })
+        .state('supports.edit', {
+          url: ':id/edit',
+          templateUrl: 'views/partials/supports/tickets.edit.html',
+          controller: 'EditSupportCtrl'
+        });
 
         // Admin controllers
         $stateProvider
@@ -516,7 +550,7 @@ angular.module('frontendApp.router', ['ui.router'])
               templateUrl: 'views/partials/admin/orders/orders.state_changes.html',
               controller: 'StateChangeCtrl'
             })
-
+            //Admin forums
             .state('admin.forums', {
                 abstract: true,
                 url: '/admin/forums/',
@@ -540,7 +574,31 @@ angular.module('frontendApp.router', ['ui.router'])
                 templateUrl: 'views/partials/admin/forums/forums.edit.html',
                 controller: 'EditForumCtrl'
             })
-        ;
+          //Admin Support
+          .state('admin.supports', {
+            abstract: true,
+            url: '/admin/supports/',
+            // Example of loading a template from a file. This is also a top level state,
+            // so this template file will be loaded and then inserted into the ui-view
+            // within index.html.
+            template: '<ui-view/>'
+            //,templateUrl: 'views/partials/admin/supports/layout.html',
+          })
+          .state('admin.supports.list', {
+            url: '',
+            templateUrl: 'views/partials/admin/supports/tickets.list.html',
+            controller: 'AdminSupportCtrl'
+          })
+          .state('admin.supports.view', {
+            url: ':id/',
+            templateUrl: 'views/partials/admin/supports/tickets.view.html',
+            controller: 'ViewAdminSupportCtrl'
+          })
+          .state('admin.supports.edit', {
+            url: ':id/edit',
+            templateUrl: 'views/partials/admin/supports/tickets.edit.html',
+            controller: 'EditAdminSupportCtrl'
+          });
 
     }
 ]);

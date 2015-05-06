@@ -2,7 +2,7 @@
 
 angular.module('frontendApp',
 	['ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.bootstrap','ui.select2','ui.sortable','ui.tree',
-     'frontendApp.router', 'ngFileUpload', 'gettext', 'ngClipboard','markdown','angularTreeview','ngIdle'])
+     'frontendApp.router', 'ngFileUpload', 'gettext', 'ngClipboard','markdown','angularTreeview','ngIdle','relativeDate'])
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', '$logProvider','ngClipProvider',
         function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $logProvider, ngClipProvider) {
             $logProvider.debugEnabled = true;
@@ -121,6 +121,8 @@ angular.module('frontendApp',
                         $state.go('anon.login');
                     }
                 }
+            } else {
+              $rootScope.error = null;
             }
         });
 

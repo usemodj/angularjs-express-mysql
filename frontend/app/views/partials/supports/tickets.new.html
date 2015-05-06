@@ -1,0 +1,37 @@
+﻿<div class="row">
+    <div class="col-md-10 col-md-offset-1 text-right">
+        <span class="badge"><a class=" btn btn-default btn-xs" ui-sref="supports.list"><i class="fa fa-arrow-left"></i> Back </a></span>
+    </div>
+</div>
+
+<div class="panel panel-default col-md-10 col-md-offset-1">
+    <div class="panel-body">
+        <h2>New Ticket</h2>
+        <form class="myform" name="form" ng-submit="uploadTicket(myform)"  novalidate>
+
+        <div class="form-group">
+            <label>Subject *:</label>
+            <input  class="form-control"  ng-model="newTicket.subject" required>
+        </div>
+        <div class="form-group">
+            <label>Message:</label>
+            <textarea id="topic-editor" class="form-control" rows="15" ng-model="newTicket.content" markdown-editor></textarea>
+        </div>
+
+        <div ng-include="" src="'views/partials/include/input_file.html'"></div>
+
+        <div class="form-group has-info" ng-show="progress">
+            <p class="help-block">Progress... {{ progress }}%</p>
+        </div>
+        <div class="form-group has-error" ng-show="error">
+          <p class="help-block">{{ error }}</p>
+        </div>
+        <div class="form-group has-success" ng-show="success">
+            <p class="help-block">{{ message }}</p>
+        </div>
+
+            <button class="btn btn-primary" type="submit" ng-disabled="form.$invalid">Save</button>
+        <button class="btn btn-primary" ng-click="cancelEdit()">Cancel</button>
+        </form>
+    </div>
+</div>

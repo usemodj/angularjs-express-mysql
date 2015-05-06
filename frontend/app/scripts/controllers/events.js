@@ -48,7 +48,7 @@ angular.module('frontendApp')
       });
       $timeout(function(){
         closeModals();
-      }, 15000);
+      }, 60000);
 
     });
 
@@ -58,7 +58,7 @@ angular.module('frontendApp')
       // you can change the title or display a warning dialog from here.
       // you can let them resume their session by calling Idle.watch()
       $scope.countdown = countdown;
-      console.log(countdown);
+      //console.log(countdown);
     });
 
     $scope.$on('IdleTimeout', function() {
@@ -73,10 +73,10 @@ angular.module('frontendApp')
         windowClass: 'modal-danger'
       });
       $scope.timedout.result.then(function(selectedItem){
-        console.log('model selectedItem');
+        //console.log('modal selectedItem');
       }, function(){
-        console.log('modal dismisssed');
-        //TODO: logout
+        //console.log('modal dismisssed');
+        //logout
         $scope.Auth.logout();
       });
     });
@@ -93,7 +93,7 @@ angular.module('frontendApp')
   }])
   .config(['IdleProvider', 'KeepaliveProvider', function(IdleProvider, KeepaliveProvider) {
     // configure Idle settings
-    IdleProvider.idle(30*60); // in seconds
+    IdleProvider.idle(40*60); // in seconds
     IdleProvider.timeout(60); // in seconds
     KeepaliveProvider.interval(2); // in seconds
   }])

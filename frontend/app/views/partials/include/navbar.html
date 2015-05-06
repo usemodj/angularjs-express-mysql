@@ -17,7 +17,9 @@
             </li>
             <li ng-class="{active:$state.includes('forums')}"><a ui-sref="forums.list" translate>Forums</a>
             </li>
-            <li access-level="accessLevels.user"ng-class="{active:$state.includes('orders')}"><a ui-sref="orders.list" translate>My Order</a>
+            <li access-level="accessLevels.user" ng-class="{active:$state.includes('supports')}"><a ui-sref="supports.list">Support</a>
+            </li>
+            <li access-level="accessLevels.user" ng-class="{active:$state.includes('orders')}"><a ui-sref="orders.list" translate>My Order</a>
             </li>
             <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.login" translate>Login</a>
             </li>
@@ -28,13 +30,14 @@
               <li class="dropdown">
                   <a data-toggle="dropdown">Welcome, {{ user.email }} <b class="caret"></b></a>
                   <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
-                      <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.orders.list"><span class="glyphicon glyphicon-shopping-cart"></span> Manage Orders</a> </li>
-                      <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.products.list"><span class="glyphicon glyphicon-th-large"></span> Manage Products</a> </li>
-                      <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.forums.list"><i class="fa fa-comment"></i> Manage Forums</a> </li>
-                      <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.users.list"><span class="fa fa-users"></span> Manage Users</a> </li>
-                      <li active-nav><a role="menuitem" ui-sref="user.password"><i class="fa fa-key"></i> Change Password</a></li>
-                      <li active-nav><a role="menuitem" ui-sref="user.profile"><i class="fa fa-user"></i> My Profile</a></li>
-                      <li role="presentation"><a role="menuitem" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                    <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.orders.list"><span class="glyphicon glyphicon-shopping-cart"></span> Manage Orders</a> </li>
+                    <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.products.list"><span class="glyphicon glyphicon-th-large"></span> Manage Products</a> </li>
+                    <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.forums.list"><i class="fa fa-comment"></i> Manage Forums</a> </li>
+                    <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.supports.list"><i class="fa fa-comment"></i> Manage Supports</a> </li>
+                    <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.users.list"><span class="fa fa-users"></span> Manage Users</a> </li>
+                    <li active-nav><a role="menuitem" ui-sref="user.password"><i class="fa fa-key"></i> Change Password</a></li>
+                    <li active-nav><a role="menuitem" ui-sref="user.profile"><i class="fa fa-user"></i> My Profile</a></li>
+                    <li role="presentation"><a role="menuitem" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                   </ul>
               </li>
           </ul>

@@ -1,5 +1,6 @@
 var crypto = require('crypto');
 var log = require('log4js').getLogger('User');
+accessLevels = require('../../frontend/app/scripts/common/routingConfig').accessLevels
 
 module.exports = function(orm, db) {
     var User = db.define('users', {
@@ -63,8 +64,8 @@ module.exports = function(orm, db) {
         }
 
     }, {
-        cache: false,
-        autoFetch: true,
+        //cache: false,
+        autoFetch: false,
         autoFetchLimit: 1,
         methods: {
             serialize: function() {
@@ -73,7 +74,7 @@ module.exports = function(orm, db) {
                     email: this.email,
                     profile_id: this.profile_id,
                     role: this.role,
-                    //profile: this.profile
+                    profile: this.profile
                 };
             },
             /**
@@ -81,10 +82,29 @@ module.exports = function(orm, db) {
              */
 
             authenticate: function(plainText) {
-                log.debug('>> plainText: '+ plainText);
-                log.debug('>> this.encrypted_password: '+ this.encrypted_password);
-                log.debug('>> this.encryptPassword(plainText): '+ this.encryptPassword(plainText));
+                //log.debug('>> plainText: '+ plainText);
+                //log.debug('>> this.encrypted_password: '+ this.encrypted_password);
+                //log.debug('>> this.encryptPassword(plainText): '+ this.encryptPassword(plainText));
                 return this.encryptPassword(plainText) === this.encrypted_password;
+            },
+
+            authorize: function( accessLevel){
+                if(typeof accessLevel === 'string'){
+                    accessLevel = accessLevels[accessLevel];
+                    //console.log(accessLevel)
+                }
+
+                if(this.role){
+                    return (accessLevel.bit_mask & this.role.bit_mask);
+                } else {
+                    this.getRole(function(err, role){
+                        if(err) {
+                            log.error(err);
+                            return false;
+                        }
+                        return (accessLevel.bit_mask & role.bit_mask);
+                    });
+                }
             },
 
             /**
@@ -138,8 +158,8 @@ module.exports = function(orm, db) {
 
     });
     // creates column 'customer_id' in 'users' table
-    //User.hasOne('role', db.models.roles);
-    //User.hasOne('profile', db.models.profiles);
+    User.hasOne('role', db.models.roles, {});
+    User.hasOne('profile', db.models.profiles,{});
 
     User.makeSalt = function() {
         return crypto.randomBytes(16).toString('hex');
@@ -219,7 +239,6 @@ module.exports = function(orm, db) {
             }
         });
     };
-
 
     //	Person.find({ surname: "Doe" }).limit(3).offset(2).only("name", "surname").run(function (err, people) {
     // finds people with surname='Doe', skips first 2 and limits to 3 elements,
