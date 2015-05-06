@@ -42,9 +42,9 @@
                 <tbody>
                 <tr ng-repeat="item in data.tickets">
                     <td>{{item.id}}</td>
-                    <td><a ui-sref="supports.view({id: item.id})">{{item.subject}}</a>
-                      <i ng-if="item.locked" class="fa fa-unlock-alt"></i><br/>
-                      <small><span class="btn btn-default btn-xs">Written by {{item.email}}</span> <span class="btn btn-default btn-xs">{{item.created_at}}</span></small></td>
+                    <td><a ui-sref="supports.view({id: item.id})">{{item.subject}}</a><br/>
+                      <small><span class="btn btn-default btn-xs">Written by {{item.email}}</span>
+                        <span class="btn btn-default btn-xs">{{item.created_at | date: 'yyyy-MM-dd HH:mm:ss'}} ({{item.created_at | relativeDate}})</span></small></td>
                     <td>{{item.status}}</td>
                     <td><small>{{item.last_replier}}({{item.last_replied_at | relativeDate}})</small><br/>
                       <span class="badge">Views: {{item.views}}</span> <span class="badge">Replies: {{item.replies}}</span>
