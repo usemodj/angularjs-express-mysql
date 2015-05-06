@@ -13,6 +13,7 @@ angular.module('frontendApp')
     $scope.data = {};
     $scope.conditions = {};
 
+    if(!$scope.Auth.authorize('user')) return $state.go('anon.login');
 
     $scope.pageChanged = function() {
       $scope.searchTickets();

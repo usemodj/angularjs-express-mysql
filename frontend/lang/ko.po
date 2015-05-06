@@ -16,6 +16,10 @@ msgid "Forums"
 msgstr "포럼"
 
 #: app/views/partials/include/navbar.html
+msgid "Support"
+msgstr "지원"
+
+#: app/views/partials/include/navbar.html
 msgid "Login"
 msgstr "로그인"
 

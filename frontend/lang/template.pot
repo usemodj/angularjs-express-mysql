@@ -5,21 +5,30 @@ msgstr ""
 "Project-Id-Version: \n"
 
 #: app/views/partials/include/navbar.html
+#: dist/views/partials/include/navbar.html
 msgid "Forums"
 msgstr ""
 
 #: app/views/partials/include/navbar.html
+#: dist/views/partials/include/navbar.html
 msgid "Login"
 msgstr ""
 
 #: app/views/partials/include/navbar.html
+#: dist/views/partials/include/navbar.html
 msgid "My Order"
 msgstr ""
 
 #: app/views/partials/include/navbar.html
+#: dist/views/partials/include/navbar.html
 msgid "News"
 msgstr ""
 
 #: app/views/partials/include/navbar.html
+#: dist/views/partials/include/navbar.html
 msgid "Signup"
+msgstr ""
+
+#: app/views/partials/include/navbar.html
+msgid "Support"
 msgstr ""

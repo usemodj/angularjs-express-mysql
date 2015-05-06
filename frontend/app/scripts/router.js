@@ -293,7 +293,10 @@ angular.module('frontendApp.router', ['ui.router'])
         .state('supports.list', {
           url: '',
           templateUrl: 'views/partials/supports/tickets.list.html',
-          controller: 'SupportCtrl'
+          controller: 'SupportCtrl',
+          data: {
+            access: access.public
+          }
         })
         .state('supports.new', {
           url: 'new',
