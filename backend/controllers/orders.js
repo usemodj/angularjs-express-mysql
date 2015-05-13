@@ -255,7 +255,6 @@ module.exports = {
 
     },
 
-    //TODO: debuging cart item list and function of button
     getCart: function(req, res, next) {
         var Order = req.models.orders;
         var LineItem = req.models.line_items;
@@ -694,6 +693,106 @@ module.exports = {
                 if(err) {
                     log.error(err);
                     return res.status(400).json(err);
+                }
+                res.status(200).json(order);
+            });
+        });
+    },
+
+    updatePayment: function(req, res, next) {
+        var Order = req.models.orders;
+        var Payment = req.models.payments;
+        var StateChange = req.models.state_changes;
+        var User = req.models.users;
+
+        //var ip = req.connection.remoteAddress;
+        var user = JSON.parse(req.cookies.user);
+        var body = req.body; //payment
+        log.debug(body);
+        User.one({email: user.email}, function(err, user) {
+            if (err || user == null) {
+                log.error('Login required!');
+                return res.status(401).send('Login required!');
+            }
+            async.waterfall([
+                function(callback) {
+                     Payment.one({order_id: body.order_id}, function (err, payment) {
+                        if (err || payment == null) {
+                           return callback(err);
+
+                        } else {
+                            payment.save({
+                                amount: body.amount,
+                                identifier: body.identifier,
+                                cvv_response_code: body.cvv_response_code,
+                                cvv_response_message: body.cvv_response_message
+                            }, function (err, payment) {
+                                if (err) return callback(err);
+                                callback(null, payment);
+                            });
+                        }
+                    });
+
+                },
+                function(payment, callback) {
+                    if(payment.cvv_response_code == '0000'){// payment success
+                      Order.get(payment.order_id, function(err, order){
+                          if(err) return callback(err);
+                          order.payment_state = 'paid';
+                          order.shipment_state = 'ready';
+                          order.save(function(err, order){
+                              if(err) return callback(err);
+                              return callback(null, order);
+                          });
+                      });
+                    } else {
+                        return callback(payment.cvv_response_message);
+                    }
+                },
+                function(order, callback) {
+                    log.debug(JSON.stringify(order));
+                    StateChange.create({
+                        created_at: new Date(),
+                        name: 'order',
+                        next_state: 'shipment',
+                        previous_state: 'paid',
+                        order_id: order.id,
+                        user_id: user.id
+                    }, function (err) {
+                        if(err) return callback(err);
+                        callback(null, order);
+                    });
+                },
+                function(order, callback){
+                    StateChange.create({
+                        created_at: new Date(),
+                        name: 'payment',
+                        next_state: 'paid',
+                        previous_state: 'balance_due',
+                        order_id: order.id,
+                        user_id: user.id
+                    }, function (err) {
+                        if(err) return callback(err);
+                        callback(null, order);
+                    });
+                },
+                function(order, callback){
+                    StateChange.create({
+                        created_at: new Date(),
+                        name: 'shipment',
+                        next_state: 'ready',
+                        previous_state: 'pending',
+                        order_id: order.id,
+                        user_id: user.id
+                    }, function (err) {
+                        if(err) return callback(err);
+                        callback(null, order);
+                    });
+                }
+            ], function(err, order){
+                if(err) {
+                    log.error(err);
+                    return res.status(500).json(err);
                 }
                 res.status(200).json(order);
             });

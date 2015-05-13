@@ -25,7 +25,7 @@ angular.module('frontendApp')
 
     $scope.getOrders();
   }])
-.controller('ViewOrderCtrl',['$scope','$state', '$stateParams', 'orders', function ($scope, $state, $stateParams, orders) {
+.controller('ViewOrderCtrl',['$scope','$state', '$stateParams', '$modal', '$window', 'orders', function ($scope, $state, $stateParams, $modal, $window, orders) {
     $scope.data = {};
 
     $scope.confirmOrder = function() {
@@ -41,5 +41,55 @@ angular.module('frontendApp')
         });
     };
 
+    $scope.payNow = function(form){
+      //console.log($scope.data.order);
+      var modalInstance = $modal.open({
+        templateUrl: 'views/partials/orders/orders.paygate.html',
+        controller: 'EditPaymentCtrl',
+        windowClass: 'center-modal',
+        resolve: {
+          order: function(){
+            return $scope.data.order;
+          }
+        }
+      });
+      modalInstance.result.then(function(editedPayment){
+        console.log(editedPayment);
+        updatePayment(editedPayment);
+      }, function(){
+        //console.log('cancel');
+
+        $state.go('orders.view',{id: $stateParams.id}, {reload: true});
+      });
+    };
+
+    var updatePayment = function(payment){
+
+      orders.updatePayment(payment, function(err, data){
+        if(err) $scope.error = err;
+        $state.go('orders.view',{id: $stateParams.id}, {reload: true});
+      });
+    };
+
     $scope.getOrder();
+}])
+.controller('EditPaymentCtrl', ['$scope', '$state', '$modalInstance', 'order', function ($scope, $state, $modalInstance, order) {
+  $scope.order = order;
+
+  $scope.save = function(){
+    $scope.payment = {
+      order_id: $scope.order.id,
+      amount: $scope.unitprice,
+      identifier: $scope.cardauthcode,
+      cvv_response_code: $scope.replycode,
+      cvv_response_message: $scope.replyMsg
+    };
+    $modalInstance.close($scope.payment);
+  };
+
+  $scope.cancel = function(){
+    $scope.payment = {};
+    $modalInstance.dismiss('cancel');
+  };
+
 }]);

@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/all.css" />
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+    <script language="javascript" type="text/javascript"
+            src="https://api.paygate.net/ajax/common/OpenPayAPI.js"></script>
   </head>
   <body ng-app="frontendApp" style="padding:0;margin:0;padding-top: 55px;">
     <div class="container" ng-controller="EventsCtrl" >
@@ -34,8 +36,8 @@
       <![endif]-->
 
       <!-- Add your site or application content here -->
-      <div ng-include="" src="'views/partials/include/navbar.html'"></div>
-      <div ui-view></div>
+      <div ui-view="navbar" ng-cloak=""></div>
+      <div ui-view="content"></div>
       <div ng-include="" src="'views/partials/include/footer.html'"></div>
       <div ng-include="" src="'views/partials/include/idle_dialog.html'"></div>
     </div>
@@ -69,6 +71,11 @@
     <script src="bower_components/angular-markdown-filter/markdown.js"></script>
     <script src="bower_components/angular-translate/angular-translate.js"></script>
     <script src="bower_components/angular-relative-date/angular-relative-date.js"></script>
+    <script src="bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js"></script>
+    <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+    <script src="bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+    <script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+    <script src="bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
     <!-- endbower -->
     <script src="bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
     <script src="bower_components/bootstrap-markdown/locale/bootstrap-markdown.kr.js"></script>
@@ -157,6 +164,8 @@
     <script src="scripts/controllers/support.js"></script>
     <script src="scripts/services/tickets.js"></script>
     <script src="scripts/controllers/admin/support.js"></script>
+    <script src="scripts/services/languages.js"></script>
+    <script src="scripts/controllers/language.js"></script>
     <!-- endbuild -->
 </body>
 </html>

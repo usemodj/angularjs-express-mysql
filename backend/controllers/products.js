@@ -371,6 +371,8 @@ module.exports = {
            //    meta_keywords: productData.meta_keywords
            //
            //};
+           delete productData.created_at;
+           delete productData.updated_at;
            product.save(productData, function(err, product){
                if(err) return res.status(500).json(err);
                log.debug('>> product data saved!');

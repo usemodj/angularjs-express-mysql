@@ -14,7 +14,7 @@
         <tbody>
         <tr ng-repeat="item in data.orders">
             <td class="col-md-2 text-center"><a ui-sref="orders.view({id:item.id})">{{item.number}}</a></td>
-            <td class="col-md-2 text-center">{{item.completed_at}}</a></td>
+            <td class="col-md-2 text-center">{{item.completed_at | date: 'yyyy-MM-dd hh:mm:ss'}}</a></td>
             <td class="col-md-2 text-center">{{item.state}}</td>
             <td class="col-md-2 text-center">{{item.payment_state}}</td>
             <td class="col-md-2 text-center">{{item.shipment_state}}</td>

@@ -1,0 +1,108 @@
+<div class="modal-header">
+  <label>Credit Card Payment</label>
+</div>
+<div class="modal-body">
+  <div id="PGIOscreen" class="text-center bg-info">Loading ... </div>
+
+  <form name="PGIOForm" class="form-group" id="paymentCtrl">
+    <input type="hidden" name="mid" value="domestic" /><!--Merchant ID-->
+    <input type="hidden" name="paymethod" value="100" /><!--Card Paymethod-->
+    <input type="hidden" name="charset" value="UTF-8" />
+    <div class="row">
+      <div class="col-md-3">Good Name</div>
+      <div class="col-md-8">
+          <input class="form-control" name="goodname" value="{{order.line_items[0].name}}" readonly/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2">Price</div>
+      <div class="col-md-6">
+          <input id="unitprice" class="form-control" name="unitprice" value="{{order.total}}" readonly/>
+      </div>
+      <div class="col-md-2">
+          <input class="form-control" size=10 name="goodcurrency" value="WON" readonly/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2">Name</div>
+      <div class="col-md-4">
+        <input class="form-control" name="receipttoname" value="{{order.bill_address.name}}" /><!--receipt name-->
+      </div>
+      <div class="col-md-1">Phone</div>
+      <div class="col-md-4">
+        <input class="form-control" name="receipttotel" value="{{order.bill_address.mobile}}" /><!--receipt phone-->
+      </div>
+    </div>
+    <div class="row">
+    <div class="col-md-2">Email</div>
+      <div class="col-md-8">
+        <input class="form-control" name="receipttoemail" value="{{currentUser.email}}" /><!-- receipt email-->
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">Approval No</div>
+      <div class="col-md-8">
+        <input id="cardauthcode" class="form-control" name="cardauthcode" value="" readonly/><!--Approval No-->
+      </div>
+      <div class="col-md-3">Payment Result</div>
+      <div class="col-md-8">
+        <input id="replycode" class="form-control" name="replycode" value=""  readonly/><!--Payment Result Code-->
+        <input id="replyMsg" class="form-control" name="replyMsg" value=""  readonly/><!--Payment Result Message-->
+      </div>
+    </div>
+    <input type="hidden" name="cardquota" value="" /><!--Card Quota-->
+    <input type="hidden" name="cardexpiremonth" /><!--Card Expiry month-->
+    <input type="hidden" name="cardexpireyear" /><!--Card Expiry year-->
+    <input type="hidden" name="cardsecretnumber" /><!--Card CVV2 value-->
+    <input type="hidden" name="cardownernumber" /><!--last 7 number of card owner SSN (for Korean user only)-->
+    <input type="hidden" name="cardtype" /><!--CardType-->
+    <input type="hidden" name="cardnumber" /><!--CardNumber-->
+  </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  function startPayment() {
+    doTransaction(document.PGIOForm);
+  }
+
+  function scopeApply(){
+    var scope = $('#paymentCtrl').scope();
+    scope.$apply(function(){
+      scope.unitprice = $('#unitprice').val();
+      scope.cardauthcode = $('#cardauthcode').val();
+      scope.replycode = $('#replycode').val();
+      scope.replyMsg = $('#replyMsg').val();
+   });
+  }
+
+  function getPGIOresult() {
+    verifyReceived(getPGIOElement('tid'),
+      'callbacksuccess', 'callbackfail');
+  }
+
+  function callbacksuccess() {
+    scopeApply();
+    var replycode = getPGIOElement('replycode')
+    if (replycode == '0000') {
+      // 거래성공 경우 for transaction success
+      //document.PGIOForm.action = 'shop.co.kr/pay/record_payment.jsp';
+      //document.PGIOForm.submit();
+      $('#paymentCtrl').scope().save();
+    } else {
+      // 거래실패 경우 for transaction failure
+      alert("결제가 실패했습니다. 다시 이용해 주세요");
+      //$('#paymentCtrl').scope().cancel();
+      $('#paymentCtrl').scope().save();
+    }
+  }
+
+  function callbackfail() {
+    // paygate system error
+    console.log('paygate system error!');
+  }
+
+  setTimeout( function(){startPayment()}, 2000);
+
+</script>

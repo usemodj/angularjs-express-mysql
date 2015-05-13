@@ -1,4 +1,4 @@
-<div role="navigation" style="z-index:3000" class="navbar navbar-default navbar-fixed-top" ng-controller="NavbarCtrl">
+<div role="navigation" style="z-index:3000" class="navbar navbar-default navbar-fixed-top">
   <div class="container">
       <div class="navbar-header">
           <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle">
@@ -11,24 +11,38 @@
       </div>
       <div class="collapse navbar-collapse pull-right">
           <ul class="nav navbar-nav">
-            <li ng-class="{active:$state.includes('products')}"><a ui-sref="products.list">Store</a>
+            <li ng-class="{active:$state.includes('products')}"><a ui-sref="products.list" translate="global.menu.store">Store</a>
             </li>
-            <li ng-class="{active:$state.includes('news')}"><a ui-sref="news.list" translate>News</a>
+            <li ng-class="{active:$state.includes('news')}"><a ui-sref="news.list" translate="global.menu.news">News</a>
             </li>
-            <li ng-class="{active:$state.includes('forums')}"><a ui-sref="forums.list" translate>Forums</a>
+            <li ng-class="{active:$state.includes('forums')}"><a ui-sref="forums.list" translate="global.menu.forums">Forums</a>
             </li>
-            <li ng-class="{active:$state.includes('supports')}"><a ui-sref="supports.list" translate>Support</a>
+            <li ng-class="{active:$state.includes('supports')}"><a ui-sref="supports.list" translate="global.menu.support">Support</a>
             </li>
-            <li access-level="accessLevels.user" ng-class="{active:$state.includes('orders')}"><a ui-sref="orders.list" translate>My Order</a>
+            <li access-level="accessLevels.user" ng-class="{active:$state.includes('orders')}"><a ui-sref="orders.list" translate="global.menu.my.order">My Order</a>
             </li>
-            <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.login" translate>Login</a>
+            <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.login" translate="global.menu.account.login">Login</a>
             </li>
-            <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.signup" translate>Signup</a>
+            <li access-level="accessLevels.anon" active-nav><a ui-sref="anon.signup" translate="global.menu.account.signup">Signup</a>
+            </li>
+            <li ui-sref-active="active" class="dropdown pointer" ng-controller="LanguageCtrl">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                <span>
+                    <span class="glyphicon glyphicon-flag"></span>
+                    <span class="hidden-tablet" translate="global.menu.language">Language</span>
+                    <b class="caret"></b>
+                </span>
+              </a>
+              <ul class="dropdown-menu">
+                <li active-menu="{{language}}" ng-repeat="language in languages">
+                  <a href="" ng-click="changeLanguage(language)">{{'language.' + language| translate}}</a>
+                </li>
+              </ul>
             </li>
           </ul>
           <ul style="z-index:100" class="nav navbar-nav navbar-right" access-level="accessLevels.user">
               <li class="dropdown">
-                  <a data-toggle="dropdown">Welcome, {{ user.email }} <b class="caret"></b></a>
+                  <a data-toggle="dropdown">{{ user.email }} <b class="caret"></b></a>
                   <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
                     <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.orders.list"><span class="glyphicon glyphicon-shopping-cart"></span> Manage Orders</a> </li>
                     <li access-level="accessLevels.admin" active-nav><a role="menuitem" ui-sref="admin.products.list"><span class="glyphicon glyphicon-th-large"></span> Manage Products</a> </li>
@@ -41,6 +55,7 @@
                   </ul>
               </li>
           </ul>
+
       </div>
       <!--/.navbar-collapse -->
   </div>

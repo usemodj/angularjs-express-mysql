@@ -1,6 +1,9 @@
 <div class="container">
     <h2>Order {{data.order.number}} <a ng-show="data.order.state == 'confirm'" ng-click="confirmOrder()" class="btn btn-primary" >
-      <span class="glyphicon glyphicon-ok"></span> Confirm </a></h2>
+      <span class="glyphicon glyphicon-ok"></span> Confirm </a>
+      <a ng-show="data.order.state == 'complete' && data.order.payment_state == 'balance_due' " ng-click="payNow()" class="btn btn-primary" >
+        <span class="glyphicon glyphicon-ok"></span> Pay Now </a>
+    </h2>
     <div class="row well">
       <div class="col-md-4">
         <label>Status</label><br/>

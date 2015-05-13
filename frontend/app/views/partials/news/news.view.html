@@ -16,7 +16,7 @@
         </div>
         <div class="panel panel-default">
             <div ng-show="data.article.img_url"><img width="100%" ng-src="{{data.article.img_url}}"></div>
-            <div>Written by {{data.article.user.email}} {{data.article.updated_at}}</div>
+            <div>Written by {{data.article.user.email}} {{data.article.created_at | date:'yyyy-MM-dd hh:mm:ss'}}</div>
             <div class="panel-body" ng-bind-html="data.article.content | markdown"></div>
             <div class="btn-group" ng-repeat="file in data.article.assets | orderBy:'position' ">
                 <a class="btn btn-default btn-sm" ng-href="/uploads/images/{{file.attachment_file_path}}" alt="{{file.attachment_file_name}}" target="attachment">

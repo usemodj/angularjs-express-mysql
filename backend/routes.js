@@ -246,6 +246,12 @@ var routes = [
         accessLevel: accessLevels.user
     },
     {
+        path: '/orders/update_payment',
+        httpMethod: 'POST',
+        middleware: [OrderCtrl.updatePayment],
+        accessLevel: accessLevels.user
+    },
+    {
         path: '/orders/confirm',
         httpMethod: 'POST',
         middleware: [OrderCtrl.confirmOrder],

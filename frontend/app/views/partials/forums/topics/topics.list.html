@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-xs-8 col-md-8">
             <h2>Topics List
@@ -7,29 +7,29 @@
         <div class="col-xs-4 col-md-4 text-center">
         </div>
     </div>
-    <div class="panel-body" >
+    <div class="col-md-12" >
         <form name="form" class="" role="form" ng-submit="searchTopics(form)">
             <div class="row">
-               <div class="form-group col-xs-2 col-md-2">
+               <div class="form-group col-md-3">
                     <label>Topic:</label><br/>
                     <input class="form-control" ng-model="conditions.name" placeholder="Name">
                 </div>
-                <div class="form-group col-xs-2 col-md-2">
+                <div class="form-group col-md-4">
                     <label>Written by:</label><br/>
                     <input class="form-control" ng-model="conditions.email" placeholder="Email">
                 </div>
-                <div class="form-group col-xs-2 col-md-2">
+                <div class="form-group col-md-3">
                     <label><br/>
                         <input type="checkbox" ng-model="conditions.locked"> Only Show Locked
                     </label>
                 </div>
-                <div class="col-xs-2 col-md-2">
+                <div class="col-md-2">
                     <br>
                     <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> Search</button>
                 </div>
             </div>
         </form>
-        <br/>
+
         <div class="row">
             <div class="col-md-12 text-left">
                 <span class="badge"><a class="btn btn-default btn-xs" ui-sref="forums.list">Forums List</a></span> &gt;
@@ -67,7 +67,7 @@
                     <td class="info">{{item.id}}</td>
                     <td><small>Sticky:</small> <a ui-sref="forums.topics.view({forum_id: item.forum_id, id: item.id})">{{item.name}}</a>
                       <i ng-if="item.locked" class="fa fa-unlock-alt"></i><br/>
-                      <small><span class="badge">Written by {{item.email}}</span> <span class="badge">{{item.created_at}}</span></small></td>
+                      <small><span class="badge">Written by {{item.email}}</span> <span class="badge">{{item.created_at | date:'yyyy-MM-dd hh:mm:ss'}}</span></small></td>
                     <td><span class="badge">Views: {{item.views}}</span>, <span class="badge">Replies: {{item.replies}}</span><br/>
                       <small>Last: {{item.last_post}}</small></td>
                     <td class="text-center">
@@ -80,7 +80,7 @@
                     <td>{{item.id}}</td>
                     <td><a ui-sref="forums.topics.view({forum_id: item.forum_id, id: item.id})">{{item.name}}</a>
                       <i ng-if="item.locked" class="fa fa-unlock-alt"></i><br/>
-                      <small><span class="btn btn-default btn-xs">Written by {{item.email}}</span> <span class="btn btn-default btn-xs">{{item.created_at}}</span></small></td>
+                      <small><span class="btn btn-default btn-xs">Written by {{item.email}}</span> <span class="btn btn-default btn-xs">{{item.created_at | date:'yyyy-MM-dd hh:mm:ss'}}</span></small></td>
                     <td><span class="badge">Views: {{item.views}}</span> <span class="badge">Replies: {{item.replies}}</span><br/>
                       <small>Last: {{item.last_post}}</small></td>
                     <td class="text-center">

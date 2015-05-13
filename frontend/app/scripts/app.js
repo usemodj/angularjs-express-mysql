@@ -1,20 +1,20 @@
 'use strict';
 
 angular.module('frontendApp',
-	['ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.bootstrap','ui.select2','ui.sortable','ui.tree',
-     'frontendApp.router', 'ngFileUpload', 'gettext', 'ngClipboard','markdown','angularTreeview','ngIdle','relativeDate'])
-    .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', '$logProvider','ngClipProvider',
-        function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $logProvider, ngClipProvider) {
+	['LocalStorageModule','ngCookies', 'ngResource', 'ngSanitize', 'ui.router', 'ui.bootstrap','ui.select2','ui.sortable','ui.tree', 'pascalprecht.translate', 'tmh.dynamicLocale',
+     'frontendApp.router', 'ngFileUpload', 'ngClipboard','markdown','angularTreeview','ngIdle','relativeDate'])
+    .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', '$logProvider','ngClipProvider','$translateProvider', 'tmhDynamicLocaleProvider',
+        function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $logProvider, ngClipProvider, $translateProvider, tmhDynamicLocaleProvider) {
             $logProvider.debugEnabled = true;
             ngClipProvider.setPath("bower_components/zeroclipboard/dist/ZeroClipboard.swf");
-//>>> IE browser cache problem >>>
+          //>>> IE browser cache problem >>>
           $httpProvider.defaults.cache = false;
           if (!$httpProvider.defaults.headers.get) {
             $httpProvider.defaults.headers.get = {};
           }
           // disable IE ajax request caching
           $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
-//<<<
+          //<<<
             // For Access-Control-Allow-Origin and Set-Cookie header
             // $httpProvider.defaults.useXDomain = true;
             // $httpProvider.defaults.withCredentials = true;
@@ -84,10 +84,24 @@ angular.module('frontendApp',
             }];
 
             $httpProvider.interceptors.push(interceptor);
+            // Initialize angular-translate
+            $translateProvider.useLoader('$translatePartialLoader', {
+              urlTemplate: 'i18n/{lang}/{part}.json'
+            });
+
+            $translateProvider.preferredLanguage('en');
+            //$translateProvider.useCookieStorage();
+            $translateProvider.useLocalStorage();
+            // two options are available: null (nothing) and 'escaped' (for HTML).
+            $translateProvider.useSanitizeValueStrategy(null);
+
+            tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js');
+            tmhDynamicLocaleProvider.useCookieStorage('NG_TRANSLATE_LANG_KEY');
+
         }
     ])
-    .run(['$rootScope', '$state','$stateParams', 'AuthFactory','gettextCatalog', '$http','$cookies', '$location', 'redirects',
-        function ($rootScope, $state, $stateParams, AuthFactory,gettextCatalog, $http, $cookies, $location, redirects) {
+    .run(['$rootScope', '$state','$stateParams', 'AuthFactory', '$http','$cookies', '$location', 'redirects','$translate','languages',
+        function ($rootScope, $state, $stateParams, AuthFactory, $http, $cookies, $location, redirects, $translate, languages) {
         // It's very handy to add references to $state and $stateParams to the $rootScope
         // so that you can access them from any scope within your applications.For example,
         // <li ng-class="{ active: $state.includes('contacts.list') }"> will set the <li>
@@ -99,16 +113,22 @@ angular.module('frontendApp',
         //$http.defaults.headers.post['X-XSRF-TOKEN'] = $cookies['XSRF-TOKEN'];
         //$http.defaults.headers.post['_csrf'] = $cookies._csrf;
 
-        gettextCatalog.currentLanguage = settings.gettext.language;
-        gettextCatalog.debug = settings.gettext.debug;
+        //gettextCatalog.currentLanguage = settings.gettext.language;
+        //gettextCatalog.debug = settings.gettext.debug;
 
         $rootScope.$on('$stateChangeError',
           function (event, toState, toParams, fromState, fromParams, error) {
             console.log('$stateChangeError', event, toState, toParams, fromState, fromParams, error);
           });
         $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
+            // Update the language
+            languages.getCurrent().then(function (language) {
+              //console.log(language);
+              $translate.use(language);
+            });
+
             //console.log('>>location: '+ $location.path());
-            if($location.path() != '/login/') redirects.setRedirectURL($location.path());
+            if($location.path().indexOf('/login') === -1) redirects.setRedirectURL($location.path());
             if (!AuthFactory.authorize(toState.data.access)) {
                 $rootScope.error = "You tried accessing a route you don't have access to...";
                 event.preventDefault();

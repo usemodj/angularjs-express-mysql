@@ -1,4 +1,4 @@
-﻿<div class="container">
+﻿<div class="container-fluid">
     <a ui-sref="forums.list">Forums List</a> &gt;
     <ul style="display: inline-block;" class="list-inline pills" ng-repeat="item in data.forums">
       <li ng-if="!$last"><a ui-sref="forums.topics.list({forum_id: item.id})">{{item.name}}</a> &gt;</li>
@@ -6,11 +6,11 @@
     </ul>
     <div class="row">
         <div class="col-md-10 col-md-offset-1 text-right">
-            <span class="badge"><a class=" btn btn-default" ui-sref="forums.topics.list({forum_id: $stateParams.forum_id})"><i class="fa fa-arrow-left"></i> Back </a></span>
+            <span class="badge"><a class=" btn btn-default btn-xs" ui-sref="forums.topics.list({forum_id: $stateParams.forum_id})"><i class="fa fa-arrow-left"></i> Back </a></span>
             <span class="badge" style="color:#666666;"><a ng-show="currentUser.email == data.topic.email || Auth.authorize('editor')" ng-confirm-click="Are you sure?" ng-click="delete(data.topic)"
-                                   class="btn btn-default" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required!"><i class="glyphicon glyphicon-remove"></i> Delete Topic </a></span>
+                                   class="btn btn-default btn-xs" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required!"><i class="glyphicon glyphicon-remove"></i> Delete Topic </a></span>
             <span class="badge" style="color:#666666;"><a ng-hide="data.forums[data.forums.length-1].locked && !Auth.authorize('editor')" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Login Required!"
-                                   class=" btn btn-default" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})"><i class="fa fa-edit"></i> New Topic</a></span>
+                                   class=" btn btn-default btn-xs" ui-sref="forums.topics.new({forum_id: $stateParams.forum_id})"><i class="fa fa-edit"></i> New Topic</a></span>
         </div>
     </div>
 
@@ -19,7 +19,7 @@
     </div>
     <div class="panel panel-default col-md-10 col-md-offset-1" ng-repeat="item in data.posts">
         <div class="panel-heading">{{item.name}}</div>
-        <div>Written by {{item.user.email}} {{item.updated_at}}</div>
+        <div>Written by {{item.user.email}} {{item.updated_at | date:'yyyy-MM-dd hh:mm:ss'}}</div>
         <div class="panel-body" ng-bind-html="item.content | markdown"></div>
         <div class="btn-group" ng-repeat="file in item.assets | orderBy:'position' ">
             <a class="btn btn-default btn-sm" ng-href="/uploads/images/{{file.attachment_file_path}}" alt="{{file.attachment_file_name}}" target="attachment">

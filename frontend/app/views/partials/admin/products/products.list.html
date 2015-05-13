@@ -47,8 +47,8 @@
                 <td>{{item.sku}}</td>
                 <td><a ui-sref="admin.products.edit({id: item.id})" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Edit">{{item.name}}</a></td>
                 <td>{{item.price}}</td>
-                <td>{{item.available_on}}</td>
-                <td>{{item.deleted_at}}</td>
+                <td>{{item.available_on | date:'yyyy-MM-dd hh:mm:ss'}}</td>
+                <td>{{item.deleted_at | date:'yyyy-MM-dd hh:mm:ss'}}</td>
                 <td class="text-center">
                     <a ui-sref="admin.products.edit({id: item.id})" class="btn btn-xs btn-primary" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                     <a ui-sref="admin.products.clone({id: item.id})" class="btn btn-xs btn-primary" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Clone"><span class="glyphicon glyphicon-file"></span></a>

@@ -83,8 +83,8 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="item in data.orders">
-                        <td>{{item.completed_at}}</td>
-                        <td><a ui-sref="admin.orders.edit({id: item.id})">{{item.number}}</a></td>
+                        <td>{{item.completed_at | date: 'yyyy-MM-dd hh:mm:ss'}} </td>
+                        <td><a ui-sref="admin.orders.edit({id: item.id})">{{item.number}}</a> ({{item.completed_at | relativeDate}})</td>
                         <td>{{item.state}}</td>
                         <td>{{item.payment_state}}</td>
                         <td>{{item.shipment_state}}</td>

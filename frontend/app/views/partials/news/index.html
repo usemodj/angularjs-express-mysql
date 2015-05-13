@@ -38,7 +38,7 @@
                 <div class="panel-thumbnail"><a ng-show="article.img_url" ui-sref="news.view({id: article.id})"><img width="100%" ng-src="{{article.img_url}}" class="img-responsive"></a></div>
                 <div class="panel-body">
                   <p class="lead"><a ui-sref="news.view({id: article.id})">{{article.name}}</a></p>
-                  <p>{{article.created_at}}</p>
+                  <p>{{article.created_at | date:'yyyy-MM-dd hh:mm:ss'}}</p>
                   <p>{{article.summary}}</p>
 
                   <p>

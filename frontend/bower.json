@@ -29,7 +29,13 @@
     "angular-markdown-filter": "^1.2.0",
     "angular-treeview": "*",
     "ng-idle": "^1.0.4",
-    "angular-relative-date": "~1.0.0"
+    "angular-relative-date": "~1.0.0",
+    "angular-dynamic-locale": "~0.1.27",
+    "angular-translate": "~2.7.0",
+    "angular-local-storage": "~0.2.0",
+    "angular-translate-loader-partial": "~2.7.0",
+    "angular-translate-storage-cookie": "~2.7.0",
+    "angular-translate-storage-local": "~2.7.0"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0",

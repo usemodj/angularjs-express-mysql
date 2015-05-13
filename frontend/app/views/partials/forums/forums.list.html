@@ -42,7 +42,7 @@
                         <td class="col-md-8"><a ui-sref="forums.topics.list({forum_id: item.id})" >{{"&nbsp;&nbsp;&nbsp;".repeat(item.level)}}{{item.name}}</a> <i ng-if="item.locked" class="fa fa-thumb-tack"></i> <br/>
                           <small>{{item.description}}</small></td>
                         <td class="col-md-5"><small><span class="badge">Topics: {{item.topic_count}}</span> <span class="badge">Posts: {{item.post_count}}</span><br/>
-                            <span class="btn btn-default btn-xs">Updated at: {{item.updated_at}}</span></small></td>
+                            <span class="btn btn-default btn-xs">Updated at: {{item.updated_at | date:'yyyy-MM-dd hh:mm:ss'}}</span></small></td>
                      </tr>
                     </tbody>
                 </table>
