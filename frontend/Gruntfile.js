@@ -389,7 +389,8 @@ module.exports = function (grunt) {
             'images/**/*.{webp}',
             'fonts/*',
             'uploads/**',
-            'bower_components/**'
+            'bower_components/**',
+            'i18n/**'
           ]
         }, {
           expand: true,
