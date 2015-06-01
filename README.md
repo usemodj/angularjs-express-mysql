@@ -23,6 +23,19 @@ $ frontend> bower install
 $ frontend> mkdir app/uploads
 ```
 
+- Setting site info:
+```
+$ frontend> vi app/scripts/common/settings.js
+```
+
+- Paygate Card Payment Infomation:
+```
+$ frontend> vi app/views/partials/orders/orders.paygate.html
+
+ <input type="hidden" name="mid" value="CHANGE_TO_PAYGATE_MERCHANT_ID" /><!--Merchant ID-->
+
+```
+
 ## Run server to backgroud
 - Create database:
 ```
@@ -55,6 +68,9 @@ $ frontend> grunt build
 $ frontend> mkdir dist/uploads
 
 $ backend> NODE_ENV=production pm2 start ./bin/forever
+$ backend> NODE_ENV=production pm2 list
+$ backend> NODE_ENV=production pm2 stop forever
+
 ```
 
 ## Login web server
@@ -64,6 +80,11 @@ URL:  http://localhost:3000
 Login Email: admin@example.com
 Login Password: admin
 ```
+
+## Demo Site
+
+[nodesoft.co.kr](http://nodesoft.co.kr)
+
 
 ---------------------
 On Windows:
