@@ -37,7 +37,7 @@ module.exports = function(orm, db) {
 
     }, {
         //cache: false,
-        autoFetch: true,
+        autoFetch: false,
         autoFetchLimit: 1,
         methods: {
         },

@@ -6,8 +6,30 @@ var async = require('async');
 var gm = require('gm');
 var mv = require('mv');
 var settings = require('../config/settings');
-
+var markdown = require('markdown').markdown;
 var uploadPath = path.join(settings.upload_path, 'images/');
+
+function sendFeedbackMail(from, to, subject, content, link, transport, callback){
+    content += '\n\n['+ subject +']('+ link +')\n';
+    var message = {};
+    message.from = from;
+    message.to = to;
+    message.subject = subject;
+    message.html = markdown.toHTML(content);
+    log.debug(message);
+    transport.sendMail(message, function (err) {
+        if (err) {
+            log.error(err.message);
+            return callback(err);
+        }
+        log.info('Feedback Mail sent successfully!');
+        //log.debug(message);
+        // if you don't want to use this transport object anymore, uncomment following line
+        //transport.close(); // close the connection pool
+        return callback(null, message);
+    });
+
+};
 
 module.exports = {
     //public index
@@ -549,7 +571,7 @@ module.exports = {
                             ticket.last_replier_id= message2.user_id;
 
                             ticket.save(function(err){
-                                return callback(null, message2);
+                                return callback(null, ticket, message2);
                             });
                         });
 
@@ -557,7 +579,7 @@ module.exports = {
 
                 },
 
-                function(message, callback) {
+                function(ticket, message, callback) {
                     if(!Array.isArray(files)){
                         files = (files)? [files]: [];
                     }
@@ -640,8 +662,24 @@ module.exports = {
                         });
                     }, function(err){
                         if(err) log.error(err);
-                        return callback(null, message);
+                        return callback(null, ticket, message);
                     });
+                },
+                function(ticket, message, callback){ //send e-mail
+                    if(ticket.status == 'feedback'){
+                        ticket.getUser(function(err, user){
+                            if(err) return callback(null, message);
+                            //to: user.email
+                            //ticket.subject
+                            //message.content
+                            var link = settings.site_url + '/#/supports/' + ticket.id;
+                            sendFeedbackMail(settings.postmailer, user.email, ticket.subject, message.content, link, req.transport, function(err){
+                                return callback(null, message);
+                            });
+                        });
+                    } else {
+                        return callback(null, message);
+                    }
                 }
             ], function(err, results){
                 if(err) {

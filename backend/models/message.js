@@ -53,6 +53,7 @@ module.exports = function(orm, db) {
         }
 
     });
+    Message.hasOne('user', db.models.users, { });
     // creates column 'ticket_id' in 'messages' table
     Message.hasOne('ticket', db.models.tickets, { reverse:'messages', cascadeRemove:true });
 
