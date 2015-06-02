@@ -1,4 +1,5 @@
-async = require("async");
+var async = require("async");
+var log = require('log4js').getLogger('users');
 /*
  Person.count({ surname: "Doe" }, function (err, count) {
  console.log("We have %d Does in our db", count);
@@ -170,8 +171,8 @@ module.exports = {
             if (err) return next(err);
             req.models.roles.get(user.role_id, function(err, role){
                 user.role = role;
-                console.log('>>get /users/' + req.params.id);
-                console.log(JSON.stringify(user));
+                log.debug('>>get /users/' + req.params.id);
+                log.debug(JSON.stringify(user));
                 res.status(200).json(user);
             });
         });
@@ -198,18 +199,21 @@ module.exports = {
                 role_id: role.id
             }, function(err, user) {
                 if (err) {
-                    console.log('>> User.create err: ');
-                    console.log(err);
+                    log.error('>> User.create err: ');
+                    log.error(err);
                     return res.status(500).json( err);
                 }
-                user.encrypted_password = user.encryptPassword(password);
-                user.save( function(err) {
+                user.save({
+                    encrypted_password: user.encryptPassword(password),
+                    updated_at: new Date()
+                }, function(err, user) {
                     if (err) {
                         user.remove(function(err) {
-                            console.log("removed!");
+                            log.error("removed!");
                         });
                         return res.status(500).json(err);
                     }
+                    //log.debug(JSON.stringify(user));
                     Role.get(user.role_id, function(err, role){
                         if(err) throw err;
 
@@ -236,7 +240,7 @@ module.exports = {
         var retype_password = req.body.retype_password;
         var email = req.body.email;
 
-        console.log('>>changePassword req.body:'+JSON.stringify(req.body));
+        log.debug('>>changePassword req.body:'+JSON.stringify(req.body));
         req.models.users.findOne({
             email: email,
             password: password
@@ -267,7 +271,7 @@ module.exports = {
         var roleId = req.body.role_id;
         var active = req.body.active;
         var id = req.params.id;
-        console.log('>> changeRole req.body:'+ JSON.stringify(req.body));
+        log.debug('>> changeRole req.body:'+ JSON.stringify(req.body));
         req.models.users.get(id, function(err, user){
             req.models.roles.get(roleId, function(err, role){
                 user.role = role;
@@ -275,11 +279,11 @@ module.exports = {
                 user.active = active;
                 user.save(function(err) {
                     if (!err) {
-                        console.log('Role is updated!');
-                        console.log('>>changeRole user:'+ JSON.stringify(user));
+                        log.debug('Role is updated!');
+                        log.debug('>>changeRole user:'+ JSON.stringify(user));
                         return res.status(200).json('Role is updated!');
                     } else {
-                        console.log(err);
+                        log.error(err);
                         return res.status(500).json(err);
                     }
                 });

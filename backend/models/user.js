@@ -64,7 +64,7 @@ module.exports = function(orm, db) {
         }
 
     }, {
-        //cache: false,
+        cache: false,
         autoFetch: false,
         autoFetchLimit: 1,
         methods: {
@@ -85,6 +85,8 @@ module.exports = function(orm, db) {
                 //log.debug('>> plainText: '+ plainText);
                 //log.debug('>> this.encrypted_password: '+ this.encrypted_password);
                 //log.debug('>> this.encryptPassword(plainText): '+ this.encryptPassword(plainText));
+                //log.debug(JSON.stringify(this));
+
                 return this.encryptPassword(plainText) === this.encrypted_password;
             },
 
@@ -200,6 +202,7 @@ module.exports = function(orm, db) {
             if (err) {
                 callback(err);
             } else {
+                //log.debug('>> person: '+ JSON.stringify(person));
                 //console.log('>> user.password: '+ user.password);
                 //console.log('>> person.encrypted_password: '+ person.encrypted_password);
                 //console.log('>> person.encryptPassword(user.password): '+ person.encryptPassword(user.password));
@@ -209,7 +212,7 @@ module.exports = function(orm, db) {
                 } else {
                     var errors = [{
                         property: 'encrypted_password',
-                        msg: 'Password is incorrect.',
+                        msg: 'Password is incorrect!',
                         value: user.password
                     }];
                     callback(errors);

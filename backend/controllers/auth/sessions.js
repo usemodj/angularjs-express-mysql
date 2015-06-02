@@ -33,7 +33,7 @@ module.exports = {
                 last_sign_in_ip: user.current_sign_in_ip,
                 last_sign_in_at: user.current_sign_in_at
             }, function(err) {
-                console.log(err);
+                log.error(err);
                 if (err) return next(err);
             });
 
