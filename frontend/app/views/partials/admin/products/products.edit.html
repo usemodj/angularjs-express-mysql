@@ -78,7 +78,7 @@
                                    <div class="form-group" ng-class="{'has-error': myform.deleted_at.$invalid}">
                                      <label>Deleted At:</label>
                                      <input class="form-control" placeholder="yyyy-mm-dd" type="text"  name="deleted_at" ng-model="currentProduct.deleted_at" jqdatepicker/>
-                                     <p class="error" ng-show="myform.available_on.$error.date">Not valid date!</p>
+                                     <p class="error" ng-show="myform.deleted_at.$error.date">Not valid date!</p>
                                    </div>
                                 </div>
                                 <div class="row">
@@ -107,7 +107,7 @@
                                     </div>
                                     <div class="form-group col-xs-6 col-md-6" ng-class="{'has-error': myform.depth.$invalid}">
                                         <label>Depth:</label>
-                                        <input class="form-control" type="number" min="0" name="depth" ng-model="currentProduct.variant.depth"/>
+                                        <input class="form-control" type="number" step="0.01" min="0" name="depth" ng-model="currentProduct.variant.depth"/>
                                         <p class="error" ng-show="myform.depth.$error.number">Not valid number!</p>
                                     </div>
                                 </div>

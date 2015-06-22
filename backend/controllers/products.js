@@ -122,6 +122,7 @@ req.db.
 var log = require('log4js').getLogger('products');
 var markdown = require('markdown').markdown;
 var _ = require('underscore');
+var async = require('async');
 
 module.exports = {
 

@@ -33,7 +33,7 @@
 
   <div class="row">
       <div ng-repeat="article in data.articles">
-        <div class="col-sm-4 col-xs-6">
+        <div class="col-sm-4 col-xs-12">
               <div class="panel panel-default">
                 <div class="panel-thumbnail"><a ng-show="article.img_url" ui-sref="news.view({id: article.id})"><img width="100%" ng-src="{{article.img_url}}" class="img-responsive"></a></div>
                 <div class="panel-body">
