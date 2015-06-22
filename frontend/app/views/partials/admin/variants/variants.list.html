@@ -11,7 +11,7 @@
     <form name="myform" class="form-inline" role="form" ng-submit="createVariant(myform)">
         <div class="row">
             <div class="form-group col-xs-6 col-md-6">
-                <div ng-hide="data.product.option_types">
+                <div ng-show="data.product.option_types == null || data.product.option_types.length == 0">
                   <label>Option Type *:</label>
                   <a class="form-control btn btn-primary" ui-sref="admin.products.edit({id: $stateParams.product_id})" target="product"> Select Option Types of the Product ...</a>
                 </div>
