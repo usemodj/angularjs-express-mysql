@@ -24,26 +24,17 @@ angular.module('frontendApp')
 
         $scope.sortableOptions = {
             change: function(e, ui) {
-                //console.log("change");
-                //console.log(ui);
                 var entry = $scope.data.variants.map(function(item){
                     return item.id;
                 }).join(',');
                 beforeSort = entry;
-                //console.log('>>beforeSort:'+beforeSort);
-
             },
             // called after a node is dropped
             stop: function(e, ui) {
-                //console.log("stop");
-
                 var entry = $scope.data.variants.map(function(item){
                     return item.id;
                 }).join(',');
                 sorted = entry != beforeSort;
-                //console.log('>>beforeSort:'+ beforeSort);
-                //console.log('>>entry:'+ entry);
-                //console.log('>>sorted:'+ sorted);
                 // IF sorted == true, updatePosition()
                 if(sorted){
                     $scope.updatePosition(entry);
