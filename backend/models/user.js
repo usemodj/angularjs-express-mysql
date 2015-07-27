@@ -1,8 +1,11 @@
 var crypto = require('crypto');
 var log = require('log4js').getLogger('User');
-accessLevels = require('../../frontend/app/scripts/common/routingConfig').accessLevels
+var accessLevels = require('../../frontend/app/scripts/common/routingConfig').accessLevels
+//var Q = require('q');
+var deasync = require('deasync');
 
 module.exports = function(orm, db) {
+
     var User = db.define('users', {
 
         email: {
@@ -65,7 +68,7 @@ module.exports = function(orm, db) {
 
     }, {
         cache: false,
-        autoFetch: false,
+        autoFetch: true,
         autoFetchLimit: 1,
         methods: {
             serialize: function() {
@@ -99,14 +102,24 @@ module.exports = function(orm, db) {
                 if(this.role){
                     return (accessLevel.bit_mask & this.role.bit_mask);
                 } else {
-                    this.getRole(function(err, role){
-                        if(err) {
+                    log.info('>>email:' +this.email);
+                    log.info(this.role_id);
+                    var Role = db.models.roles;
+                    var access;
+                    Role.get(this.role_id, function (err, role) {
+                    //this.getRole(function (err, role) {
+                        if (err) {
                             log.error(err);
-                            return false;
+                            access = false;
+                        } else {
+                            access = (accessLevel.bit_mask & role.bit_mask);
                         }
-                        return (accessLevel.bit_mask & role.bit_mask);
+
                     });
-                }
+                    while( access === undefined)
+                        deasync.runLoopOnce();
+                    return access;
+               }
             },
 
             /**

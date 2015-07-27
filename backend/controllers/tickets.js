@@ -333,11 +333,11 @@ module.exports = {
         var User = req.models.users;
         var Asset = req.models.assets;
 
-        var user = JSON.parse(req.cookies.user);
+        var userData = JSON.parse(req.cookies.user);
         var ticket_id = req.params.id;
 
-        log.debug(req.body);
-        User.one({email: user.email}, function(err, user) {
+        //log.debug(req.body);
+        User.one({email: userData.email}, function(err, user) {
             if (err || user == null) {
                 log.error('Login required!');
                 return res.status(401).send(new Error('Login required!'));
@@ -345,8 +345,8 @@ module.exports = {
 
             Ticket.get(ticket_id, function (err, ticket) {
                 if (err) return res.status(500).send(err);
-
-                //log.debug('>>ticket.user_id: '+ ticket.user_id + ' == user.id:'+ user.id);
+                log.debug(JSON.stringify(user));
+                log.debug('>> User.authorize(user, editor):' + JSON.stringify(user.authorize('editor')));
                 if(ticket.user_id != user.id && !user.authorize('editor')) return  res.status(500).json('It is not allowed to you!');
 
                 ticket.save({views: ticket.views + 1, updated_at: ticket.updated_at}, function (err) {
