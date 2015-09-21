@@ -110,34 +110,6 @@ Browser connection
  http://localhost:9000
 
 
----------------
-ref. Yeoman + Express + Angular = Full-Stack Workflow
-	http://blog.omkarpatil.com/
-
-The process is quite simple and involves generating an application using Yeoman Angular generator in the usual manner and then a little modification of Gruntfile.js. Here are the steps - 
-
-1. Create an Angular application using Yeoman Angular generator in usual way.
-
-2. Install express, grunt-contrib-watch and grunt-express-server using npm install and use the save flags as shown below so that the package.json file is updated automatically.
-
-```
-npm install express --save
-npm install grunt-contrib-watch --save-dev
-npm install grunt-express-server --save-dev
-```
-
-3. Uninstall grunt-contrib-livereload, grunt-regarde and grunt-contrib-connect using npm uninstall. These are not needed anymore and the plugins installed in previous step will provide the necessary functionality.
-
-```
-npm uninstall grunt-contrib-livereload --save-dev
-npm uninstall grunt-regarde --save-dev
-npm uninstall grunt-contrib-connect --save-dev
-```
-
-4. Now comes the modification of Gruntfile.js file. You'll need to remove configuration related to the plugins mentioned in the previous step and add configuration for plugins added in step 1. You can find the exact changes in the embedded gist by doing a diff between revisions.
-
-5. Add an Express server at the root of the directory. You can take server.js from the gist and build upon it. 	
-
 
 ---------------
 ## Yeoman AngularJS Generator
