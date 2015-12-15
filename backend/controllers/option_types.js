@@ -50,20 +50,20 @@ module.exports = {
         var OptionValue = req.models.option_values;
 
         OptionType.get(id, function(err, optionType){
-            console.log('>> optionType:'+ JSON.stringify(optionType));
+            log.debug('>> optionType:'+ JSON.stringify(optionType));
             //if(!optionType.optionValues) optionType.optionValues = [];
 
             async.eachSeries(optionType.optionValues, function(value, callback){
                 OptionValue.get(value.id, function(err, optionValue){
                     optionValue.remove(function(err){
-                       console.log('>> Option value removed!');
+                       log.debug('>> Option value removed!');
                        callback();
                     });
                 });
             }, function(err){
                 if(err) return next(err);
                 optionType.remove(function(err){
-                    console.log('>> Option type removed!');
+                    log.debug('>> Option type removed!');
                     res.status(200).json('Option type removed!');
                 });
             });
@@ -82,7 +82,7 @@ module.exports = {
     },
 
     updatePosition: function(req, res, next){
-        console.log(req.body);
+        log.debug(req.body);
         var entry = req.body.entry;
         var ids = [];
         if(entry) ids = entry.split(',');
@@ -96,7 +96,7 @@ module.exports = {
                 //optionType.position = i++;
                 optionType.save({id:optionType.id, position: i++}, function(err){
                     if(err) return next(err);
-                    console.log('OptionType updated!');
+                    log.debug('OptionType updated!');
                     callback();
                 });
             })

@@ -1,6 +1,9 @@
+var async = require('async');
+var log = require('log4js').getLogger('option_types');
+
 module.exports = {
     updatePosition: function(req, res, next){
-        console.log(req.body);
+        log.debug(req.body);
         var entry = req.body.entry;
         var ids = [];
         if(entry) ids = entry.split(',');
@@ -14,7 +17,7 @@ module.exports = {
                 //optionValue.position = i++;
                 optionValue.save({id:optionValue.id, position: i++}, function(err){
                     if(err) return next(err);
-                    console.log('>> OptionValue updated!');
+                    log.debug('>> OptionValue updated!');
                     callback();
                 });
             })
@@ -29,7 +32,7 @@ module.exports = {
         var OptionValue = req.models.option_values;
         OptionValue.get(id, function(err, optionValue){
            optionValue.remove(function(err){
-              console.log('>> Option value removed!');
+               log.debug('>> Option value removed!');
               res.status(200).json('Option value removed!');
            });
         });
@@ -38,14 +41,14 @@ module.exports = {
     changeOptionValues: function(req, res, next){
         var optionType = req.body;
         var optionValues = optionType.option_values;
-        console.log(optionType);
+        log.debug(optionType);
         var OptionValue = req.models.option_values;
         var updateOptionValue = function(optionValue, optionTypeId, position, callback){
             OptionValue.get(optionValue.id, function(err, data){
                 data.save({id:data.id, name:optionValue.name, presentation: optionValue.presentation,
                     option_type_id: optionTypeId, position: position},function(err){
                     if(err) return next(err);
-                    console.log('>> Option value updated!');
+                    log.debug('>> Option value updated!');
                     callback();
                 });
             });
@@ -55,8 +58,11 @@ module.exports = {
                 if(!exists){
                     OptionValue.create({name:optionValue.name, presentation: optionValue.presentation,
                         option_type_id: optionTypeId, position: position},function(err, data){
-                        if(err) return next(err);
-                        console.log('>> Option value created!');
+                        if(err) {
+                            log.debug(err);
+                            return next(err);
+                        }
+                        log.debug('>> Option value created!');
                         callback();
                     });
                 } else {
