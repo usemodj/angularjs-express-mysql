@@ -18,7 +18,7 @@ var settings = {
         port: 3306,
         database: "nodesoft2",
         user: "root",
-        password: "",
+        password: "root",
         timezone: "+09:00" //'Asia/Seoul'
     }
 };

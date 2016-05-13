@@ -13,7 +13,7 @@ angular.module('frontendApp.router', ['ui.router'])
             'navbar@': {
               templateUrl: 'views/partials/navbar/navbar.html',
               controller: 'NavbarCtrl'
-            },
+            }
           },
           resolve: {
             //authorize: ['AuthFactory',
