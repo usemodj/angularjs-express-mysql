@@ -19,7 +19,7 @@
         </thead>
         <tbody>
         <tr ng-repeat="line_item in data.order.line_items">
-            <td class="col-md-1"><img width="72px" height="72px" ng-src="/uploads/images/{{line_item.attachment_file_path}}"></td>
+            <td class="col-md-1"><img width="72px" height="72px" ng-src="/uploads/images/{{line_item.file_path}}"></td>
             <td class="col-md-5"><a ui-sref="products.view({id:line_item.product_id})"><strong>{{line_item.name}}</strong><br/> {{line_item.options}}</a></td>
             <td class="col-md-2 text-right">{{line_item.price | currency}}</td>
             <td class="col-md-1">

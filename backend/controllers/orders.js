@@ -6,22 +6,28 @@ var fs = require('fs');
 var path = require('path');
 var settings = require('../config/settings');
 
-var lineItemSql = ' SELECT DISTINCT li.*, (li.price * li.quantity) AS subtotal, v1.options, va.attachment_file_path FROM  \n' +
+var lineItemSql = ' SELECT DISTINCT li.*, (li.price * li.quantity) AS subtotal, v1.options, va.file_path FROM  \n' +
     '  (SELECT l.*, p.id AS product_id, p.name FROM line_items l,variants v, products p  \n' +
     '   WHERE l.variant_id = v.id AND v.product_id = p.id AND l.order_id = ? \n' +
     '  ) li   \n' +
-    '  INNER JOIN   \n' +
+    '  LEFT JOIN   \n' +
     '  (SELECT sv.id, sv.product_id, GROUP_CONCAT(sv.options) AS options   \n' +
     '   FROM (SELECT v.id, v.product_id, concat(t.presentation,":", o.presentation) AS options   \n' +
     ' 		 FROM variants v, variants_option_values vo, option_values o, option_types t   \n' +
     ' 		 WHERE v.id = vo.variants_id and vo.option_values_id = o.id and o.option_type_id = t.id  \n' +
     ' 	   ) sv  GROUP BY sv.id  \n' +
     '  ) v1 ON li.variant_id = v1.id  \n' +
-    '  LEFT JOIN  \n' +
-    '  (SELECT a1.* FROM   \n' +
-    ' 	(SELECT v.product_id, a.* FROM variants v, assets a WHERE v.id = a.viewable_id AND viewable_type = "Variant" ORDER BY a.position, a.id) a1  \n' +
-    '   GROUP BY a1.product_id  \n' +
-    '  ) va ON va.product_id = v1.product_id;';
+    ' LEFT JOIN  \n' +
+    ' (SELECT v.product_id,v.price, asset.id AS asset_id, asset.file_path, asset.alt \n' +
+    ' FROM variants v, \n' +
+    '    (SELECT a.id, a.viewable_id, a.viewable_type, a.attachment_file_path AS file_path, a.alt, \n' +
+    ' @asset_rank := IF(@current_variant = a.viewable_id, @asset_rank + 1, 1) AS asset_rank, \n' +
+    ' @current_variant := a.viewable_id \n' +
+    ' FROM assets a WHERE a.viewable_type = "Variant" \n' +
+    ' ORDER BY a.position, a.id \n' +
+    ' ) asset \n' +
+    ' WHERE v.id = asset.viewable_id AND asset_rank = 1 \n' +
+    ' ) va ON  v1.product_id = va.product_id;';
 
 var getOrderItems = function(order_id, req, res, callback){
 
