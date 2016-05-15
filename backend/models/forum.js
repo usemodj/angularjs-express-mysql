@@ -177,7 +177,10 @@ module.exports = function(orm, db) {
 
     Forum.createRoot = function(callback){
         Forum.count(function(err, number){
-            if(err || number) return callback('Root node does not created!', null);
+            if(err || number) {
+                log.error(err);
+                return callback('Root node does not created!', null);
+            }
             Forum.create({
                 name: 'Root',
                 description: 'Root Node',
@@ -219,7 +222,7 @@ module.exports = function(orm, db) {
      */
     Forum.getDescendantsCount = function(id, callback){
         var sql = 'SELECT COUNT(*) AS total FROM ( \n'+
-            'SELECT o.*, COUNT(p.id)-1 AS level FROM forums AS n, forums AS p, forums AS o \n'+
+            'SELECT o.lft, COUNT(p.id)-1 AS level FROM forums AS n, forums AS p, forums AS o \n'+
             ' WHERE o.lft BETWEEN p.lft AND p.rgt AND o.lft BETWEEN n.lft AND n.rgt AND n.id = ? \n'+
             ' GROUP BY o.lft ORDER BY o.lft ) AS t;'
         db.driver.execQuery(sql,[id],
@@ -243,7 +246,7 @@ module.exports = function(orm, db) {
         ' WHERE node.lft BETWEEN parent.lft AND parent.rgt \n'+
         ' AND node.lft BETWEEN sub_parent.lft AND sub_parent.rgt \n'+
         ' AND sub_parent.id = sub_tree.id \n'+
-        ' GROUP BY node.id ORDER BY node.lft \n'+
+        ' GROUP BY node.id, level ORDER BY node.lft \n'+
         ' LIMIT ? OFFSET ? ';
         db.driver.execQuery(sql,[id, perPages, ((page-1)*perPages)],
             function(err, forums){
@@ -256,11 +259,14 @@ module.exports = function(orm, db) {
      *  root - parent - parent - node(id)[level:3] - child[level:4] - child[level:5] - ...
      */
     Forum.getDescendants = function(id, callback){
-        db.driver.execQuery('SELECT o.*, COUNT(p.id)-1 AS level FROM forums AS n, forums AS p, forums AS o \n'+
+        db.driver.execQuery('SELECT n.*, COUNT(p.id)-1 AS level FROM forums AS n, forums AS p, forums AS o \n'+
                 ' WHERE o.lft BETWEEN p.lft AND p.rgt AND o.lft BETWEEN n.lft AND n.rgt AND n.id = ? \n'+
                 ' GROUP BY o.lft ORDER BY o.lft;',[id],
             function(err, forums){
-                if(err) return callback(err, null);
+                if(err) {
+                    log.error(err);
+                    return callback(err, null);
+                }
                 return callback(null, forums);
             });
     };
