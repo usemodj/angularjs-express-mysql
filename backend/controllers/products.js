@@ -123,6 +123,7 @@ var log = require('log4js').getLogger('products');
 var markdown = require('markdown').markdown;
 var _ = require('underscore');
 var async = require('async');
+var settings = require('../config/settings');
 
 module.exports = {
 
@@ -458,9 +459,10 @@ module.exports = {
         } catch(err){
             log.error(err);
         }
+        var timezone = settings.database.timezone;
 
         var sql =  ' SELECT p.id, p.name, p.available_on, va.price, va.asset_id, va.file_path, va.alt \n'+
-            ' FROM products p, \n'+
+            ' FROM products p, (select convert_tz(now(),@@session.time_zone,"'+ timezone +'") AS now) t, \n'+
             '		(SELECT v.product_id,v.price, asset.id AS asset_id, asset.file_path, asset.alt \n'+
             '		FROM variants v, \n'+
             '			(SELECT a.id, a.viewable_id, a.viewable_type, a.attachment_file_path AS file_path, a.alt, \n'+
@@ -471,8 +473,8 @@ module.exports = {
             '			) asset \n'+
             '		WHERE v.id = asset.viewable_id AND asset_rank = 1 \n'+
             '		) va \n'+
-            ' WHERE va.product_id = p.id AND (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
-            '   AND p.available_on <= NOW() AND va.price IS NOT NULL \n'+
+            ' WHERE va.product_id = p.id AND (p.deleted_at IS NULL OR p.deleted_at >= t.now) \n'+
+            '   AND p.available_on <= t.now AND va.price IS NOT NULL \n'+
             '   AND (LOWER(p.name) LIKE ? OR LOWER(p.description) LIKE ?) \n'+
             ' ORDER BY p.available_on DESC ';
         //log.debug(sql);
