@@ -4,8 +4,6 @@ var log = require('log4js').getLogger("variants");
 module.exports = {
 
     searchVariants: function(req, res, next){
-        log.debug('>>searchVariants:');
-        log.debug(req.query);
         log.debug(req.body);
         var product_id = req.body.product_id;
         var deleted = req.body.deleted;

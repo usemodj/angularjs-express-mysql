@@ -151,30 +151,4 @@ angular.module('frontendApp')
 
         };
 
-        $scope.updatePosition = function(entry){
-            optionValues.updatePosition({entry: entry}, function(err, data){
-
-            });
-        };
-
-        $scope.addOptionValue = function(){
-            $scope.optionType.optionValues.unshift({name:'',presentation:'', position:0});
-        };
-
-        $scope.deleteOptionValue = function( optionValue){
-            if(optionValue.id) optionValues.remove({id:optionValue.id});
-            $scope.optionType.optionValues.splice($scope.optionType.optionValues.indexOf(optionValue), 1);
-        };
-
-        var changeOptionValues = function( optionType){
-            optionValues.changeOptionValues(optionType, function(err, data){
-                if(err){
-                    $scope.error = err.data;
-                    return;
-                }
-                $scope.message = 'Option value changed!';
-
-                $state.go('admin.products.option_types.edit',{id:optionType.id});
-            });
-        }
     }]);

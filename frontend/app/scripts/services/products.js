@@ -13,30 +13,30 @@ angular.module('frontendApp')
       index: function () {
         return productsResource.query();
       },
-        get: function(data, callback){ //GET
-            var cb = callback || angular.noop;
-            productsResource.get(data, function(data){
-                return cb(null, data);
-            }, function(err){
-                return cb(err, null);
-            });
-        },
-        update: function(data, callback){ //PUT
-            var cb = callback || angular.noop;
-            productsResource.update(data, function( product){
-                return cb(null, product);
-            }, function(err){
-                return cb(err, null);
-            });
-        },
-        save: function(data, callback){ //POST
-            var cb = callback || angular.noop;
-            productsResource.save(data, function(product){
-                return cb(null, product);
-            }, function(err){
-                return cb(err, null);
-            });
-        },
+      get: function(data, callback){ //GET
+          var cb = callback || angular.noop;
+          productsResource.get(data, function(data){
+              return cb(null, data);
+          }, function(err){
+              return cb(err, null);
+          });
+      },
+      update: function(data, callback){ //PUT
+          var cb = callback || angular.noop;
+          productsResource.update(data, function( product){
+              return cb(null, product);
+          }, function(err){
+              return cb(err, null);
+          });
+      },
+      save: function(data, callback){ //POST
+          var cb = callback || angular.noop;
+          productsResource.save(data, function(product){
+              return cb(null, product);
+          }, function(err){
+              return cb(err, null);
+          });
+      },
       remove: function(data){//DELETE
           return productsResource.remove(data);
       },
