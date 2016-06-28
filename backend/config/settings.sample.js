@@ -6,7 +6,7 @@ var settings = {
                     : path.normalize(path.join(__dirname, './../../frontend/app/uploads/')),
     port: process.env.NODE_PORT || 3000,
 
-    postmailer: 'postmaster@nodesoft.co.kr',
+    postmailer: 'postmaster@localhost',
 
     database: {
         protocol: "mysql", // or  "postgresql"
@@ -18,7 +18,7 @@ var settings = {
         port: 3306,
         database: "nodesoft2",
         user: "root",
-        password: "root",
+        password: "",
         timezone: "+09:00" //'Asia/Seoul'
     }
 };

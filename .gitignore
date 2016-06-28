@@ -6,3 +6,4 @@ app/bower_components
 log
 uploads/*
 .idea
+backend/config/settings.js
