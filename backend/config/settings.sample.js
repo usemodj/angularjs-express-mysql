@@ -1,12 +1,12 @@
 var path = require('path');
 //console.log(process.env);
 var settings = {
-    site_url: 'http://demo1.nodesoft.co.kr',
+    site_url: 'http://localhost:3000',
     upload_path: (process.env.NODE_ENV == 'production')? path.normalize(path.join(__dirname, './../../frontend/dist/uploads/'))
                     : path.normalize(path.join(__dirname, './../../frontend/app/uploads/')),
     port: process.env.NODE_PORT || 3000,
 
-    postmailer: 'postmaster@nodesoft.co.kr',
+    postmailer: 'postmaster@localhost',
 
     database: {
         protocol: "mysql", // or  "postgresql"
@@ -16,9 +16,9 @@ var settings = {
         },
         host: "127.0.0.1",
         port: 3306,
-        database: "demo1_nodesoft_co_kr",
+        database: "nodesoft2",
         user: "root",
-        password: "Thinkrbot3208!",
+        password: "",
         timezone: "+09:00" //'Asia/Seoul'
     }
 };
