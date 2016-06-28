@@ -23,7 +23,7 @@ var lineItemSql = ' SELECT DISTINCT li.*, (li.price * li.quantity) AS subtotal, 
     '    (SELECT a.id, a.viewable_id, a.viewable_type, a.attachment_file_path AS file_path, a.alt, \n' +
     ' @asset_rank := IF(@current_variant = a.viewable_id, @asset_rank + 1, 1) AS asset_rank, \n' +
     ' @current_variant := a.viewable_id \n' +
-    ' FROM assets a WHERE a.viewable_type = "Variant" \n' +
+    ' FROM assets a, (SELECT @asset_rank :=0) r WHERE a.viewable_type = "Variant" \n' +
     ' ORDER BY a.position, a.id \n' +
     ' ) asset \n' +
     ' WHERE v.id = asset.viewable_id AND asset_rank = 1 \n' +
