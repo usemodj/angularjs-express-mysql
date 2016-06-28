@@ -24,5 +24,6 @@
     <file url="file://$PROJECT_DIR$/frontend/app/views/partials/resetPasswordMail.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/bower.json" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/package.json" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

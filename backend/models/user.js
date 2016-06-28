@@ -1,8 +1,8 @@
 var crypto = require('crypto');
 var log = require('log4js').getLogger('User');
-var accessLevels = require('../../frontend/app/scripts/common/routingConfig').accessLevels
+var accessLevels = require('../../frontend/app/scripts/common/routingConfig').accessLevels;
 //var Q = require('q');
-var deasync = require('deasync');
+//var deasync = require('deasync');
 
 module.exports = function(orm, db) {
 
@@ -114,11 +114,8 @@ module.exports = function(orm, db) {
                         } else {
                             access = (accessLevel.bit_mask & role.bit_mask);
                         }
-
+                        return access;
                     });
-                    while( access === undefined)
-                        deasync.runLoopOnce();
-                    return access;
                }
             },
 

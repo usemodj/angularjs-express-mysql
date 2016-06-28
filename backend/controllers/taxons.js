@@ -28,19 +28,22 @@ module.exports = {
         }
 
         var sql = ' SELECT p.id, p.name, p.available_on, va.price, va.file_path, va.alt \n'+
-            ' FROM products_taxons pt, products p LEFT JOIN \n'+
-            '         (SELECT va.* \n'+
-            '          FROM (SELECT v.*, a.id AS asset_id, a.viewable_type, a.attachment_file_path AS file_path, a.alt \n'+
-            '                FROM variants v, assets a WHERE a.viewable_type = "Variant" AND v.id = a.viewable_id AND v.deleted_at IS NULL \n'+
-            '                GROUP BY v.product_id, a.position ORDER BY a.position, a.id \n'+
-            '               ) va \n'+
-            '         GROUP BY va.product_id, va.viewable_type \n'+
-            '         ) va ON va.product_id = p.id \n'+
-            ' WHERE pt.taxons_id = ? AND pt.products_id = p.id \n'+
-            '   AND (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
-            '   AND p.available_on <= NOW() AND va.price IS NOT NULL \n'+
-            '   AND (LOWER(p.name) LIKE ? OR LOWER(p.description) LIKE ?) \n'+
-            ' ORDER BY p.available_on DESC ';
+            ' FROM products_taxons pt, products p, \n'+
+            ' 	(SELECT v.product_id,v.price, asset.id AS asset_id, asset.file_path, asset.alt \n'+
+            ' 	FROM variants v, \n'+
+            ' 			(SELECT a.id, a.viewable_id, a.viewable_type, a.attachment_file_path AS file_path, a.alt, \n'+
+            ' 			@asset_rank := IF(@current_variant = a.viewable_id, @asset_rank + 1, 1) AS asset_rank, \n'+
+            ' 			@current_variant := a.viewable_id \n'+
+            ' 			FROM assets a WHERE a.viewable_type = "Variant" \n'+
+            ' 			ORDER BY a.position, a.id \n'+
+            ' 			) asset \n'+
+            ' 	WHERE v.id = asset.viewable_id AND asset_rank = 1 \n'+
+            ' 	) va  \n'+
+            ' WHERE va.product_id = p.id AND pt.taxons_id = ? AND pt.products_id = p.id \n'+
+        ' AND (p.deleted_at IS NULL OR p.deleted_at >= NOW()) \n'+
+        ' AND p.available_on <= NOW() AND va.price IS NOT NULL \n'+
+        ' AND (LOWER(p.name) LIKE ? OR LOWER(p.description) LIKE ?) \n'+
+        ' ORDER BY p.available_on DESC ';
         //log.debug(sql);
 
         req.db.driver.execQuery( sql + ' LIMIT ? OFFSET ?;',[taxonId, name, name, perPages, (page - 1)* perPages], function(err, products){
