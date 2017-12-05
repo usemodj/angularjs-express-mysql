@@ -1,3 +1,8 @@
+
+- This is `MySQL` database version.
+- `MongoDB` database version is [usemodj/SmartPlug](https://github.com/usemodj/smartplug)
+
+
 ## Install Backend Express module
 Ubuntu:
 ```
